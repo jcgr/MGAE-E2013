@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Window.h"
 
 // PUBLIC
 Player::Player()
@@ -13,6 +14,7 @@ Player::Player(int x, int y)
 	velX = 0;
 	velY = 0;
 	moveState = STAND_RIGHT;
+	canJump = false;
 
 	// Initialize the collision points.
 	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)

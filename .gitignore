@@ -3,6 +3,7 @@
 
 # Compiled things
 2DPlatformerEngine/2DPlatformerEngine/Debug/
+*.exe
 *.slo
 *.lo
 *.o

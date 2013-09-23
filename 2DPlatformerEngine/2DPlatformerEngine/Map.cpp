@@ -60,8 +60,6 @@ void Map::loadMap(string fileName)
 				tileMap[row][col] = mapTiles[col] - 48;
 			}
 		}
-
-		std::cout << "derp";
 	}
 	else
 	{

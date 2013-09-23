@@ -45,6 +45,10 @@ class Game
 		SDL_Texture* playerTexture;
 		SDL_Texture* testMsg, *keyTest;
 
+		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
+
+		SDL_Rect backgroundPosition;
+
 		/**
 		* Updates the player.
 		*/
@@ -59,13 +63,17 @@ class Game
 		void updateEnemies();
 
 		/**
-		* Draws the player.
+		* Draws the background.
 		*/
-		void drawPlayer();
+		void drawBackground();
 		/**
 		* Draws the level.
 		*/
 		void drawLevel();
+		/**
+		* Draws the player.
+		*/
+		void drawPlayer();
 
 		/**
 		* Loads the data from the testMap file, which
