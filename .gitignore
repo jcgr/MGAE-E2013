@@ -1,0 +1,15 @@
+# Gimp files
+*.xcf
+
+# Compiled things
+2DPlatformerEngine/2DPlatformerEngine/Debug/
+*.slo
+*.lo
+*.o
+*.obj
+*.tlog
+*.ilk
+*.pdb
+
+# VS stuff
+*.opensdf
