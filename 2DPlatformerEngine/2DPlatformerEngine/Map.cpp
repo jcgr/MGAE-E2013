@@ -94,6 +94,9 @@ int Map::getTile(int x, int y)
 	if (tileMap[tileY][tileX] == 2 || tileMap[tileY][tileX] == 3) {
 		return TILE_GOAL;
 	}
+	if (tileMap[tileY][tileX] == 4) {
+		return TILE_SPIKE;
+	}
 
 	return TILE_EMPTY;
 }

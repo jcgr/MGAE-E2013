@@ -28,6 +28,7 @@ void Level::load(string level)
 	backgroundTexture = Window::LoadImage("media/background.jpg");
 	brickTexture = Window::LoadImage("media/brick64px.png");
 	goalTexture = Window::LoadImage("media/Goal64px.png");
+	spikeTexture = Window::LoadImage("media/Spikes64px.png");
 }
 
 void Level::run()
@@ -131,6 +132,10 @@ void Level::updatePlayer()
 	movePlayer();
 	player.updateTexture();
 	calculateCollisionPoints(player.posX, player.posY, player.currentCollisionPoints);
+
+	if (player.health <= 0) {
+		player.respawn();
+	}
 }
 
 void Level::updateMap()
@@ -259,6 +264,21 @@ void Level::drawLevel()
 				Window::Draw(brickTexture, pos);
 			}
 
+			// Draw the spikes.
+			if (tempMap[y][currentX] == 4)
+			{
+				int tempWidth, tempHeight;
+				SDL_QueryTexture(brickTexture, NULL, NULL, &tempWidth, &tempHeight);
+
+				SDL_Rect pos;
+				pos.x = (x * TILE_WIDTH) - (offsetX);
+				pos.y = y * TILE_HEIGHT;
+				pos.w = tempWidth;
+				pos.h = tempHeight;
+
+				Window::Draw(spikeTexture, pos);
+			}
+
 			// Draw the goal.
 			if (tempMap[y][currentX] == 2)
 			{
@@ -342,10 +362,11 @@ int Level::checkCollision(int newPosX, int newPosY)
 
 	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
 	{
-		if (!tileType){
 			SDL_Point tempPoint = player.tempCollisionPoints[i];
-			tileType = map.getTile(tempPoint.x, tempPoint.y);
-		}
+			int tempCollisionType = map.getTile(tempPoint.x, tempPoint.y);
+			if (tempCollisionType > tileType) {
+				tileType = tempCollisionType;
+			}
 	}
 
 	return tileType;
@@ -375,6 +396,10 @@ void Level::handleCollision(int collisionType)
 
 	case TILE_GOAL:
 		player.reachedGoal = true;
+		break;
+
+	case TILE_SPIKE:
+		player.health = 0;
 		break;
 	}
 }

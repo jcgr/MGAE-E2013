@@ -66,6 +66,7 @@ class Player
 		* @param y The y-coordinate
 		*/
 		void setSpawn(int x, int y);
+		void respawn();
 
 		/**
 		* Increases the player's x velocity

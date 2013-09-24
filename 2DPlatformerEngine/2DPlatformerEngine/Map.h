@@ -19,6 +19,7 @@ class Map
 		#define TILE_EMPTY 0
 		#define TILE_SOLID_BLOCK 1
 		#define TILE_GOAL 2
+		#define TILE_SPIKE 4
 
 		/**
 		* Loads a grid based map from the given file.

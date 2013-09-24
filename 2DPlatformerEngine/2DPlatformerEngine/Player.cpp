@@ -78,6 +78,13 @@ void Player::setSpawn(int x, int y)
 	respawnY = y;
 }
 
+void Player::respawn()
+{
+	posX = respawnX;
+	posY = respawnY;
+	health = 1;
+}
+
 void Player::accelerateX()
 {
 	velX = 7;

@@ -59,7 +59,7 @@ class Level
 		/**
 		* The texture of game objects.
 		*/
-		SDL_Texture *brickTexture, *goalTexture;
+		SDL_Texture *brickTexture, *goalTexture, *spikeTexture;
 
 		/**
 		* The state of the keyboard.
