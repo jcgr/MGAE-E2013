@@ -72,6 +72,10 @@ class Game
 		* Draws the player.
 		*/
 		void drawPlayer();
+		/**
+		* Draws the win screen.
+		*/
+		void drawWinScreen();
 
 		/**
 		* Calculates the collision points for the given position.

@@ -7,12 +7,12 @@ using namespace std;
 Game::Game()
 {
 	map = Map(TILE_HEIGHT, TILE_WIDTH);
-	player = Player(1080, 500);
 }
 
 void Game::initialize()
 {
 	Window::Init("2D Platformer");
+	player = Player(1080, 500);
 
 	backgroundPosition = {
 		0, 0, Window::Box().w, Window::Box().h
@@ -35,6 +35,9 @@ void Game::gameLoop()
 
 	//For tracking if we want to quit
 	bool quit = false;
+	bool showVictoryScreen = false;
+
+	// Main loop for level
 	while (!quit)
 	{
 		bool keyPressed = false;
@@ -87,7 +90,31 @@ void Game::gameLoop()
 
 		if (player.reachedGoal){
 			quit = true;
+			showVictoryScreen = true;
 		}
+	}
+
+	// Shows the victory screen after the level
+	while (showVictoryScreen)
+	{
+		while (SDL_PollEvent(&e))
+		{
+			// Update keyboardState
+			SDL_PumpEvents();
+
+			// If user closes the window
+			if (e.type == SDL_QUIT) {
+				showVictoryScreen = false;
+			}
+
+			if (keyboardState[SDL_SCANCODE_SPACE]) {
+				showVictoryScreen = false;
+			}
+		}
+
+		Window::Clear();
+		drawWinScreen();
+		Window::Present();
 	}
 }
 
@@ -287,6 +314,28 @@ void Game::drawPlayer()
 
 	// Draw the player
 	Window::Draw(player.getCurrentTexture(), pos, &player.getCurrentAnimationClip());
+}
+
+void Game::drawWinScreen()
+{
+	SDL_Color white = { 255, 255, 255 };
+	SDL_Texture *msgGrats, *msgContinue;
+	SDL_Rect msgGratsBox, msgContinueBox;
+
+	msgGrats = Window::RenderText("You have completed the level!", "FreeSans.ttf", white, 50);
+	msgContinue = Window::RenderText("Press [space] to continue.", "FreeSans.ttf", white, 30);
+
+	SDL_QueryTexture(msgGrats, NULL, NULL, &msgGratsBox.w, &msgGratsBox.h);
+	SDL_QueryTexture(msgContinue, NULL, NULL, &msgContinueBox.w, &msgContinueBox.h);
+
+	msgGratsBox.x = (Window::Box().w / 2) - (msgGratsBox.w / 2);
+	msgGratsBox.y = (Window::Box().h / 2) - (msgGratsBox.h / 2) - 25;
+
+	msgContinueBox.x = (Window::Box().w / 2) - (msgContinueBox.w / 2);
+	msgContinueBox.y = (Window::Box().h / 2) - (msgContinueBox.h / 2) + 25;
+
+	Window::Draw(msgGrats, msgGratsBox);
+	Window::Draw(msgContinue, msgContinueBox);
 }
 
 int Game::checkCollision(int newPosX, int newPosY)
