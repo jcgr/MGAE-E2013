@@ -7,6 +7,8 @@
 Player::Player()
 {
 	health = 1;
+	posX = 0;
+	posY = 0;
 	velX = 0;
 	velY = 0;
 	moveState = STAND_RIGHT;
@@ -44,7 +46,7 @@ void Player::loadPlayer()
 	currentTexture = playerStandRight;
 
 	// Get size of the default texture
-	SDL_QueryTexture(playerStandRight, NULL, NULL, &playerWidth, &playerHeight);
+	SDL_QueryTexture(currentTexture, NULL, NULL, &playerWidth, &playerHeight);
 
 	animationStandClip.x = 0;
 	animationStandClip.y = 0;
