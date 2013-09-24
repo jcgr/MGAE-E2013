@@ -22,15 +22,24 @@ class Player
 		#define MOVE_RIGHT 2
 		#define MOVE_LEFT -2
 
+		int health;
+		/**
+		* One of the coordinates for the player's pixel position.
+		*/
+		int posX, posY;
 		/**
 		* The state of movement the player is in.
 		*/
 		int moveState;
-		/**
-		* The size of the player.
-		*/
-		int playerHeight, playerWidth;
 
+		/**
+		* A value that tells if the player can jump or not.
+		*/
+		bool canJump;
+		/**
+		* A value that tells if the player has reached the goal or not.
+		*/
+		bool reachedGoal;
 		/**
 		* A value that tells if the player is jumping or not.
 		*/
@@ -39,7 +48,7 @@ class Player
 		/**
 		* The points to check for collision with regards to the player.
 		*/
-		SDL_Point collisionPoints[COLLISION_POINT_AMOUNT];
+		SDL_Point currentCollisionPoints[COLLISION_POINT_AMOUNT], tempCollisionPoints[COLLISION_POINT_AMOUNT];
 
 		/**
 		* Uses the given texture to determine the height
@@ -66,31 +75,42 @@ class Player
 		void decelerateY();
 
 		/**
-		* Tells the player to move
-		* @param map The map to use for collision detection.
+		* Updates the player's texture to correspond to what the
+		* player is doing.
 		*/
-		void move(Map map);
+		void updateTexture();
 
 		/**
-		* Gets the x-coordinate of the player's position.
-		* @return The player's pixel position on the x-axis.
+		* Gets the height of the player
+		* @return The height of the player
 		*/
-		int getPosX();
+		int getHeight();
 		/**
-		* Gets the y-coordinate of the player's position.
-		* @return The player's pixel position on the y-axis.
+		* Gets the width of the player
+		* @return The width of the player
 		*/
-		int getPosY();
+		int getWidth();
+
 		/**
-		* Gets the player's velocity on the x-axis.
-		* @return The player's velocity on the x-axis.
+		* Gets the x velocity of the player
+		* @return The x velocity of the player
 		*/
 		int getVelX();
 		/**
-		* Gets the player's velocity on the y-axis.
-		* @return The player's velocity on the y-axis.
+		* Gets the y velocity of the player
+		* @return The y velocity of the player
 		*/
 		int getVelY();
+		/**
+		* Sets the value of the player's y velocity
+		* @param y The new value
+		*/
+		void setVelY(int y);
+		/**
+		* Sets the value of the player's x velocity
+		* @param x The new value
+		*/
+		void setVelX(int x);
 
 		/**
 		* Gets the rectangle that take corresponds to the right
@@ -107,15 +127,14 @@ class Player
 
 	private:
 
-		int health;
-		/**
-		* One of the coordinates for the player's pixel position.
-		*/
-		int posX, posY;
 		/**
 		* The player's velocity along an axis.
 		*/
 		int velX, velY;
+		/**
+		* The size of the player.
+		*/
+		int playerHeight, playerWidth;
 		/**
 		* Used to determine the current animation.
 		*/
@@ -127,11 +146,8 @@ class Player
 		int internalClipCounter;
 
 		/**
-		* A value that tells if the player can jump or not.
+		* The clip for the standing animation
 		*/
-		bool canJump;
-		bool reachedGoal;
-
 		SDL_Rect animationStandClip;
 		/**
 		* The clips for the walking animation
@@ -158,43 +174,6 @@ class Player
 		* The texture that shows the player jumping.
 		*/
 		SDL_Texture *playerJumpRight, *playerJumpLeft;
-
-		/**
-		* Moves the player horizontally.
-		* @param map The map used for collision detection.
-		*/
-		void moveHorizontal(Map map);
-		/**
-		* Moves the player vertically.
-		* @param map The map used for collision detection.
-		*/
-		void moveVertical(Map map);
-
-		/**
-		* Updates the player's texture to correspond to what the
-		* player is doing.
-		*/
-		void updateTexture();
-
-		/**
-		* Calculates the collision points for the given position.
-		* @param newPosX The x coordiate of the new position.
-		* @param newPosY The y coordiate of the new position.
-		* @param collisionPoints The array to put the results into.
-		*/
-		void calculateCollisionPoints(int newPosX, int newPosY, SDL_Point* collisionPoints);
-
-		/**
-		* Calculates if the player is colliding with something in the map.
-		* @param map The map to check for collision with. 
-		* @param newPosX The x-coordinate of the position to check for.
-		* @param newPosY The y-coordinate of the position to check for.
-		* @return True is the player will collide with something solid; false if not.
-		*/
-		bool isColliding(Map map, int newPosX, int newPosY);
-		int mapCollision(Map map, int newPosX, int newPosY);
-
-		void handleCollision(int collisionType);
 };
 
 #endif // !PLAYER_H

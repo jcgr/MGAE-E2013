@@ -60,6 +60,11 @@ class Game
 		void updateEnemies();
 
 		/**
+		* Moves the player.
+		*/
+		void movePlayer();
+
+		/**
 		* Draws the level.
 		*/
 		void drawLevel();
@@ -67,6 +72,24 @@ class Game
 		* Draws the player.
 		*/
 		void drawPlayer();
+
+		/**
+		* Calculates the collision points for the given position.
+		* @param newPosX The x coordiate of the new position.
+		* @param newPosY The y coordiate of the new position.
+		* @param collisionPoints The array to put the results into.
+		*/
+		void calculateCollisionPoints(int newPosX, int newPosY, SDL_Point* collisionPoints);
+
+		void handleCollision(int collisionType);
+
+		/**
+		* Checks if the player is colliding with something in the map.
+		* @param newPosX The x-coordinate of the position to check for.
+		* @param newPosY The y-coordinate of the position to check for.
+		* @return A value that indicates the kind of collision
+		*/
+		int checkCollision(int newPosX, int newPosY);
 
 		/**
 		* Loads the data from the testMap file, which

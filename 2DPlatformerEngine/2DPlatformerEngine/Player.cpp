@@ -22,8 +22,8 @@ Player::Player(int x, int y)
 	// Initialize the collision points.
 	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
 	{
-		SDL_Point point = { 0, 0 };
-		collisionPoints[i] = point;
+		currentCollisionPoints[i] = SDL_Point{ 0, 0 };
+		tempCollisionPoints[i] = SDL_Point{ 0, 0 };
 	}
 
 	currentWalkClip = 0;
@@ -46,8 +46,6 @@ void Player::loadPlayer()
 
 	// Get size of the default texture
 	SDL_QueryTexture(playerStandRight, NULL, NULL, &playerWidth, &playerHeight);
-
-	calculateCollisionPoints(posX, posY, collisionPoints);
 
 	animationStandClip.x = 0;
 	animationStandClip.y = 0;
@@ -114,35 +112,7 @@ void Player::decelerateY()
 	velY = -7;
 }
 
-int Player::getPosX()
-{
-	return posX;
-}
-
-int Player::getPosY()
-{
-	return posY;
-}
-
-SDL_Rect Player::getCurrentAnimationClip()
-{
-	if (isJumping){
-		return animationJumpClips[currentJumpClip];
-	}
-	else if (moveState == MOVE_LEFT || moveState == MOVE_RIGHT) {
-		return animationWalkClips[currentWalkClip];
-	}
-	else {
-		return animationStandClip;
-	}
-}
-
-SDL_Texture* Player::getCurrentTexture()
-{
-	return currentTexture;
-}
-
-void Player::move(Map map)
+void Player::updateTexture()
 {
 	// Resets the internal clip counter.
 	if (internalClipCounter > 18){
@@ -153,81 +123,8 @@ void Player::move(Map map)
 	currentWalkClip = internalClipCounter / 2;
 	currentJumpClip = (internalClipCounter - 2) / 2;
 
-	// Moves the player if necessary
-	moveHorizontal(map);
-	moveVertical(map);
-
 	internalClipCounter++;
-	updateTexture();
 
-	// Calculates new collision points for the player after moving.
-	calculateCollisionPoints(posX, posY, collisionPoints);
-}
-
-// !PUBLIC
-
-// PRIVATE
-
-void Player::moveHorizontal(Map map)
-{
-	if (moveState == MOVE_LEFT){
-		// Smooth collision detection.
-		for (int i = 0; i < velX; i++)
-		{
-			if (isColliding(map, posX - 1, posY)) {
-				break;
-			}
-
-			posX--;
-		}
-	}
-	if (moveState == MOVE_RIGHT){
-		// Smooth collision detection.
-		for (int i = 0; i < velX; i++)
-		{
-			if (isColliding(map, posX + 1, posY)) {
-				break;
-			}
-
-			posX++;
-		}
-	}
-}
-
-void Player::moveVertical(Map map)
-{
-	// If the player is moving up ...
-	if (velY > 0) {
-		// ... check each position step-by-step instead of just moving
-		// the player 7 pixels immediately.
-		for (int i = 0; i < 7; i++)
-		{
-			if (isColliding(map, posX, posY - 1)) {
-				decelerateY();
-				break;
-			}
-
-			posY--;
-			velY--;
-		}
-	} else {
-		for (int i = velY; i < 0; i++)
-		{
-			// If the player collides with something below, he has
-			// landed and can jump again.
-			if (isColliding(map, posX, posY + 1)) {
-				canJump = true;
-				isJumping = false;
-				break;
-			}
-
-			posY++;
-		}
-	}
-}
-
-void Player::updateTexture()
-{
 	// Jumping animation takes priority.
 	if (isJumping){
 		if (moveState == MOVE_RIGHT || moveState == STAND_RIGHT){
@@ -236,7 +133,8 @@ void Player::updateTexture()
 		if (moveState == MOVE_LEFT || moveState == STAND_LEFT){
 			currentTexture = playerJumpLeft;
 		}
-	} else {
+	}
+	else {
 		switch (moveState)
 		{
 		case MOVE_RIGHT:
@@ -261,68 +159,56 @@ void Player::updateTexture()
 	}
 }
 
-void Player::calculateCollisionPoints(int newPosX, int newPosY, SDL_Point* cPoints)
+SDL_Rect Player::getCurrentAnimationClip()
 {
-	// Calculate 9 collision points. Each corner, midways between
-	// each corner and the middle of the texture.
-	for (int i = 0; i < 9; i++)
-	{
-		SDL_Point point;
-		point.x = newPosX + ((i / 3) * (playerWidth / 2));
-		point.y = newPosY + ((i % 3) * (playerHeight / 2));
-
-		cPoints[i] = point;
+	if (isJumping){
+		return animationJumpClips[currentJumpClip];
+	}
+	else if (moveState == MOVE_LEFT || moveState == MOVE_RIGHT) {
+		return animationWalkClips[currentWalkClip];
+	}
+	else {
+		return animationStandClip;
 	}
 }
 
-bool Player::isColliding(Map map, int newPosX, int newPosY)
+SDL_Texture* Player::getCurrentTexture()
 {
-	bool isColliding = false;
-
-	SDL_Point collisionDetection[COLLISION_POINT_AMOUNT];
-	calculateCollisionPoints(newPosX, newPosY, collisionDetection);
-
-	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
-	{
-		if (!isColliding){
-			SDL_Point tempPoint = collisionDetection[i];
-			isColliding = map.isPixelSolid(tempPoint.x, tempPoint.y);
-		}
-	}
-
-	return isColliding;
+	return currentTexture;
 }
 
-int Player::mapCollision(Map map, int newPosX, int newPosY)
+int Player::getHeight()
 {
-	int tileType;
-
-	SDL_Point collisionDetection[COLLISION_POINT_AMOUNT];
-	calculateCollisionPoints(newPosX, newPosY, collisionDetection);
-
-	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
-	{
-		if (!tileType){
-			SDL_Point tempPoint = collisionDetection[i];
-			tileType = map.getTile(tempPoint.x, tempPoint.y);
-		}
-	}
-
-	return tileType;
+	return playerHeight;
 }
 
-void Player::handleCollision(int collisionType)
+int Player::getWidth()
 {
-	switch (collisionType)
-	{
-	case TILE_SOLID_BLOCK:
-		// Do nothing. Is handled depending on where it happens
-		break;
-		
-	case TILE_GOAL:
-		reachedGoal = true;
-		break;
-	}
-
+	return playerWidth;
 }
+
+int Player::getVelY()
+{
+	return velY;
+}
+
+int Player::getVelX()
+{
+	return velX;
+}
+
+void Player::setVelY(int y)
+{
+	velY = y;
+}
+
+void Player::setVelX(int x)
+{
+	velX = x;
+}
+
+// !PUBLIC
+
+// PRIVATE
+
 // !PRIVATE

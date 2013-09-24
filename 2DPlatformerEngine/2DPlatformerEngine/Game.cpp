@@ -23,6 +23,7 @@ void Game::initialize()
 	goalTexture = Window::LoadImage("media/Goal64px.png");
 
 	player.loadPlayer();
+	calculateCollisionPoints(player.posX, player.posY, player.currentCollisionPoints);
 
 	map.loadMap("testMap.txt");
 }
@@ -83,6 +84,10 @@ void Game::gameLoop()
 		drawLevel();
 		drawPlayer();
 		Window::Present();
+
+		if (player.reachedGoal){
+			quit = true;
+		}
 	}
 }
 
@@ -103,7 +108,9 @@ void Game::updatePlayer()
 		player.decelerateY();
 	}
 
-	player.move(map);
+	movePlayer();
+	player.updateTexture();
+	calculateCollisionPoints(player.posX, player.posY, player.currentCollisionPoints);
 }
 
 void Game::updateMap()
@@ -116,6 +123,70 @@ void Game::updateEnemies()
 
 }
 
+void Game::movePlayer()
+{
+	// If the player if moving left ...
+	if (player.moveState == MOVE_LEFT) {
+		for (int i = 0; i < player.getVelX(); i++)
+		{
+			int collisionType = checkCollision(player.posX - 1, player.posY);
+			if (collisionType) {
+				handleCollision(collisionType);
+				break;
+			}
+
+			player.posX--;
+		}
+	}
+	// If the player is moving right ...
+	if (player.moveState == MOVE_RIGHT) {
+		for (int i = 0; i < player.getVelX(); i++)
+		{
+			int collisionType = checkCollision(player.posX + 1, player.posY);
+			if (collisionType) {
+				handleCollision(collisionType);
+				break;
+			}
+
+			player.posX++;
+		}
+	}
+	// If the player is moving up ...
+	if (player.getVelY() > 0) {
+		// ... check each position step-by-step instead of just moving
+		// the player 7 pixels immediately.
+		for (int i = 0; i < 7; i++)
+		{
+			int collisionType = checkCollision(player.posX, player.posY - 1);
+			if (collisionType) {
+				handleCollision(collisionType);
+				player.decelerateY();
+				break;
+			}
+
+			player.posY--;
+			player.setVelY(player.getVelY() - 1);
+		}
+	}
+	// If the player is moving down ...
+	else {
+		for (int i = player.getVelY(); i < 0; i++)
+		{
+			// If the player collides with something below, he has
+			// landed and can jump again.
+			int collisionType = checkCollision(player.posX, player.posY + 1);
+			if (collisionType) {
+				handleCollision(collisionType);
+				player.canJump = true;
+				player.isJumping = false;
+				break;
+			}
+
+			player.posY++;
+		}
+	}
+}
+
 void Game::drawLevel()
 {
 	int** tempMap = map.getMap();
@@ -124,7 +195,7 @@ void Game::drawLevel()
 
 	// Calculate which part of the level to show, based on the player's
 	// position. Make sure it does not exceed the bounds of the map.
-	camPosX = (player.getPosX()) - (Window::WINDOW_WIDTH / 2);
+	camPosX = (player.posX) - (Window::WINDOW_WIDTH / 2);
 	if (camPosX < 0) {
 		camPosX = 0;
 	}
@@ -195,25 +266,71 @@ void Game::drawPlayer()
 	// Get player position. Adjust to take height/width
 	// of the character into account.
 	SDL_Rect pos;
-	pos.x = player.getPosX() - (player.playerWidth / 2);
-	pos.y = player.getPosY() - (player.playerHeight / 2);
-	pos.w = player.playerWidth;
-	pos.h = player.playerHeight;
+	pos.x = player.posX - (player.getWidth() / 2);
+	pos.y = player.posY - (player.getHeight() / 2);
+	pos.w = player.getWidth();
+	pos.h = player.getHeight();
 
 	// If the player is not close to any side...
-	if (player.getPosX() > left && player.getPosX() < right){
+	if (player.posX > left && player.posX < right){
 		// ... set his x position to the middle of the screen.
 		pos.x = Window::WINDOW_WIDTH / 2
-			- (player.playerWidth / 2);
+			- (player.getWidth() / 2);
 	}
 	// If the player is close to the right side of the level...
-	if (player.getPosX() >= right) {
+	if (player.posX >= right) {
 		// ... set his x position to show how close he is.
 		pos.x = Window::WINDOW_WIDTH / 2
-			+ (player.getPosX() - right)
-			- (player.playerWidth / 2);
+			+ (player.posX - right)
+			- (player.getWidth() / 2);
 	}
 
 	// Draw the player
 	Window::Draw(player.getCurrentTexture(), pos, &player.getCurrentAnimationClip());
+}
+
+int Game::checkCollision(int newPosX, int newPosY)
+{
+	int tileType = 0;
+
+	// Get temp collision points
+	calculateCollisionPoints(newPosX, newPosY, player.tempCollisionPoints);
+
+	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
+	{
+		if (!tileType){
+			SDL_Point tempPoint = player.tempCollisionPoints[i];
+			tileType = map.getTile(tempPoint.x, tempPoint.y);
+		}
+	}
+
+	return tileType;
+}
+
+void Game::calculateCollisionPoints(int newPosX, int newPosY, SDL_Point* collisionPoints)
+{
+	// Calculate 9 collision points. Each corner, midways between
+	// each corner and the middle of the texture.
+	for (int i = 0; i < 9; i++)
+	{
+		SDL_Point point;
+		point.x = newPosX + ((i / 3) * (player.getWidth() / 2));
+		point.y = newPosY + ((i % 3) * (player.getHeight() / 2));
+
+		collisionPoints[i] = point;
+	}
+}
+
+void Game::handleCollision(int collisionType)
+{
+	switch (collisionType)
+	{
+	case TILE_SOLID_BLOCK:
+		// Do nothing. Is handled depending on where it happens
+		break;
+
+	case TILE_GOAL:
+		player.reachedGoal = true;
+		break;
+	}
 }
