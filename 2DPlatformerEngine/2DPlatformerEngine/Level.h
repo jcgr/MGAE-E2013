@@ -8,11 +8,11 @@
 #include "Map.h"
 #include "Player.h"
 
-class Game
+class Level
 {
 	public:
-		Game();
-		~Game(){};
+		Level();
+		~Level(){};
 
 		const int TILE_HEIGHT = 64;
 		const int TILE_WIDTH = 64;

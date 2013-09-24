@@ -19,6 +19,7 @@ class Map
 		#define TILE_EMPTY 0
 		#define TILE_SOLID_BLOCK 1
 		#define TILE_GOAL 2
+		#define TILE_PLAYER_SPAWN 9
 
 		/**
 		* Loads a grid based map from the given file.
@@ -33,12 +34,11 @@ class Map
 		int** getMap();
 
 		/**
-		* Checks if the given pixel contains a solid tile.
+		* Gets the type of tile at the given position
 		* @param x The x coordinate of the pixel.
 		* @param y The y coordinate of the pixel.
-		* @return True if the pixel is part of a solid tile; false if it is not.
+		* @return The type of tile at the position.
 		*/
-		bool isPixelSolid(int x, int y);
 		int getTile(int x, int y);
 
 		/**

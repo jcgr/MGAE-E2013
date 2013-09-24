@@ -56,6 +56,13 @@ class Player
 		* @param playerTexture The default texture of the player.
 		*/
 		void loadPlayer();
+		/**
+		* Spawns the player at the given position.
+		* Does NOT check if there is a wall.
+		* @param x The x-coordinate
+		* @param y The y-coordinate
+		*/
+		void spawn(int x, int y);
 
 		/**
 		* Increases the player's x velocity

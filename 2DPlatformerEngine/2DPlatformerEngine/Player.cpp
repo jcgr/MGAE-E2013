@@ -71,6 +71,12 @@ void Player::loadPlayer()
 	}
 }
 
+void Player::spawn(int x, int y)
+{
+	posX = x;
+	posY = y;
+}
+
 void Player::accelerateX()
 {
 	velX = 7;

@@ -1,15 +1,15 @@
 #include <SDL_image.h>
 
-#include "Game.h"
+#include "Level.h"
 
 using namespace std;
 
-Game::Game()
+Level::Level()
 {
 	map = Map(TILE_HEIGHT, TILE_WIDTH);
 }
 
-void Game::initialize()
+void Level::initialize()
 {
 	Window::Init("2D Platformer");
 	player = Player(1080, 500);
@@ -28,7 +28,7 @@ void Game::initialize()
 	map.loadMap("testMap.txt");
 }
 
-void Game::gameLoop()
+void Level::gameLoop()
 {
 	//Our event structure
 	SDL_Event e;
@@ -118,13 +118,13 @@ void Game::gameLoop()
 	}
 }
 
-void Game::end()
+void Level::end()
 {
 	Window::Clear();
 	Window::Quit();
 }
 
-void Game::updatePlayer()
+void Level::updatePlayer()
 {
 	// Check if the player needs to lose speed
 	// on any of the axis.
@@ -140,17 +140,17 @@ void Game::updatePlayer()
 	calculateCollisionPoints(player.posX, player.posY, player.currentCollisionPoints);
 }
 
-void Game::updateMap()
+void Level::updateMap()
 {
 
 }
 
-void Game::updateEnemies()
+void Level::updateEnemies()
 {
 
 }
 
-void Game::movePlayer()
+void Level::movePlayer()
 {
 	// If the player if moving left ...
 	if (player.moveState == MOVE_LEFT) {
@@ -214,7 +214,7 @@ void Game::movePlayer()
 	}
 }
 
-void Game::drawLevel()
+void Level::drawLevel()
 {
 	int** tempMap = map.getMap();
 	int firstX, camPosX, offsetX;
@@ -282,7 +282,7 @@ void Game::drawLevel()
 	}
 }
 
-void Game::drawPlayer()
+void Level::drawPlayer()
 {
 	// these are used to determine if the player is close
 	// to one end of the screen.
@@ -316,7 +316,7 @@ void Game::drawPlayer()
 	Window::Draw(player.getCurrentTexture(), pos, &player.getCurrentAnimationClip());
 }
 
-void Game::drawWinScreen()
+void Level::drawWinScreen()
 {
 	SDL_Color white = { 255, 255, 255 };
 	SDL_Texture *msgGrats, *msgContinue;
@@ -338,7 +338,7 @@ void Game::drawWinScreen()
 	Window::Draw(msgContinue, msgContinueBox);
 }
 
-int Game::checkCollision(int newPosX, int newPosY)
+int Level::checkCollision(int newPosX, int newPosY)
 {
 	int tileType = 0;
 
@@ -356,7 +356,7 @@ int Game::checkCollision(int newPosX, int newPosY)
 	return tileType;
 }
 
-void Game::calculateCollisionPoints(int newPosX, int newPosY, SDL_Point* collisionPoints)
+void Level::calculateCollisionPoints(int newPosX, int newPosY, SDL_Point* collisionPoints)
 {
 	// Calculate 9 collision points. Each corner, midways between
 	// each corner and the middle of the texture.
@@ -370,7 +370,7 @@ void Game::calculateCollisionPoints(int newPosX, int newPosY, SDL_Point* collisi
 	}
 }
 
-void Game::handleCollision(int collisionType)
+void Level::handleCollision(int collisionType)
 {
 	switch (collisionType)
 	{

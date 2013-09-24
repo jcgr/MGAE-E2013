@@ -1,14 +1,14 @@
-#include "Game.h"
+#include "Level.h"
 
 int main(int argc, char* args[])
 {
-	Game game = Game();
+	Level level = Level();
 
-	game.initialize();
+	level.initialize();
 
-	game.gameLoop();
+	level.gameLoop();
 
-	game.end();
+	level.end();
 
 	return 0;
 }

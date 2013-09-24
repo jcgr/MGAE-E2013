@@ -72,27 +72,6 @@ int** Map::getMap()
 	return tileMap;
 }
 
-bool Map::isPixelSolid(int x, int y)
-{
-	// Checks if the pixel is within the map.
-	if (x > width * tileWidth || x < 0)
-		return true;
-	if (y > height * tileHeight || y < 0)
-		return true;
-
-	// Finds the tile location of the pixel.
-	// Remove tileWidth/Height / 2 because of how the window
-	// moves everything it draws (the given position becomes the
-	// center instead of the top-right point).
-	int tileX = (x - (tileWidth / 2)) / tileWidth;
-	int tileY = (y - (tileHeight / 2)) / tileHeight;
-	
-	if (tileMap[tileY][tileX] > 0)
-		return true;
-
-	return false;
-}
-
 int Map::getTile(int x, int y)
 {
 	// Checks if the pixel is within the map.
