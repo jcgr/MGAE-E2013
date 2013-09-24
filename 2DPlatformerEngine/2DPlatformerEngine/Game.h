@@ -35,15 +35,12 @@ class Game
 		int previousKey1, previousKey2;
 		int currentKey1, currentKey2;
 
-		bool keyDown;
-
 		Player player;
 		Map map;
 
-		SDL_Texture* backgroundTexture;
-		SDL_Texture* brickTexture;
-		SDL_Texture* playerTexture;
-		SDL_Texture* testMsg, *keyTest;
+		SDL_Texture *backgroundTexture;
+		SDL_Texture *brickTexture, *goalTexture;
+		SDL_Texture *testMsg, *keyTest;
 
 		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
 
@@ -62,10 +59,6 @@ class Game
 		*/
 		void updateEnemies();
 
-		/**
-		* Draws the background.
-		*/
-		void drawBackground();
 		/**
 		* Draws the level.
 		*/

@@ -16,6 +16,10 @@ class Map
 		Map(int tileHeight, int tileWidth);
 		~Map(){};
 
+		#define TILE_EMPTY 0
+		#define TILE_SOLID_BLOCK 1
+		#define TILE_GOAL 2
+
 		/**
 		* Loads a grid based map from the given file.
 		* @param &fileName The name of the file that contains the map.
@@ -35,6 +39,7 @@ class Map
 		* @return True if the pixel is part of a solid tile; false if it is not.
 		*/
 		bool isPixelSolid(int x, int y);
+		int getTile(int x, int y);
 
 		/**
 		* Gets the height of the map in tiles.

@@ -9,12 +9,15 @@ Player::Player()
 
 Player::Player(int x, int y)
 {
+	health = 1;
 	posX = x;
 	posY = y;
 	velX = 0;
 	velY = 0;
 	moveState = STAND_RIGHT;
+
 	canJump = false;
+	reachedGoal = false;
 
 	// Initialize the collision points.
 	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
@@ -28,29 +31,45 @@ Player::Player(int x, int y)
 	internalClipCounter = 0;
 }
 
-void Player::loadPlayer(SDL_Texture* playerTexture)
+void Player::loadPlayer()
 {
-	// Get size of the playerTexture
-	SDL_QueryTexture(playerTexture, NULL, NULL, &playerWidth, &playerHeight);
+	// Load the player textures
+	playerStandRight = Window::LoadImage("media/SamusStandRight64px.png");
+	playerStandLeft = Window::LoadImage("media/SamusStandLeft64px.png");
+	playerWalkRight = Window::LoadImage("media/SamusWalkRight64px.png");
+	playerWalkLeft = Window::LoadImage("media/SamusWalkLeft64px.png");
+	playerJumpRight = Window::LoadImage("media/SamusJumpRight64px.png");
+	playerJumpLeft = Window::LoadImage("media/SamusJumpLeft64px.png");
+
+	// Set default texture
+	currentTexture = playerStandRight;
+
+	// Get size of the default texture
+	SDL_QueryTexture(playerStandRight, NULL, NULL, &playerWidth, &playerHeight);
 
 	calculateCollisionPoints(posX, posY, collisionPoints);
+
+	animationStandClip.x = 0;
+	animationStandClip.y = 0;
+	animationStandClip.w = playerWidth;
+	animationStandClip.h = playerHeight;
 
 	// Creates the clips for the walking animation
 	for (int i = 0; i < 10; i++)
 	{
-		animationWalkClips[i].x = i * playerHeight;
+		animationWalkClips[i].x = i * playerWidth;
 		animationWalkClips[i].y = 0;
 		animationWalkClips[i].h = playerHeight;
-		animationWalkClips[i].w = playerHeight;
+		animationWalkClips[i].w = playerWidth;
 	}
 
 	// Creates the clips for the jumping animation
 	for (int i = 0; i < 8; i++)
 	{
-		animationJumpClips[i].x = i * playerHeight;
+		animationJumpClips[i].x = i * playerWidth;
 		animationJumpClips[i].y = 0;
 		animationJumpClips[i].h = playerHeight;
-		animationJumpClips[i].w = playerHeight;
+		animationJumpClips[i].w = playerWidth;
 	}
 }
 
@@ -64,10 +83,11 @@ void Player::accelerateY()
 {
 	// After jumping, the player will have to wait with
 	// jumping until he has landed.
-	if (velY < 200 && canJump){
+	if (canJump){
 		velY = 200;
 		canJump = false;
 		isJumping = true;
+
 		// Start with the correct jump clip.
 		currentJumpClip = 0;
 	}
@@ -82,19 +102,16 @@ void Player::decelerateX()
 
 	if (moveState == MOVE_RIGHT) {
 		moveState = STAND_RIGHT;
-		standRight();
 	}
 
 	if (moveState == MOVE_LEFT) {
 		moveState = STAND_LEFT;
-		standLeft();
 	}
 }
 
 void Player::decelerateY()
 {
-	if (velY >= -7)
-		velY = -7;
+	velY = -7;
 }
 
 int Player::getPosX()
@@ -107,14 +124,22 @@ int Player::getPosY()
 	return posY;
 }
 
-SDL_Rect* Player::getAnimationWalkClips()
+SDL_Rect Player::getCurrentAnimationClip()
 {
-	return animationWalkClips;
+	if (isJumping){
+		return animationJumpClips[currentJumpClip];
+	}
+	else if (moveState == MOVE_LEFT || moveState == MOVE_RIGHT) {
+		return animationWalkClips[currentWalkClip];
+	}
+	else {
+		return animationStandClip;
+	}
 }
 
-SDL_Rect* Player::getAnimationJumpClips()
+SDL_Texture* Player::getCurrentTexture()
 {
-	return animationJumpClips;
+	return currentTexture;
 }
 
 void Player::move(Map map)
@@ -131,9 +156,9 @@ void Player::move(Map map)
 	// Moves the player if necessary
 	moveHorizontal(map);
 	moveVertical(map);
-	updateTexture();
 
 	internalClipCounter++;
+	updateTexture();
 
 	// Calculates new collision points for the player after moving.
 	calculateCollisionPoints(posX, posY, collisionPoints);
@@ -146,16 +171,26 @@ void Player::move(Map map)
 void Player::moveHorizontal(Map map)
 {
 	if (moveState == MOVE_LEFT){
-		moveLeft(map);
+		// Smooth collision detection.
+		for (int i = 0; i < velX; i++)
+		{
+			if (isColliding(map, posX - 1, posY)) {
+				break;
+			}
+
+			posX--;
+		}
 	}
 	if (moveState == MOVE_RIGHT){
-		moveRight(map);
-	}
-	if (moveState == STAND_LEFT){
-		standLeft();
-	}
-	if (moveState == STAND_RIGHT){
-		standRight();
+		// Smooth collision detection.
+		for (int i = 0; i < velX; i++)
+		{
+			if (isColliding(map, posX + 1, posY)) {
+				break;
+			}
+
+			posX++;
+		}
 	}
 }
 
@@ -189,42 +224,6 @@ void Player::moveVertical(Map map)
 			posY++;
 		}
 	}
-}
-
-void Player::moveRight(Map map)
-{
-	// Smooth collision detection.
-	for (int i = 0; i < velX; i++)
-	{
-		if (isColliding(map, posX + 1, posY)) {
-			break;
-		}
-
-		posX++;
-	}
-}
-
-void Player::moveLeft(Map map)
-{
-	// Smooth collision detection.
-	for (int i = 0; i < velX; i++)
-	{
-		if (isColliding(map, posX - 1, posY)) {
-			break;
-		}
-
-		posX--;
-	}
-}
-
-void Player::standRight()
-{
-	currentTexture = playerStandRight;
-}
-
-void Player::standLeft()
-{
-	currentTexture = playerStandLeft;
 }
 
 void Player::updateTexture()
@@ -292,5 +291,38 @@ bool Player::isColliding(Map map, int newPosX, int newPosY)
 	}
 
 	return isColliding;
+}
+
+int Player::mapCollision(Map map, int newPosX, int newPosY)
+{
+	int tileType;
+
+	SDL_Point collisionDetection[COLLISION_POINT_AMOUNT];
+	calculateCollisionPoints(newPosX, newPosY, collisionDetection);
+
+	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
+	{
+		if (!tileType){
+			SDL_Point tempPoint = collisionDetection[i];
+			tileType = map.getTile(tempPoint.x, tempPoint.y);
+		}
+	}
+
+	return tileType;
+}
+
+void Player::handleCollision(int collisionType)
+{
+	switch (collisionType)
+	{
+	case TILE_SOLID_BLOCK:
+		// Do nothing. Is handled depending on where it happens
+		break;
+		
+	case TILE_GOAL:
+		reachedGoal = true;
+		break;
+	}
+
 }
 // !PRIVATE

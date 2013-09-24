@@ -20,20 +20,11 @@ void Game::initialize()
 
 	backgroundTexture = Window::LoadImage("media/background.jpg");
 	brickTexture = Window::LoadImage("media/brick64px.png");
+	goalTexture = Window::LoadImage("media/Goal64px.png");
 
-	player.playerStandRight = Window::LoadImage("media/SamusStandRight64px.png");
-	player.playerStandLeft = Window::LoadImage("media/SamusStandLeft64px.png");
-	player.playerWalkRight = Window::LoadImage("media/SamusWalkRight64px.png");
-	player.playerWalkLeft = Window::LoadImage("media/SamusWalkLeft64px.png");
-	player.playerJumpRight = Window::LoadImage("media/SamusJumpRight64px.png");
-	player.playerJumpLeft = Window::LoadImage("media/SamusJumpLeft64px.png");
-
-	player.currentTexture = player.playerStandRight;
-	player.loadPlayer(player.playerStandRight);
+	player.loadPlayer();
 
 	map.loadMap("testMap.txt");
-
-	keyDown = false;
 }
 
 void Game::gameLoop()
@@ -88,7 +79,7 @@ void Game::gameLoop()
 		updateEnemies();
 
 		Window::Clear();
-		drawBackground();
+		Window::Draw(backgroundTexture, backgroundPosition);
 		drawLevel();
 		drawPlayer();
 		Window::Present();
@@ -103,8 +94,6 @@ void Game::end()
 
 void Game::updatePlayer()
 {
-	player.move(map);
-
 	// Check if the player needs to lose speed
 	// on any of the axis.
 	if (currentKey1 == 0){
@@ -113,6 +102,8 @@ void Game::updatePlayer()
 	if (currentKey2 == 0){
 		player.decelerateY();
 	}
+
+	player.move(map);
 }
 
 void Game::updateMap()
@@ -123,11 +114,6 @@ void Game::updateMap()
 void Game::updateEnemies()
 {
 
-}
-
-void Game::drawBackground()
-{
-	Window::Draw(backgroundTexture, backgroundPosition);
 }
 
 void Game::drawLevel()
@@ -165,16 +151,34 @@ void Game::drawLevel()
 				currentX = width - 1;
 			}
 
-			// Draw the tile.
+			// Draw the tiles.
 			if (tempMap[y][currentX] == 1)
 			{
+				int tempWidth, tempHeight;
+				SDL_QueryTexture(brickTexture, NULL, NULL, &tempWidth, &tempHeight);
+
 				SDL_Rect pos;
 				pos.x = (x * TILE_WIDTH) - (offsetX);
 				pos.y = y * TILE_HEIGHT;
-				pos.w = TILE_WIDTH;
-				pos.h = TILE_HEIGHT;
+				pos.w = tempWidth;
+				pos.h = tempHeight;
 
 				Window::Draw(brickTexture, pos);
+			}
+
+			// Draw the goal.
+			if (tempMap[y][currentX] == 2)
+			{
+				int tempWidth, tempHeight;
+				SDL_QueryTexture(goalTexture, NULL, NULL, &tempWidth, &tempHeight);
+
+				SDL_Rect pos;
+				pos.x = (x * TILE_WIDTH) - (offsetX) - ((tempWidth - TILE_WIDTH) / 2);
+				pos.y = y * TILE_HEIGHT - (tempHeight - TILE_HEIGHT);
+				pos.w = tempWidth;
+				pos.h = tempHeight;
+
+				Window::Draw(goalTexture, pos);
 			}
 		}
 	}
@@ -210,16 +214,6 @@ void Game::drawPlayer()
 			- (player.playerWidth / 2);
 	}
 
-	// Draw the right texture (this part looks like shit D:)
-	if (player.isJumping){
-		SDL_Rect* clips = player.getAnimationJumpClips();
-		Window::Draw(player.currentTexture, pos, &clips[player.currentJumpClip]);
-	}
-	else if (player.moveState == MOVE_LEFT || player.moveState == MOVE_RIGHT) {
-		SDL_Rect* clips = player.getAnimationWalkClips();
-		Window::Draw(player.currentTexture, pos, &clips[player.currentWalkClip]);
-	}
-	else {
-		Window::Draw(player.currentTexture, pos);
-	}
+	// Draw the player
+	Window::Draw(player.getCurrentTexture(), pos, &player.getCurrentAnimationClip());
 }

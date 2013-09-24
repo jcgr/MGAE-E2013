@@ -30,32 +30,11 @@ class Player
 		* The size of the player.
 		*/
 		int playerHeight, playerWidth;
-		/**
-		* Used to determine the current animation.
-		*/
-		int currentWalkClip, currentJumpClip;
 
 		/**
 		* A value that tells if the player is jumping or not.
 		*/
 		bool isJumping;
-
-		/**
-		* The texture used for drawing the player.
-		*/
-		SDL_Texture *currentTexture;
-		/**
-		* The texture that shows the player standing.
-		*/
-		SDL_Texture *playerStandRight, *playerStandLeft;
-		/**
-		* The texture that shows the player walking/running.
-		*/
-		SDL_Texture *playerWalkRight, *playerWalkLeft;
-		/**
-		* The texture that shows the player jumping.
-		*/
-		SDL_Texture *playerJumpRight, *playerJumpLeft;
 
 		/**
 		* The points to check for collision with regards to the player.
@@ -67,7 +46,7 @@ class Player
 		* and width of the player.
 		* @param playerTexture The default texture of the player.
 		*/
-		void loadPlayer(SDL_Texture* playerTexture);
+		void loadPlayer();
 
 		/**
 		* Increases the player's x velocity
@@ -114,20 +93,21 @@ class Player
 		int getVelY();
 
 		/**
-		* Gets the rectangles that takes care of clipping the 
-		* walking animation texture.
-		* @return The rectangles with the right clips.
+		* Gets the rectangle that take corresponds to the right
+		* part of the current animation.
+		* @return The rectangle with the right values
 		*/
-		SDL_Rect* getAnimationWalkClips();
+		SDL_Rect getCurrentAnimationClip();
+
 		/**
-		* Gets the rectangles that takes care of clipping the
-		* jumping animation texture.
-		* @return The rectangles with the right clips.
+		* Gets the current texture.
+		* @return The current player texture.
 		*/
-		SDL_Rect* getAnimationJumpClips();
+		SDL_Texture* getCurrentTexture();
 
 	private:
 
+		int health;
 		/**
 		* One of the coordinates for the player's pixel position.
 		*/
@@ -136,6 +116,10 @@ class Player
 		* The player's velocity along an axis.
 		*/
 		int velX, velY;
+		/**
+		* Used to determine the current animation.
+		*/
+		int currentWalkClip, currentJumpClip;
 		/**
 		* The internal clip counter for deciding what animation to use.
 		* Used to slow down the switching of clips for drawing.
@@ -146,7 +130,9 @@ class Player
 		* A value that tells if the player can jump or not.
 		*/
 		bool canJump;
+		bool reachedGoal;
 
+		SDL_Rect animationStandClip;
 		/**
 		* The clips for the walking animation
 		*/
@@ -155,6 +141,23 @@ class Player
 		* The clips for the jumping animation
 		*/
 		SDL_Rect animationJumpClips[8];
+
+		/**
+		* The texture used for drawing the player.
+		*/
+		SDL_Texture *currentTexture;
+		/**
+		* The texture that shows the player standing.
+		*/
+		SDL_Texture *playerStandRight, *playerStandLeft;
+		/**
+		* The texture that shows the player walking/running.
+		*/
+		SDL_Texture *playerWalkRight, *playerWalkLeft;
+		/**
+		* The texture that shows the player jumping.
+		*/
+		SDL_Texture *playerJumpRight, *playerJumpLeft;
 
 		/**
 		* Moves the player horizontally.
@@ -166,25 +169,6 @@ class Player
 		* @param map The map used for collision detection.
 		*/
 		void moveVertical(Map map);
-
-		/**
-		* Moves the player right.
-		* @param map The map used for collision detection.
-		*/
-		void moveRight(Map map);
-		/**
-		* Moves the player left.
-		* @param map The map used for collision detection.
-		*/
-		void moveLeft(Map map);
-		/**
-		* Tells the player to face the right.
-		*/
-		void standRight();
-		/**
-		* Tells the player to face the Left.
-		*/
-		void standLeft();
 
 		/**
 		* Updates the player's texture to correspond to what the
@@ -208,6 +192,9 @@ class Player
 		* @return True is the player will collide with something solid; false if not.
 		*/
 		bool isColliding(Map map, int newPosX, int newPosY);
+		int mapCollision(Map map, int newPosX, int newPosY);
+
+		void handleCollision(int collisionType);
 };
 
 #endif // !PLAYER_H
