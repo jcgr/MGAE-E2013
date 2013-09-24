@@ -133,9 +133,9 @@ void Level::updatePlayer()
 	player.updateTexture();
 	calculateCollisionPoints(player.posX, player.posY, player.currentCollisionPoints);
 
-	if (player.health <= 0) {
-		player.respawn();
-	}
+	//if (player.health <= 0) {
+	//	player.respawn();
+	//}
 }
 
 void Level::updateMap()
@@ -150,66 +150,68 @@ void Level::updateEnemies()
 
 void Level::movePlayer()
 {
-	// If the player if moving left ...
-	if (player.moveState == MOVE_LEFT) {
-		for (int i = 0; i < player.velX; i++)
-		{
-			int collisionType = checkCollision(player.posX - 1, player.posY);
-			if (collisionType) {
-				handleCollision(collisionType);
-				break;
-			}
+	if (player.isAlive) {
+		// If the player if moving left ...
+		if (player.moveState == MOVE_LEFT) {
+			for (int i = 0; i < player.velX; i++)
+			{
+				int collisionType = checkCollision(player.posX - 1, player.posY);
+				if (collisionType) {
+					handleCollision(collisionType);
+					break;
+				}
 
-			player.posX--;
+				player.posX--;
+			}
 		}
-	}
 
-	// If the player is moving right ...
-	if (player.moveState == MOVE_RIGHT) {
-		for (int i = 0; i < player.velX; i++)
-		{
-			int collisionType = checkCollision(player.posX + 1, player.posY);
-			if (collisionType) {
-				handleCollision(collisionType);
-				break;
+		// If the player is moving right ...
+		if (player.moveState == MOVE_RIGHT) {
+			for (int i = 0; i < player.velX; i++)
+			{
+				int collisionType = checkCollision(player.posX + 1, player.posY);
+				if (collisionType) {
+					handleCollision(collisionType);
+					break;
+				}
+
+				player.posX++;
 			}
-
-			player.posX++;
 		}
-	}
 
-	// If the player is moving up ...
-	if (player.velY > 0) {
-		// ... check each position step-by-step instead of just moving
-		// the player 7 pixels immediately.
-		for (int i = 0; i < GRAVITY; i++)
-		{
-			int collisionType = checkCollision(player.posX, player.posY - 1);
-			if (collisionType) {
-				handleCollision(collisionType);
-				player.decelerateY();
-				break;
+		// If the player is moving up ...
+		if (player.velY > 0) {
+			// ... check each position step-by-step instead of just moving
+			// the player 7 pixels immediately.
+			for (int i = 0; i < GRAVITY; i++)
+			{
+				int collisionType = checkCollision(player.posX, player.posY - 1);
+				if (collisionType) {
+					handleCollision(collisionType);
+					player.decelerateY();
+					break;
+				}
+
+				player.posY--;
+				player.velY--;
 			}
-
-			player.posY--;
-			player.velY--;
 		}
-	}
-	// If the player is moving down ...
-	else {
-		for (int i = player.velY; i < 0; i++)
-		{
-			// If the player collides with something below, he has
-			// landed and can jump again.
-			int collisionType = checkCollision(player.posX, player.posY + 1);
-			if (collisionType) {
-				handleCollision(collisionType);
-				player.canJump = true;
-				player.isJumping = false;
-				break;
-			}
+		// If the player is moving down ...
+		else {
+			for (int i = player.velY; i < 0; i++)
+			{
+				// If the player collides with something below, he has
+				// landed and can jump again.
+				int collisionType = checkCollision(player.posX, player.posY + 1);
+				if (collisionType) {
+					handleCollision(collisionType);
+					player.canJump = true;
+					player.isJumping = false;
+					break;
+				}
 
-			player.posY++;
+				player.posY++;
+			}
 		}
 	}
 }
@@ -399,7 +401,7 @@ void Level::handleCollision(int collisionType)
 		break;
 
 	case TILE_SPIKE:
-		player.health = 0;
+		player.die();
 		break;
 	}
 }

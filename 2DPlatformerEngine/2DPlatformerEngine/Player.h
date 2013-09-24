@@ -36,6 +36,10 @@ class Player
 		int moveState;
 
 		/**
+		* A value that tells if the player is alive.
+		*/
+		bool isAlive;
+		/**
 		* A value that tells if the player can jump or not.
 		*/
 		bool canJump;
@@ -66,6 +70,14 @@ class Player
 		* @param y The y-coordinate
 		*/
 		void setSpawn(int x, int y);
+
+		/**
+		* Kills the player.
+		*/
+		void die();
+		/**
+		* Respawns the player with 1 health.
+		*/
 		void respawn();
 
 		/**
@@ -128,12 +140,12 @@ class Player
 		/**
 		* Used to determine the current animation.
 		*/
-		int currentWalkClip, currentJumpClip;
+		int currentWalkClip, currentJumpClip, currentDeathClip;
 		/**
 		* The internal clip counter for deciding what animation to use.
 		* Used to slow down the switching of clips for drawing.
 		*/
-		int internalClipCounter;
+		int internalClipCounter, internalDeathClipCounter;
 
 		/**
 		* The clip for the standing animation
@@ -147,6 +159,10 @@ class Player
 		* The clips for the jumping animation
 		*/
 		SDL_Rect animationJumpClips[8];
+		/**
+		* The clips for the dying animation
+		*/
+		SDL_Rect animationDieClips[15];
 
 		/**
 		* The texture used for drawing the player.
@@ -164,6 +180,10 @@ class Player
 		* The texture that shows the player jumping.
 		*/
 		SDL_Texture *playerJumpRight, *playerJumpLeft;
+		/**
+		* The texture for the death animation.
+		*/
+		SDL_Texture *playerDie;
 };
 
 #endif // !PLAYER_H
