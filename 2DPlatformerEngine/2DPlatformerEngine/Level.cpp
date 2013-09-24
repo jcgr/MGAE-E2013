@@ -6,29 +6,29 @@ using namespace std;
 
 Level::Level()
 {
-	map = Map(TILE_HEIGHT, TILE_WIDTH);
 }
 
-void Level::initialize()
+void Level::load(string level)
 {
-	Window::Init("2D Platformer");
-	player = Player(1080, 500);
-
 	backgroundPosition = {
 		0, 0, Window::Box().w, Window::Box().h
 	};
 
-	backgroundTexture = Window::LoadImage("media/background.jpg");
-	brickTexture = Window::LoadImage("media/brick64px.png");
-	goalTexture = Window::LoadImage("media/Goal64px.png");
+	map = Map(TILE_HEIGHT, TILE_WIDTH);
+	map.loadMap(level);
+	SDL_Rect initialSpawn = map.getPlayerSpawn();
 
+	player = Player();
+	player.setSpawn(initialSpawn.x, initialSpawn.y);
 	player.loadPlayer();
 	calculateCollisionPoints(player.posX, player.posY, player.currentCollisionPoints);
 
-	map.loadMap("testMap.txt");
+	backgroundTexture = Window::LoadImage("media/background.jpg");
+	brickTexture = Window::LoadImage("media/brick64px.png");
+	goalTexture = Window::LoadImage("media/Goal64px.png");
 }
 
-void Level::gameLoop()
+void Level::run()
 {
 	//Our event structure
 	SDL_Event e;
@@ -120,8 +120,8 @@ void Level::gameLoop()
 
 void Level::end()
 {
-	Window::Clear();
-	Window::Quit();
+	//Window::Clear();
+	//Window::Quit();
 }
 
 void Level::updatePlayer()

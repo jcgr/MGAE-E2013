@@ -13,7 +13,6 @@ class Player
 {
 	public:
 		Player();
-		Player(int x, int y);
 		~Player(){};
 
 		#define COLLISION_POINT_AMOUNT 9
@@ -57,12 +56,12 @@ class Player
 		*/
 		void loadPlayer();
 		/**
-		* Spawns the player at the given position.
+		* Sets the spawn point of the player to the given position.
 		* Does NOT check if there is a wall.
 		* @param x The x-coordinate
 		* @param y The y-coordinate
 		*/
-		void spawn(int x, int y);
+		void setSpawn(int x, int y);
 
 		/**
 		* Increases the player's x velocity
@@ -134,6 +133,10 @@ class Player
 
 	private:
 
+		/**
+		* The player's respawn point.
+		*/
+		int respawnX, respawnY;
 		/**
 		* The player's velocity along an axis.
 		*/

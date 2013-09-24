@@ -4,14 +4,7 @@
 // PUBLIC
 Player::Player()
 {
-	Player(300, 300);
-}
-
-Player::Player(int x, int y)
-{
 	health = 1;
-	posX = x;
-	posY = y;
 	velX = 0;
 	velY = 0;
 	moveState = STAND_RIGHT;
@@ -33,6 +26,10 @@ Player::Player(int x, int y)
 
 void Player::loadPlayer()
 {
+	// Sets initial position to respawn position
+	posX = respawnX;
+	posY = respawnY;
+
 	// Load the player textures
 	playerStandRight = Window::LoadImage("media/SamusStandRight64px.png");
 	playerStandLeft = Window::LoadImage("media/SamusStandLeft64px.png");
@@ -71,10 +68,10 @@ void Player::loadPlayer()
 	}
 }
 
-void Player::spawn(int x, int y)
+void Player::setSpawn(int x, int y)
 {
-	posX = x;
-	posY = y;
+	respawnX = x;
+	respawnY = y;
 }
 
 void Player::accelerateX()

@@ -1,5 +1,5 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef LEVEL_H
+#define LEVEL_H
 
 #include <SDL.h>
 
@@ -18,13 +18,14 @@ class Level
 		const int TILE_WIDTH = 64;
 
 		/**
-		* Initializes the game.
+		* Loads the level.
+		* @param level The level to load.
 		*/
-		void initialize();
+		void load(string level);
 		/**
-		* A loop in the game.
+		* Runs the game.
 		*/
-		void gameLoop();
+		void run();
 		/**
 		* Ends the game and cleans stuff up.
 		*/
@@ -103,4 +104,4 @@ class Level
 		bool loadMap();
 };
 
-#endif // !GAME_H
+#endif // !LEVEL_H

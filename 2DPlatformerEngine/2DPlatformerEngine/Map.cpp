@@ -95,6 +95,24 @@ int Map::getTile(int x, int y)
 	return TILE_EMPTY;
 }
 
+SDL_Rect Map::getPlayerSpawn()
+{
+	SDL_Rect spawn;
+	spawn.x = 300;
+	spawn.y = 300;
+
+	for (int row = 0; row < Map::height; row++) {
+		for (int col = 0; col < Map::width; col++) {
+			if (tileMap[row][col] == 9) {
+				spawn.y = row * Map::tileHeight + 20;
+				spawn.x = col * Map::tileWidth;
+			}
+		}
+	}
+
+	return spawn;
+}
+
 int Map::getHeight()
 {
 	return height;

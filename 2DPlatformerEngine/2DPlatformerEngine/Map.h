@@ -42,6 +42,12 @@ class Map
 		int getTile(int x, int y);
 
 		/**
+		* Gets the player's spawn location.
+		* @return A SDL_Rect with the spawn position.
+		*/
+		SDL_Rect getPlayerSpawn();
+
+		/**
 		* Gets the height of the map in tiles.
 		* @return The height of the map in tiles.
 		*/
