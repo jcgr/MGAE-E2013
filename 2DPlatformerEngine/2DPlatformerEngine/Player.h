@@ -27,6 +27,10 @@ class Player
 		*/
 		int posX, posY;
 		/**
+		* The player's velocity along an axis.
+		*/
+		int velX, velY;
+		/**
 		* The state of movement the player is in.
 		*/
 		int moveState;
@@ -98,27 +102,6 @@ class Player
 		int getWidth();
 
 		/**
-		* Gets the x velocity of the player
-		* @return The x velocity of the player
-		*/
-		int getVelX();
-		/**
-		* Gets the y velocity of the player
-		* @return The y velocity of the player
-		*/
-		int getVelY();
-		/**
-		* Sets the value of the player's y velocity
-		* @param y The new value
-		*/
-		void setVelY(int y);
-		/**
-		* Sets the value of the player's x velocity
-		* @param x The new value
-		*/
-		void setVelX(int x);
-
-		/**
 		* Gets the rectangle that take corresponds to the right
 		* part of the current animation.
 		* @return The rectangle with the right values
@@ -137,10 +120,6 @@ class Player
 		* The player's respawn point.
 		*/
 		int respawnX, respawnY;
-		/**
-		* The player's velocity along an axis.
-		*/
-		int velX, velY;
 		/**
 		* The size of the player.
 		*/

@@ -14,8 +14,17 @@ class Level
 		Level();
 		~Level(){};
 
-		const int TILE_HEIGHT = 64;
-		const int TILE_WIDTH = 64;
+		#define GRAVITY 7
+
+		/**
+		* The dimensions of the tile.
+		*/
+		const int TILE_HEIGHT = 64, TILE_WIDTH = 64;
+
+		/**
+		* Tells the game to shut down.
+		*/
+		bool gameShutDown;
 
 		/**
 		* Loads the level.
@@ -26,25 +35,40 @@ class Level
 		* Runs the game.
 		*/
 		void run();
-		/**
-		* Ends the game and cleans stuff up.
-		*/
-		void end();
 
 	private:
 
-		int previousKey1, previousKey2;
-		int currentKey1, currentKey2;
+		/**
+		* Determines which key is currently pressed.
+		*/
+		int currentHorizontalKey, currentVerticalKey;
 
+		/**
+		* The player object.
+		*/
 		Player player;
+		/**
+		* The map object.
+		*/
 		Map map;
 
+		/**
+		* The texture of the background.
+		*/
 		SDL_Texture *backgroundTexture;
+		/**
+		* The texture of game objects.
+		*/
 		SDL_Texture *brickTexture, *goalTexture;
-		SDL_Texture *testMsg, *keyTest;
 
+		/**
+		* The state of the keyboard.
+		*/
 		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
 
+		/**
+		* The position and dimension of the background.
+		*/
 		SDL_Rect backgroundPosition;
 
 		/**

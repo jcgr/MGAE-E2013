@@ -4,8 +4,7 @@
 
 #include "Map.h"
 
-using namespace std;
-
+// PUBLIC
 Map::Map()
 {
 	Map::tileHeight = 64;
@@ -37,11 +36,11 @@ void Map::loadMap(string fileName)
 
 		tileMap = new int*[Map::width];
 
-		for (int row = 0; row < Map::height; ++row){
+		for (int row = 0; row < Map::height; row++) {
 			tileMap[row] = new int[Map::width];
 		}
-		for (int row = 0; row < Map::height; ++row){
-			for (int col = 0; col < Map::width; ++col){
+		for (int row = 0; row < Map::height; row++) {
+			for (int col = 0; col < Map::width; col++) {
 					tileMap[row][col] = 0;
 			}
 		}
@@ -75,10 +74,12 @@ int** Map::getMap()
 int Map::getTile(int x, int y)
 {
 	// Checks if the pixel is within the map.
-	if (x > width * tileWidth || x < 0)
+	if (x > width * tileWidth || x < 0) {
 		return TILE_SOLID_BLOCK;
-	if (y > height * tileHeight || y < 0)
+	}
+	if (y > height * tileHeight || y < 0) {
 		return TILE_SOLID_BLOCK;
+	}
 
 	// Finds the tile location of the pixel.
 	// Remove tileWidth/Height / 2 because of how the window
@@ -87,10 +88,12 @@ int Map::getTile(int x, int y)
 	int tileX = (x - (tileWidth / 2)) / tileWidth;
 	int tileY = (y - (tileHeight / 2)) / tileHeight;
 
-	if (tileMap[tileY][tileX] == 1)
+	if (tileMap[tileY][tileX] == 1) {
 		return TILE_SOLID_BLOCK;
-	if (tileMap[tileY][tileX] == 2 || tileMap[tileY][tileX] == 3)
+	}
+	if (tileMap[tileY][tileX] == 2 || tileMap[tileY][tileX] == 3) {
 		return TILE_GOAL;
+	}
 
 	return TILE_EMPTY;
 }

@@ -2,22 +2,24 @@
 
 #include "Level.h"
 
-using namespace std;
-
+// PUBLIC
 Level::Level()
 {
 }
 
 void Level::load(string level)
 {
+	// The position/size of the background.
 	backgroundPosition = {
 		0, 0, Window::Box().w, Window::Box().h
 	};
 
+	// Loads the map and gets the player spawn.
 	map = Map(TILE_HEIGHT, TILE_WIDTH);
 	map.loadMap(level);
 	SDL_Rect initialSpawn = map.getPlayerSpawn();
 
+	// Loads the player.
 	player = Player();
 	player.setSpawn(initialSpawn.x, initialSpawn.y);
 	player.loadPlayer();
@@ -30,22 +32,17 @@ void Level::load(string level)
 
 void Level::run()
 {
-	//Our event structure
 	SDL_Event e;
 
 	//For tracking if we want to quit
 	bool quit = false;
 	bool showVictoryScreen = false;
+	gameShutDown = false;
 
 	// Main loop for level
 	while (!quit)
 	{
-		bool keyPressed = false;
-
-		previousKey1 = currentKey1;
-		previousKey2 = currentKey2;
-
-		//// Event Polling
+		// Event Polling
 		while (SDL_PollEvent(&e))
 		{
 			// Update keyboardState
@@ -54,27 +51,29 @@ void Level::run()
 			// If user closes the window
 			if (e.type == SDL_QUIT){
 				quit = true;
+				gameShutDown = true;
 			}
 
-			currentKey1 = 0;
-			currentKey2 = 0;
+			currentHorizontalKey = 0;
+			currentVerticalKey = 0;
 
 			if (keyboardState[SDL_SCANCODE_D]){
 				player.accelerateX();
 				player.moveState = MOVE_RIGHT;
-				currentKey1 = SDLK_d;
+				currentHorizontalKey = SDLK_d;
 			}
 			if (keyboardState[SDL_SCANCODE_A]){
 				player.accelerateX();
 				player.moveState = MOVE_LEFT;
-				currentKey1 = SDLK_a;
+				currentHorizontalKey = SDLK_a;
 			}
 			if (keyboardState[SDL_SCANCODE_W]){
 				player.accelerateY();
-				currentKey2 = SDLK_w;
+				currentVerticalKey = SDLK_w;
 			}
 			if (keyboardState[SDL_SCANCODE_ESCAPE]){
 				quit = true;
+				gameShutDown = true;
 			}
 		}
 
@@ -88,7 +87,7 @@ void Level::run()
 		drawPlayer();
 		Window::Present();
 
-		if (player.reachedGoal){
+		if (player.reachedGoal) {
 			quit = true;
 			showVictoryScreen = true;
 		}
@@ -118,20 +117,14 @@ void Level::run()
 	}
 }
 
-void Level::end()
-{
-	//Window::Clear();
-	//Window::Quit();
-}
-
 void Level::updatePlayer()
 {
 	// Check if the player needs to lose speed
 	// on any of the axis.
-	if (currentKey1 == 0){
+	if (currentHorizontalKey == 0){
 		player.decelerateX();
 	}
-	if (currentKey2 == 0){
+	if (currentVerticalKey == 0){
 		player.decelerateY();
 	}
 
@@ -142,19 +135,19 @@ void Level::updatePlayer()
 
 void Level::updateMap()
 {
-
+	// Does nothing
 }
 
 void Level::updateEnemies()
 {
-
+	// Does nothing
 }
 
 void Level::movePlayer()
 {
 	// If the player if moving left ...
 	if (player.moveState == MOVE_LEFT) {
-		for (int i = 0; i < player.getVelX(); i++)
+		for (int i = 0; i < player.velX; i++)
 		{
 			int collisionType = checkCollision(player.posX - 1, player.posY);
 			if (collisionType) {
@@ -165,9 +158,10 @@ void Level::movePlayer()
 			player.posX--;
 		}
 	}
+
 	// If the player is moving right ...
 	if (player.moveState == MOVE_RIGHT) {
-		for (int i = 0; i < player.getVelX(); i++)
+		for (int i = 0; i < player.velX; i++)
 		{
 			int collisionType = checkCollision(player.posX + 1, player.posY);
 			if (collisionType) {
@@ -178,11 +172,12 @@ void Level::movePlayer()
 			player.posX++;
 		}
 	}
+
 	// If the player is moving up ...
-	if (player.getVelY() > 0) {
+	if (player.velY > 0) {
 		// ... check each position step-by-step instead of just moving
 		// the player 7 pixels immediately.
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < GRAVITY; i++)
 		{
 			int collisionType = checkCollision(player.posX, player.posY - 1);
 			if (collisionType) {
@@ -192,12 +187,12 @@ void Level::movePlayer()
 			}
 
 			player.posY--;
-			player.setVelY(player.getVelY() - 1);
+			player.velY--;
 		}
 	}
 	// If the player is moving down ...
 	else {
-		for (int i = player.getVelY(); i < 0; i++)
+		for (int i = player.velY; i < 0; i++)
 		{
 			// If the player collides with something below, he has
 			// landed and can jump again.

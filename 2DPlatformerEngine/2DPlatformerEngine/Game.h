@@ -9,12 +9,24 @@ class Game
 		Game();
 		~Game(){};
 
+		/**
+		* Initialize the game.
+		*/
 		void initialize();
+		/**
+		* Run the game.
+		*/
 		void play();
+		/**
+		* End the game and clean up.
+		*/
 		void end();
 
 	private:
 
+		/**
+		* Show the ending screen.
+		*/
 		void showEndScreen();
 };
 

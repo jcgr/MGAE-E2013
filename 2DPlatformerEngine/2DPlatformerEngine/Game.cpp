@@ -3,7 +3,6 @@
 #include "Game.h"
 
 // Public
-
 Game::Game()
 {
 
@@ -18,38 +17,45 @@ void Game::play()
 {
 	Level level = Level();
 
+	// The file name for the levels.
 	int levelNumber = 0;
 	string levelFile = "Level";
 	string levelFileExtention = ".txt";
+	
 	bool gameOver = false, showVictoryScreen = false;
 
 	while (!gameOver)
 	{
+		// Append the level-things to find the next level.
 		string levelFileName = levelFile + std::to_string(levelNumber) + levelFileExtention;
 		ifstream mapData(levelFileName.c_str());
 
+		// If the file exists ...
 		if (mapData.is_open())
 		{
+			// ... load the level and run it
 			level.load(levelFileName);
-
 			level.run();
-
-			level.end();
 
 			levelNumber++;
 		}
 
+		// If the file does not exist ...
 		if (!mapData.is_open())
 		{
+			// ... end the game
 			gameOver = true;
 			showVictoryScreen = true;
+		}
+
+		if (level.gameShutDown) {
+			gameOver = true;
 		}
 	}
 
 	// Shows the victory screen after the level
 	while (showVictoryScreen)
 	{
-		//Our event structure
 		SDL_Event e;
 
 		while (SDL_PollEvent(&e))
@@ -79,7 +85,6 @@ void Game::end()
 }
 
 // Private
-
 void Game::showEndScreen()
 {
 	SDL_Color white = { 255, 255, 255 };

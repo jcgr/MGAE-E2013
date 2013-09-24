@@ -19,7 +19,6 @@ class Map
 		#define TILE_EMPTY 0
 		#define TILE_SOLID_BLOCK 1
 		#define TILE_GOAL 2
-		#define TILE_PLAYER_SPAWN 9
 
 		/**
 		* Loads a grid based map from the given file.
@@ -60,8 +59,17 @@ class Map
 
 	private:
 
+		/**
+		* The map represented as integers
+		*/
 		int** tileMap;
+		/**
+		* The dimensions of the map in tiles.
+		*/
 		int height, width;
+		/**
+		* The dimensions of each individual tile.
+		*/
 		int tileHeight, tileWidth;
 
 };

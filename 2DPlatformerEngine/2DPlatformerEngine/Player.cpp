@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "Window.h"
+// Includes level to get gravity for decelerateY
+#include "Level.h"
 
 // PUBLIC
 Player::Player()
@@ -112,7 +114,7 @@ void Player::decelerateX()
 
 void Player::decelerateY()
 {
-	velY = -7;
+	velY = -GRAVITY;
 }
 
 void Player::updateTexture()
@@ -164,7 +166,7 @@ void Player::updateTexture()
 
 SDL_Rect Player::getCurrentAnimationClip()
 {
-	if (isJumping){
+	if (isJumping) {
 		return animationJumpClips[currentJumpClip];
 	}
 	else if (moveState == MOVE_LEFT || moveState == MOVE_RIGHT) {
@@ -190,28 +192,4 @@ int Player::getWidth()
 	return playerWidth;
 }
 
-int Player::getVelY()
-{
-	return velY;
-}
-
-int Player::getVelX()
-{
-	return velX;
-}
-
-void Player::setVelY(int y)
-{
-	velY = y;
-}
-
-void Player::setVelX(int x)
-{
-	velX = x;
-}
-
-// !PUBLIC
-
 // PRIVATE
-
-// !PRIVATE
