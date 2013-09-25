@@ -26,6 +26,7 @@ Player::Player()
 	currentWalkClip = 0;
 	currentJumpClip = 0;
 	internalClipCounter = 0;
+	internalDeathClipCounter = 0;
 }
 
 void Player::loadPlayer()
@@ -157,9 +158,9 @@ void Player::updateTexture()
 	internalClipCounter++;
 	if (!isAlive) {
 		internalDeathClipCounter++;
-		internalDeathClipCounter = internalDeathClipCounter % 42;
+		internalDeathClipCounter = internalDeathClipCounter % 56;
 		currentDeathClip = internalDeathClipCounter / 3;
-		if (internalDeathClipCounter == 41) {
+		if (internalDeathClipCounter == 55) {
 			respawn();
 		}
 	}

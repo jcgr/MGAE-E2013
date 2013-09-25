@@ -118,7 +118,7 @@ class Level
 		* @param newPosY The y-coordinate of the position to check for.
 		* @return A value that indicates the kind of collision
 		*/
-		int checkCollision(int newPosX, int newPosY);
+		int checkPlayerCollision(int newPosX, int newPosY);
 
 		/**
 		* Loads the data from the testMap file, which
