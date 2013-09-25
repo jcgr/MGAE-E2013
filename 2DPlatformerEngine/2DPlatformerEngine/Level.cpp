@@ -23,7 +23,9 @@ void Level::load(string level)
 	player = Player();
 	player.setSpawn(initialSpawn.x, initialSpawn.y);
 	player.loadPlayer();
-	calculateCollisionPoints(player.posX, player.posY, player.currentCollisionPoints);
+	calculateCollisionPoints(player.getHeight(), player.getWidth(), player.posX, player.posY, player.currentCollisionPoints);
+
+	loadEnemiesFromMap();
 
 	backgroundTexture = Window::LoadImage("media/background.jpg");
 	brickTexture = Window::LoadImage("media/brick64px.png");
@@ -43,6 +45,11 @@ void Level::run()
 	// Main loop for level
 	while (!quit)
 	{
+		if (player.timeToRespawn) {
+			player.respawn();
+			loadEnemiesFromMap();
+		}
+
 		// Event Polling
 		while (SDL_PollEvent(&e))
 		{
@@ -86,6 +93,7 @@ void Level::run()
 		Window::Draw(backgroundTexture, backgroundPosition);
 		drawLevel();
 		drawPlayer();
+		drawEnemies();
 		Window::Present();
 
 		if (player.reachedGoal) {
@@ -105,6 +113,7 @@ void Level::run()
 			// If user closes the window
 			if (e.type == SDL_QUIT) {
 				showVictoryScreen = false;
+				gameShutDown = true;
 			}
 
 			if (keyboardState[SDL_SCANCODE_SPACE]) {
@@ -131,7 +140,7 @@ void Level::updatePlayer()
 
 	movePlayer();
 	player.updateTexture();
-	calculateCollisionPoints(player.posX, player.posY, player.currentCollisionPoints);
+	calculateCollisionPoints(player.getHeight(), player.getWidth(), player.posX, player.posY, player.currentCollisionPoints);
 }
 
 void Level::updateMap()
@@ -141,7 +150,34 @@ void Level::updateMap()
 
 void Level::updateEnemies()
 {
-	// Does nothing
+	// If the player is dead, don't bother moving
+	if (!player.isAlive) {
+		return;
+	}
+
+	// Update each enemy's speed and texture
+	for (int enemy = 0; enemy < numberOfEnemies; enemy++)
+	{
+		Enemy tempEnemy = enemyList[enemy];
+		tempEnemy.updateTexture();
+		tempEnemy.updateSpeed();
+
+		switch (tempEnemy.enemyType)
+		{
+		case ENEMY_HARPY:
+			tempEnemy = moveHarpy(tempEnemy);
+			break;
+
+		case ENEMY_GRIZZLY:
+			tempEnemy = moveGrizzly(tempEnemy);
+			break;
+
+		default:
+			break;
+		}
+
+		enemyList[enemy] = tempEnemy;
+	}
 }
 
 void Level::movePlayer()
@@ -155,9 +191,12 @@ void Level::movePlayer()
 	if (player.moveState == MOVE_LEFT) {
 		for (int i = 0; i < player.velX; i++)
 		{
-			int collisionType = checkPlayerCollision(player.posX - 1, player.posY);
+			calculateCollisionPoints(player.getHeight(), player.getWidth(), 
+									player.posX - 1, player.posY, 
+									player.tempCollisionPoints);
+			int collisionType = checkCollision(player.tempCollisionPoints, true);
 			if (collisionType) {
-				handleCollision(collisionType);
+				handlePlayerCollision(collisionType);
 				break;
 			}
 
@@ -169,9 +208,12 @@ void Level::movePlayer()
 	if (player.moveState == MOVE_RIGHT) {
 		for (int i = 0; i < player.velX; i++)
 		{
-			int collisionType = checkPlayerCollision(player.posX + 1, player.posY);
+			calculateCollisionPoints(player.getHeight(), player.getWidth(),
+									player.posX + 1, player.posY,
+									player.tempCollisionPoints);
+			int collisionType = checkCollision(player.tempCollisionPoints, true);
 			if (collisionType) {
-				handleCollision(collisionType);
+				handlePlayerCollision(collisionType);
 				break;
 			}
 
@@ -185,9 +227,12 @@ void Level::movePlayer()
 		// the player 7 pixels immediately.
 		for (int i = 0; i < GRAVITY; i++)
 		{
-			int collisionType = checkPlayerCollision(player.posX, player.posY - 1);
+			calculateCollisionPoints(player.getHeight(), player.getWidth(),
+				player.posX, player.posY - 1,
+				player.tempCollisionPoints);
+			int collisionType = checkCollision(player.tempCollisionPoints, true);
 			if (collisionType) {
-				handleCollision(collisionType);
+				handlePlayerCollision(collisionType);
 				player.decelerateY();
 				break;
 			}
@@ -202,9 +247,12 @@ void Level::movePlayer()
 		{
 			// If the player collides with something below, he has
 			// landed and can jump again.
-			int collisionType = checkPlayerCollision(player.posX, player.posY + 1);
+			calculateCollisionPoints(player.getHeight(), player.getWidth(),
+									player.posX, player.posY + 1,
+									player.tempCollisionPoints);
+			int collisionType = checkCollision(player.tempCollisionPoints, true);
 			if (collisionType) {
-				handleCollision(collisionType);
+				handlePlayerCollision(collisionType);
 				player.canJump = true;
 				player.isJumping = false;
 				break;
@@ -215,10 +263,133 @@ void Level::movePlayer()
 	}
 }
 
+Enemy Level::moveHarpy(Enemy harpy)
+{
+	for (int movement = 0; movement < harpy.velY; movement++)
+	{
+		if (harpy.moveDirection == MOVE_UP)
+		{
+			calculateCollisionPoints(harpy.getHeight(), harpy.getWidth(),
+				harpy.posX, harpy.posY - 1,
+				harpy.tempCollisionPoints);
+			int collisionType = checkCollision(harpy.tempCollisionPoints, false);
+			if (collisionType > 0) {
+				harpy.moveDirection = MOVE_DOWN;
+				break;
+			}
+
+			harpy.posY--;
+		}
+		else if (harpy.moveDirection == MOVE_DOWN)
+		{
+			calculateCollisionPoints(harpy.getHeight(), harpy.getWidth(),
+				harpy.posX, harpy.posY + 1,
+				harpy.tempCollisionPoints);
+			int collisionType = checkCollision(harpy.tempCollisionPoints, false);
+			if (collisionType > 0) {
+				harpy.moveDirection = MOVE_UP;
+				break;
+			}
+
+			harpy.posY++;
+		}
+	}
+
+	//if (harpy.moveDirection == MOVE_UP)
+	//{
+	//	for (int movement = 0; movement < harpy.velY; movement++)
+	//	{
+	//		calculateCollisionPoints(harpy.getHeight(), harpy.getWidth(),
+	//			harpy.posX, harpy.posY - 1,
+	//			harpy.tempCollisionPoints);
+	//		int collisionType = checkCollision(harpy.tempCollisionPoints, false);
+	//		if (collisionType > 0) {
+	//			harpy.moveDirection = MOVE_DOWN;
+	//			break;
+	//		}
+
+	//		harpy.posY--;
+	//	}
+	//} 
+	//else if (harpy.moveDirection == MOVE_DOWN)
+	//{
+	//	for (int movement = 0; movement < harpy.velY; movement++)
+	//	{
+	//		calculateCollisionPoints(harpy.getHeight(), harpy.getWidth(),
+	//			harpy.posX, harpy.posY + 1,
+	//			harpy.tempCollisionPoints);
+	//		int collisionType = checkCollision(harpy.tempCollisionPoints, false);
+	//		if (collisionType > 0) {
+	//			harpy.moveDirection = MOVE_UP;
+	//			break;
+	//		}
+
+	//		harpy.posY++;
+	//	}
+	//}
+
+	return harpy;
+}
+
+Enemy Level::moveGrizzly(Enemy grizzly)
+{
+	// Move the grizzly horizontally based on its moveDirection + velocity.
+	for (int movement = 0; movement < grizzly.velX; movement++)
+	{
+		if (grizzly.moveDirection == MOVE_RIGHT)
+		{
+			// Check for collision
+			calculateCollisionPoints(grizzly.getHeight(), grizzly.getWidth(),
+				grizzly.posX + 1, grizzly.posY,
+				grizzly.tempCollisionPoints);
+			int collisionType = checkCollision(grizzly.tempCollisionPoints, false);
+			if (collisionType > 0) {
+				grizzly.moveDirection = MOVE_LEFT;
+				break;
+			}
+
+			grizzly.posX++;
+		}
+		else if (grizzly.moveDirection == MOVE_LEFT)
+		{
+			// Check for collision
+			calculateCollisionPoints(grizzly.getHeight(), grizzly.getWidth(),
+				grizzly.posX - 1, grizzly.posY,
+				grizzly.tempCollisionPoints);
+			int collisionType = checkCollision(grizzly.tempCollisionPoints, false);
+			if (collisionType > 0) {
+				grizzly.moveDirection = MOVE_RIGHT;
+				break;
+			}
+
+			grizzly.posX--;
+		}
+	}
+	
+	// Move the grizzly vertically
+	for (int movement = 0; movement < grizzly.velY; movement++)
+	{
+		// Check for collision
+		calculateCollisionPoints(grizzly.getHeight(), grizzly.getWidth(),
+			grizzly.posX, grizzly.posY + 1,
+			grizzly.tempCollisionPoints);
+		int collisionType = checkCollision(grizzly.tempCollisionPoints, false);
+		if (collisionType > 0) {
+			grizzly.isFalling = false;
+			break;
+		}
+
+		grizzly.isFalling = true;
+		grizzly.posY++;
+	}
+
+	return grizzly;
+}
+
 void Level::drawLevel()
 {
 	int** tempMap = map.getMap();
-	int firstX, camPosX, offsetX;
+	int firstX, offsetX;
 	int height = map.getHeight(), width = map.getWidth();
 
 	// Calculate which part of the level to show, based on the player's
@@ -300,36 +471,45 @@ void Level::drawLevel()
 
 void Level::drawPlayer()
 {
-	// these are used to determine if the player is close
-	// to one end of the screen.
-	int left, right;
-	left = Window::WINDOW_WIDTH / 2;
-	right = map.getWidth() * 64 - (left);
-
 	// Get player position. Adjust to take height/width
 	// of the character into account.
 	SDL_Rect pos;
-	pos.x = player.posX - (player.getWidth() / 2);
+	pos.x = player.posX - (player.getWidth() / 2) - camPosX;
 	pos.y = player.posY - (player.getHeight() / 2);
 	pos.w = player.getWidth();
 	pos.h = player.getHeight();
 
-	// If the player is not close to any side...
-	if (player.posX > left && player.posX < right){
-		// ... set his x position to the middle of the screen.
-		pos.x = Window::WINDOW_WIDTH / 2
-			- (player.getWidth() / 2);
-	}
-	// If the player is close to the right side of the level...
-	if (player.posX >= right) {
-		// ... set his x position to show how close he is.
-		pos.x = Window::WINDOW_WIDTH / 2
-			+ (player.posX - right)
-			- (player.getWidth() / 2);
-	}
-
 	// Draw the player
 	Window::Draw(player.getCurrentTexture(), pos, &player.getCurrentAnimationClip());
+}
+
+void Level::drawEnemies()
+{
+	for (int i = 0; i < numberOfEnemies; i++)
+	{
+		SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+		Enemy tempEnemy = enemyList[i];
+
+		if (tempEnemy.enemyType == ENEMY_HARPY) {
+			if (player.posX < tempEnemy.posX) {
+				flip = SDL_FLIP_HORIZONTAL;
+			}
+		}
+		if (tempEnemy.enemyType == ENEMY_GRIZZLY) {
+			if (tempEnemy.moveDirection == MOVE_LEFT) {
+				flip = SDL_FLIP_HORIZONTAL;
+			}
+		}
+
+		SDL_Rect pos;
+		pos.x = tempEnemy.posX - (tempEnemy.getWidth() / 2) - camPosX;
+		pos.y = tempEnemy.posY - (tempEnemy.getHeight() / 2);
+		pos.w = tempEnemy.getWidth();
+		pos.h = tempEnemy.getHeight();
+		Window::Draw(tempEnemy.getCurrentTexture(), pos, &tempEnemy.getCurrentAnimationClip(),
+			NULL, NULL, NULL, flip);
+	}
 }
 
 void Level::drawWinScreen()
@@ -354,53 +534,122 @@ void Level::drawWinScreen()
 	Window::Draw(msgContinue, msgContinueBox);
 }
 
-int Level::checkPlayerCollision(int newPosX, int newPosY)
+void Level::loadEnemiesFromMap()
 {
-	int tileType = 0;
+	int** tempMap = map.getMap();
+	int countEnemies = 0;
 
-	// Get temp collision points
-	calculateCollisionPoints(newPosX, newPosY, player.tempCollisionPoints);
-
-	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
-	{
-			SDL_Point tempPoint = player.tempCollisionPoints[i];
-			int tempCollisionType = map.getTile(tempPoint.x, tempPoint.y);
-			if (tempCollisionType > tileType) {
-				tileType = tempCollisionType;
+	// Count how many enemies that will be spawned.
+	for (int row = 0; row < map.getHeight(); row++) {
+		for (int col = 0; col < map.getWidth(); col++) {
+			if (tempMap[row][col] == ENEMY_HARPY || tempMap[row][col] == ENEMY_GRIZZLY) {
+				countEnemies++;
 			}
+		}
 	}
 
-	return tileType;
+	// Load the enemies correctly.
+	numberOfEnemies = 0;
+	enemyList = new Enemy[countEnemies];
+	for (int row = 0; row < map.getHeight(); row++) {
+		for (int col = 0; col < map.getWidth(); col++) {
+			if (tempMap[row][col] == ENEMY_HARPY) {
+				Enemy newEnemy = Enemy();
+				newEnemy.loadEnemy(col * TILE_WIDTH, row * TILE_HEIGHT, ENEMY_HARPY);
+				enemyList[numberOfEnemies] = newEnemy;
+				numberOfEnemies++;
+			}
+			if (tempMap[row][col] == ENEMY_GRIZZLY) {
+				Enemy newEnemy = Enemy();
+				newEnemy.loadEnemy(col * TILE_WIDTH, row * TILE_HEIGHT, ENEMY_GRIZZLY);
+				enemyList[numberOfEnemies] = newEnemy;
+				numberOfEnemies++;
+			}
+		}
+	}
 }
 
-void Level::calculateCollisionPoints(int newPosX, int newPosY, SDL_Point* collisionPoints)
+void Level::calculateCollisionPoints(int unitHeight, int unitWidth, int newPosX, int newPosY, SDL_Point* collisionPoints)
 {
 	// Calculate 9 collision points. Each corner, midways between
 	// each corner and the middle of the texture.
 	for (int i = 0; i < 9; i++)
 	{
 		SDL_Point point;
-		point.x = newPosX + ((i / 3) * (player.getWidth() / 2));
-		point.y = newPosY + ((i % 3) * (player.getHeight() / 2));
+		point.x = newPosX + ((i / 3) * (unitWidth / 2));
+		point.y = newPosY + ((i % 3) * (unitHeight / 2));
 
 		collisionPoints[i] = point;
 	}
 }
 
-void Level::handleCollision(int collisionType)
+void Level::handlePlayerCollision(int collisionType)
 {
 	switch (collisionType)
 	{
-	case TILE_SOLID_BLOCK:
+	case COLLISION_SOLID_BLOCK:
 		// Do nothing. Is handled depending on where it happens
 		break;
 
-	case TILE_GOAL:
+	case COLLISION_GOAL:
 		player.reachedGoal = true;
 		break;
 
-	case TILE_SPIKE:
+	case COLLISION_SPIKE:
+		player.die();
+		break;
+
+	case COLLISION_ENEMY:
 		player.die();
 		break;
 	}
+}
+
+int Level::checkCollision(SDL_Point *collisionPoints, bool player)
+{
+	int tileType = 0;
+
+	// Check if the player hits an enemy
+	if (player)
+	{
+		for (int point = 0; point < COLLISION_POINT_AMOUNT; point++)
+		{
+			SDL_Point tempPoint = collisionPoints[point];
+
+			for (int enemy = 0; enemy < numberOfEnemies; enemy++)
+			{
+				Enemy tempEnemy = enemyList[enemy];
+
+				if (tempPoint.x > tempEnemy.posX && tempPoint.x < tempEnemy.posX + tempEnemy.getWidth()
+					&& tempPoint.y > tempEnemy.posY && tempPoint.y < tempEnemy.posY + tempEnemy.getHeight()) {
+						return COLLISION_ENEMY;
+				}
+			}
+		}
+	}
+
+	// Iterate over all collision points to check for collision with the map
+	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
+	{
+		SDL_Point tempPoint = collisionPoints[i];
+		int tempCollisionType = map.getTile(tempPoint.x, tempPoint.y);
+
+		// If checking for the player, just return the highest collision type
+		if (player) {
+			if (tempCollisionType > tileType) {
+				tileType = tempCollisionType;
+			}
+		}
+		// If checking for enemies, change only if it hits bricks or spikes
+		else {
+			if (tempCollisionType == COLLISION_GOAL) { 
+				// Do nothing 
+			}
+			else if (tempCollisionType != COLLISION_EMPTY) {
+				tileType = tempCollisionType;
+			}
+		}
+	}
+
+	return tileType;
 }

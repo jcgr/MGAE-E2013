@@ -2,11 +2,13 @@
 #define LEVEL_H
 
 #include <SDL.h>
+#include <list>
 
 #include "Window.h"
 #include "Timer.h"
 #include "Map.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class Level
 {
@@ -42,6 +44,18 @@ class Level
 		* Determines which key is currently pressed.
 		*/
 		int currentHorizontalKey, currentVerticalKey;
+
+		/**
+		* The x-coordinate of the camera (used for drawing enemies and level)
+		*/
+		int camPosX;
+
+		int numberOfEnemies;
+
+		/**
+		* A list of enemies in the level.
+		*/
+		Enemy* enemyList;
 
 		/**
 		* The player object.
@@ -88,6 +102,18 @@ class Level
 		* Moves the player.
 		*/
 		void movePlayer();
+		/**
+		* Logic for moving harpies.
+		* @param harpy The initial information about the harpy.
+		* @return The moved harpy.
+		*/
+		Enemy moveHarpy(Enemy harpy);
+		/**
+		* Logic for moving grizzlies.
+		* @param grizzly The initial information about the grizzly.
+		* @return The moved grizzly.
+		*/
+		Enemy moveGrizzly(Enemy grizzly);
 
 		/**
 		* Draws the level.
@@ -98,9 +124,18 @@ class Level
 		*/
 		void drawPlayer();
 		/**
+		* Draws the enemies.
+		*/
+		void drawEnemies();
+		/**
 		* Draws the win screen.
 		*/
 		void drawWinScreen();
+
+		/**
+		* Loads the enemies present on the map.
+		*/
+		void loadEnemiesFromMap();
 
 		/**
 		* Calculates the collision points for the given position.
@@ -108,24 +143,21 @@ class Level
 		* @param newPosY The y coordiate of the new position.
 		* @param collisionPoints The array to put the results into.
 		*/
-		void calculateCollisionPoints(int newPosX, int newPosY, SDL_Point* collisionPoints);
-
-		void handleCollision(int collisionType);
+		void calculateCollisionPoints(int height, int width, int newPosX, int newPosY, SDL_Point* collisionPoints);
 
 		/**
-		* Checks if the player is colliding with something in the map.
-		* @param newPosX The x-coordinate of the position to check for.
-		* @param newPosY The y-coordinate of the position to check for.
-		* @return A value that indicates the kind of collision
+		* Makes stuff happen to the player, depending on what he collides with
+		* @param collisionType The type of collision that happens.
 		*/
-		int checkPlayerCollision(int newPosX, int newPosY);
+		void handlePlayerCollision(int collisionType);
 
 		/**
-		* Loads the data from the testMap file, which
-		* holds the layout of the map.
-		* @return True if the load was successful; false if it was not.
+		* Checks if the points collide with something in the map.
+		* @param *collisoinPoints The points to do the collision checking for.
+		* @param player A value that determines if we're checking for the player or not.
+		* @return A value that indicates the kind of collision.
 		*/
-		bool loadMap();
+		int checkCollision(SDL_Point *collisionPoints, bool player);
 };
 
 #endif // !LEVEL_H

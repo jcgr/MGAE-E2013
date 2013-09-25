@@ -82,6 +82,9 @@ void Player::loadPlayer()
 		animationDieClips[i].h = playerHeight;
 		animationDieClips[i].w = playerWidth;
 	}
+
+	playerHeight -= 2;
+	playerWidth -= 2;
 }
 
 void Player::setSpawn(int x, int y)
@@ -102,6 +105,7 @@ void Player::respawn()
 	posX = respawnX;
 	posY = respawnY;
 	health = 1;
+	timeToRespawn = false;
 	isAlive = true;
 }
 
@@ -161,7 +165,7 @@ void Player::updateTexture()
 		internalDeathClipCounter = internalDeathClipCounter % 56;
 		currentDeathClip = internalDeathClipCounter / 3;
 		if (internalDeathClipCounter == 55) {
-			respawn();
+			timeToRespawn = true;
 		}
 	}
 

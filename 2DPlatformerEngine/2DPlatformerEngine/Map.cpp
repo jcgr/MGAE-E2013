@@ -75,10 +75,10 @@ int Map::getTile(int x, int y)
 {
 	// Checks if the pixel is within the map.
 	if (x > width * tileWidth || x < 0) {
-		return TILE_SOLID_BLOCK;
+		return COLLISION_SOLID_BLOCK;
 	}
 	if (y > height * tileHeight || y < 0) {
-		return TILE_SOLID_BLOCK;
+		return COLLISION_SOLID_BLOCK;
 	}
 
 	// Finds the tile location of the pixel.
@@ -89,16 +89,16 @@ int Map::getTile(int x, int y)
 	int tileY = (y - (tileHeight / 2)) / tileHeight;
 
 	if (tileMap[tileY][tileX] == 1) {
-		return TILE_SOLID_BLOCK;
+		return COLLISION_SOLID_BLOCK;
 	}
 	if (tileMap[tileY][tileX] == 2 || tileMap[tileY][tileX] == 3) {
-		return TILE_GOAL;
+		return COLLISION_GOAL;
 	}
 	if (tileMap[tileY][tileX] == 4) {
-		return TILE_SPIKE;
+		return COLLISION_SPIKE;
 	}
 
-	return TILE_EMPTY;
+	return COLLISION_EMPTY;
 }
 
 SDL_Rect Map::getPlayerSpawn()

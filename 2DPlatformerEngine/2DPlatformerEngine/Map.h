@@ -16,10 +16,11 @@ class Map
 		Map(int tileHeight, int tileWidth);
 		~Map(){};
 
-		#define TILE_EMPTY 0
-		#define TILE_SOLID_BLOCK 1
-		#define TILE_GOAL 2
-		#define TILE_SPIKE 4
+		#define COLLISION_EMPTY 0
+		#define COLLISION_SOLID_BLOCK 1
+		#define COLLISION_GOAL 2
+		#define COLLISION_SPIKE 4
+		#define COLLISION_ENEMY 5
 
 		/**
 		* Loads a grid based map from the given file.

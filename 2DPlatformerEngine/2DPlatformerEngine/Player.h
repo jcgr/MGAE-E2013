@@ -51,6 +51,10 @@ class Player
 		* A value that tells if the player is jumping or not.
 		*/
 		bool isJumping;
+		/**
+		* A value that tells if the player should respawn or not.
+		*/
+		bool timeToRespawn;
 
 		/**
 		* The points to check for collision with regards to the player.
