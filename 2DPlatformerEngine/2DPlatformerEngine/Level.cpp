@@ -27,10 +27,10 @@ void Level::load(string level)
 
 	loadEnemiesFromMap();
 
-	backgroundTexture = Window::LoadImage("media/background.jpg");
-	brickTexture = Window::LoadImage("media/brick64px.png");
-	goalTexture = Window::LoadImage("media/Goal64px.png");
-	spikeTexture = Window::LoadImage("media/Spikes64px.png");
+	backgroundTexture = Window::LoadImage(LEVEL_TEXTURE_BACKGROUND);
+	brickTexture = Window::LoadImage(LEVEL_TEXTURE_BRICK);
+	goalTexture = Window::LoadImage(LEVEL_TEXTURE_GOAL);
+	spikeTexture = Window::LoadImage(LEVEL_TEXTURE_SPIKES);
 }
 
 void Level::run()
@@ -65,6 +65,7 @@ void Level::run()
 			currentHorizontalKey = 0;
 			currentVerticalKey = 0;
 
+			// Using keyboardState as it handles multiple input at once.
 			if (keyboardState[SDL_SCANCODE_D]){
 				player.accelerateX();
 				player.moveState = PLAYER_MOVE_RIGHT;

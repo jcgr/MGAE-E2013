@@ -1,8 +1,13 @@
-#ifndef GAMEVARIABLES_H
-#define GAMEVARIABLES_H
+#ifndef LEVELHELPER_H
+#define LEVELHELPER_H
 
 class GameVariables
 {
+	// Level related
+	#define LEVEL_TEXTURE_BACKGROUND "media/background.jpg"
+	#define LEVEL_TEXTURE_BRICK "media/brick64px.png"
+	#define LEVEL_TEXTURE_GOAL "media/Goal64px.png"
+	#define LEVEL_TEXTURE_SPIKES "media/Spikes64px.png"
 
 	// Map related
 	#define TILE_HEIGHT 64;
