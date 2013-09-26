@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <list>
 
+#include "GameVariables.h"
 #include "Window.h"
 #include "Map.h"
 #include "Player.h"
@@ -14,13 +15,6 @@ class Level
 	public:
 		Level();
 		~Level(){};
-
-		#define GRAVITY 7
-
-		/**
-		* The dimensions of the tile.
-		*/
-		const int TILE_HEIGHT = 64, TILE_WIDTH = 64;
 
 		/**
 		* Tells the game to shut down.
@@ -102,17 +96,17 @@ class Level
 		*/
 		void movePlayer();
 		/**
-		* Logic for moving harpies.
-		* @param harpy The initial information about the harpy.
-		* @return The moved harpy.
+		* Logic for moving flying enemies.
+		* @param flyer The initial information about the flyer.
+		* @return The moved flyer.
 		*/
-		Enemy moveHarpy(Enemy harpy);
+		Enemy moveFlying(Enemy flyer);
 		/**
-		* Logic for moving grizzlies.
-		* @param grizzly The initial information about the grizzly.
-		* @return The moved grizzly.
+		* Logic for moving walking enemies.
+		* @param walker The initial information about the walker.
+		* @return The moved walker.
 		*/
-		Enemy moveGrizzly(Enemy grizzly);
+		Enemy moveWalking(Enemy walker);
 
 		/**
 		* Draws the level.

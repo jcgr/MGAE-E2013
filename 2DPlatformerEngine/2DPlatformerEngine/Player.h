@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include "Map.h"
+#include "GameVariables.h"
 
 /**
 * The player
@@ -14,12 +15,6 @@ class Player
 	public:
 		Player();
 		~Player(){};
-
-		#define COLLISION_POINT_AMOUNT 9
-		#define STAND_RIGHT 1
-		#define STAND_LEFT -1
-		#define MOVE_RIGHT 2
-		#define MOVE_LEFT -2
 
 		int health;
 		/**

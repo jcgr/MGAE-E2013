@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <vector>
 
+#include "GameVariables.h"
+
 using namespace std;
 
 /**
@@ -13,14 +15,7 @@ class Map
 {
 	public:
 		Map();
-		Map(int tileHeight, int tileWidth);
 		~Map(){};
-
-		#define COLLISION_EMPTY 0
-		#define COLLISION_SOLID_BLOCK 1
-		#define COLLISION_GOAL 2
-		#define COLLISION_SPIKE 4
-		#define COLLISION_ENEMY 5
 
 		/**
 		* Loads a grid based map from the given file.
@@ -58,6 +53,9 @@ class Map
 		* @return The width of the map in tiles.
 		*/
 		int getWidth();
+
+		int getTileHeight();
+		int getTileWidth();
 
 	private:
 

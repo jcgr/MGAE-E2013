@@ -15,7 +15,7 @@ void Level::load(string level)
 	};
 
 	// Loads the map and gets the player spawn.
-	map = Map(TILE_HEIGHT, TILE_WIDTH);
+	map = Map();
 	map.loadMap(level);
 	SDL_Rect initialSpawn = map.getPlayerSpawn();
 
@@ -67,12 +67,12 @@ void Level::run()
 
 			if (keyboardState[SDL_SCANCODE_D]){
 				player.accelerateX();
-				player.moveState = MOVE_RIGHT;
+				player.moveState = PLAYER_MOVE_RIGHT;
 				currentHorizontalKey = SDLK_d;
 			}
 			if (keyboardState[SDL_SCANCODE_A]){
 				player.accelerateX();
-				player.moveState = MOVE_LEFT;
+				player.moveState = PLAYER_MOVE_LEFT;
 				currentHorizontalKey = SDLK_a;
 			}
 			if (keyboardState[SDL_SCANCODE_W]){
@@ -164,12 +164,12 @@ void Level::updateEnemies()
 
 		switch (tempEnemy.enemyType)
 		{
-		case ENEMY_HARPY:
-			tempEnemy = moveHarpy(tempEnemy);
+		case ENEMY_FLYING:
+			tempEnemy = moveFlying(tempEnemy);
 			break;
 
-		case ENEMY_GRIZZLY:
-			tempEnemy = moveGrizzly(tempEnemy);
+		case ENEMY_WALKING:
+			tempEnemy = moveWalking(tempEnemy);
 			break;
 
 		default:
@@ -188,7 +188,7 @@ void Level::movePlayer()
 	}
 
 	// If the player if moving left ...
-	if (player.moveState == MOVE_LEFT) {
+	if (player.moveState == PLAYER_MOVE_LEFT) {
 		for (int i = 0; i < player.velX; i++)
 		{
 			calculateCollisionPoints(player.getHeight(), player.getWidth(), 
@@ -205,7 +205,7 @@ void Level::movePlayer()
 	}
 
 	// If the player is moving right ...
-	if (player.moveState == MOVE_RIGHT) {
+	if (player.moveState == PLAYER_MOVE_RIGHT) {
 		for (int i = 0; i < player.velX; i++)
 		{
 			calculateCollisionPoints(player.getHeight(), player.getWidth(),
@@ -225,7 +225,7 @@ void Level::movePlayer()
 	if (player.velY > 0) {
 		// ... check each position step-by-step instead of just moving
 		// the player 7 pixels immediately.
-		for (int i = 0; i < GRAVITY; i++)
+		for (int i = 0; i < PLAYER_GRAVITY; i++)
 		{
 			calculateCollisionPoints(player.getHeight(), player.getWidth(),
 				player.posX, player.posY - 1,
@@ -263,127 +263,94 @@ void Level::movePlayer()
 	}
 }
 
-Enemy Level::moveHarpy(Enemy harpy)
+Enemy Level::moveFlying(Enemy flyer)
 {
-	for (int movement = 0; movement < harpy.velY; movement++)
+	for (int movement = 0; movement < flyer.velY; movement++)
 	{
-		if (harpy.moveDirection == MOVE_UP)
+		if (flyer.moveDirection == ENEMY_MOVE_UP)
 		{
-			calculateCollisionPoints(harpy.getHeight(), harpy.getWidth(),
-				harpy.posX, harpy.posY - 1,
-				harpy.tempCollisionPoints);
-			int collisionType = checkCollision(harpy.tempCollisionPoints, false);
+			calculateCollisionPoints(flyer.getHeight(), flyer.getWidth(),
+				flyer.posX, flyer.posY - 1,
+				flyer.tempCollisionPoints);
+			int collisionType = checkCollision(flyer.tempCollisionPoints, false);
 			if (collisionType > 0) {
-				harpy.moveDirection = MOVE_DOWN;
+				flyer.moveDirection = ENEMY_MOVE_DOWN;
 				break;
 			}
 
-			harpy.posY--;
+			flyer.posY--;
 		}
-		else if (harpy.moveDirection == MOVE_DOWN)
+		else if (flyer.moveDirection == ENEMY_MOVE_DOWN)
 		{
-			calculateCollisionPoints(harpy.getHeight(), harpy.getWidth(),
-				harpy.posX, harpy.posY + 1,
-				harpy.tempCollisionPoints);
-			int collisionType = checkCollision(harpy.tempCollisionPoints, false);
+			calculateCollisionPoints(flyer.getHeight(), flyer.getWidth(),
+				flyer.posX, flyer.posY + 1,
+				flyer.tempCollisionPoints);
+			int collisionType = checkCollision(flyer.tempCollisionPoints, false);
 			if (collisionType > 0) {
-				harpy.moveDirection = MOVE_UP;
+				flyer.moveDirection = ENEMY_MOVE_UP;
 				break;
 			}
 
-			harpy.posY++;
+			flyer.posY++;
 		}
 	}
 
-	//if (harpy.moveDirection == MOVE_UP)
-	//{
-	//	for (int movement = 0; movement < harpy.velY; movement++)
-	//	{
-	//		calculateCollisionPoints(harpy.getHeight(), harpy.getWidth(),
-	//			harpy.posX, harpy.posY - 1,
-	//			harpy.tempCollisionPoints);
-	//		int collisionType = checkCollision(harpy.tempCollisionPoints, false);
-	//		if (collisionType > 0) {
-	//			harpy.moveDirection = MOVE_DOWN;
-	//			break;
-	//		}
-
-	//		harpy.posY--;
-	//	}
-	//} 
-	//else if (harpy.moveDirection == MOVE_DOWN)
-	//{
-	//	for (int movement = 0; movement < harpy.velY; movement++)
-	//	{
-	//		calculateCollisionPoints(harpy.getHeight(), harpy.getWidth(),
-	//			harpy.posX, harpy.posY + 1,
-	//			harpy.tempCollisionPoints);
-	//		int collisionType = checkCollision(harpy.tempCollisionPoints, false);
-	//		if (collisionType > 0) {
-	//			harpy.moveDirection = MOVE_UP;
-	//			break;
-	//		}
-
-	//		harpy.posY++;
-	//	}
-	//}
-
-	return harpy;
+	return flyer;
 }
 
-Enemy Level::moveGrizzly(Enemy grizzly)
+Enemy Level::moveWalking(Enemy walker)
 {
-	// Move the grizzly horizontally based on its moveDirection + velocity.
-	for (int movement = 0; movement < grizzly.velX; movement++)
+	// Move the walker horizontally based on its moveDirection + velocity.
+	for (int movement = 0; movement < walker.velX; movement++)
 	{
-		if (grizzly.moveDirection == MOVE_RIGHT)
+		if (walker.moveDirection == ENEMY_MOVE_RIGHT)
 		{
 			// Check for collision
-			calculateCollisionPoints(grizzly.getHeight(), grizzly.getWidth(),
-				grizzly.posX + 1, grizzly.posY,
-				grizzly.tempCollisionPoints);
-			int collisionType = checkCollision(grizzly.tempCollisionPoints, false);
+			calculateCollisionPoints(walker.getHeight(), walker.getWidth(),
+				walker.posX + 1, walker.posY,
+				walker.tempCollisionPoints);
+			int collisionType = checkCollision(walker.tempCollisionPoints, false);
 			if (collisionType > 0) {
-				grizzly.moveDirection = MOVE_LEFT;
+				walker.moveDirection = ENEMY_MOVE_LEFT;
 				break;
 			}
 
-			grizzly.posX++;
+			walker.posX++;
 		}
-		else if (grizzly.moveDirection == MOVE_LEFT)
+		else if (walker.moveDirection == ENEMY_MOVE_LEFT)
 		{
 			// Check for collision
-			calculateCollisionPoints(grizzly.getHeight(), grizzly.getWidth(),
-				grizzly.posX - 1, grizzly.posY,
-				grizzly.tempCollisionPoints);
-			int collisionType = checkCollision(grizzly.tempCollisionPoints, false);
+			calculateCollisionPoints(walker.getHeight(), walker.getWidth(),
+				walker.posX - 1, walker.posY,
+				walker.tempCollisionPoints);
+			int collisionType = checkCollision(walker.tempCollisionPoints, false);
 			if (collisionType > 0) {
-				grizzly.moveDirection = MOVE_RIGHT;
+				walker.moveDirection = ENEMY_MOVE_RIGHT;
 				break;
 			}
 
-			grizzly.posX--;
+			walker.posX--;
 		}
 	}
 	
-	// Move the grizzly vertically
-	for (int movement = 0; movement < grizzly.velY; movement++)
+	// Make the walker fall
+	for (int movement = 0; movement < walker.velY; movement++)
 	{
 		// Check for collision
-		calculateCollisionPoints(grizzly.getHeight(), grizzly.getWidth(),
-			grizzly.posX, grizzly.posY + 1,
-			grizzly.tempCollisionPoints);
-		int collisionType = checkCollision(grizzly.tempCollisionPoints, false);
+		calculateCollisionPoints(walker.getHeight(), walker.getWidth(),
+			walker.posX, walker.posY + 1,
+			walker.tempCollisionPoints);
+		int collisionType = checkCollision(walker.tempCollisionPoints, false);
 		if (collisionType > 0) {
-			grizzly.isFalling = false;
+			walker.isFalling = false;
 			break;
 		}
 
-		grizzly.isFalling = true;
-		grizzly.posY++;
+		walker.isFalling = true;
+		walker.posY++;
 	}
 
-	return grizzly;
+	return walker;
 }
 
 void Level::drawLevel()
@@ -398,14 +365,14 @@ void Level::drawLevel()
 	if (camPosX < 0) {
 		camPosX = 0;
 	}
-	if (camPosX + Window::WINDOW_WIDTH > width * TILE_WIDTH) {
-		camPosX = (map.getWidth() * TILE_WIDTH) - Window::WINDOW_WIDTH;
+	if (camPosX + Window::WINDOW_WIDTH > width * map.getTileHeight()) {
+		camPosX = (map.getWidth() * map.getTileWidth()) - Window::WINDOW_WIDTH;
 	}
 
 	// The first tile on the x-axis and how much of it that can
 	// be seen.
-	firstX = camPosX / TILE_WIDTH;
-	offsetX = camPosX % TILE_WIDTH;
+	firstX = camPosX / map.getTileWidth();
+	offsetX = camPosX % map.getTileWidth();
 
 	// Draw the level.
 	for (int x = 0; x < width; x++){
@@ -428,8 +395,8 @@ void Level::drawLevel()
 				SDL_QueryTexture(brickTexture, NULL, NULL, &tempWidth, &tempHeight);
 
 				SDL_Rect pos;
-				pos.x = (x * TILE_WIDTH) - (offsetX);
-				pos.y = y * TILE_HEIGHT;
+				pos.x = (x * map.getTileWidth()) - (offsetX);
+				pos.y = y * map.getTileHeight();
 				pos.w = tempWidth;
 				pos.h = tempHeight;
 
@@ -443,8 +410,8 @@ void Level::drawLevel()
 				SDL_QueryTexture(brickTexture, NULL, NULL, &tempWidth, &tempHeight);
 
 				SDL_Rect pos;
-				pos.x = (x * TILE_WIDTH) - (offsetX);
-				pos.y = y * TILE_HEIGHT;
+				pos.x = (x * map.getTileWidth()) - (offsetX);
+				pos.y = y * map.getTileHeight();
 				pos.w = tempWidth;
 				pos.h = tempHeight;
 
@@ -458,8 +425,8 @@ void Level::drawLevel()
 				SDL_QueryTexture(goalTexture, NULL, NULL, &tempWidth, &tempHeight);
 
 				SDL_Rect pos;
-				pos.x = (x * TILE_WIDTH) - (offsetX) - ((tempWidth - TILE_WIDTH) / 2);
-				pos.y = y * TILE_HEIGHT - (tempHeight - TILE_HEIGHT);
+				pos.x = (x * map.getTileWidth()) - (offsetX)-((tempWidth - map.getTileWidth()) / 2);
+				pos.y = y * map.getTileHeight() - (tempHeight - map.getTileHeight());
 				pos.w = tempWidth;
 				pos.h = tempHeight;
 
@@ -481,7 +448,7 @@ void Level::drawPlayer()
 
 	// Flip the player texture if necessary
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
-	if (player.moveState == MOVE_LEFT || player.moveState == STAND_LEFT) {
+	if (player.moveState == PLAYER_MOVE_LEFT || player.moveState == PLAYER_STAND_LEFT) {
 		flip = SDL_FLIP_HORIZONTAL;
 	}
 
@@ -498,13 +465,13 @@ void Level::drawEnemies()
 
 		Enemy tempEnemy = enemyList[i];
 
-		if (tempEnemy.enemyType == ENEMY_HARPY) {
+		if (tempEnemy.enemyType == ENEMY_FLYING) {
 			if (player.posX < tempEnemy.posX) {
 				flip = SDL_FLIP_HORIZONTAL;
 			}
 		}
-		if (tempEnemy.enemyType == ENEMY_GRIZZLY) {
-			if (tempEnemy.moveDirection == MOVE_LEFT) {
+		if (tempEnemy.enemyType == ENEMY_WALKING) {
+			if (tempEnemy.moveDirection == ENEMY_MOVE_LEFT) {
 				flip = SDL_FLIP_HORIZONTAL;
 			}
 		}
@@ -549,7 +516,7 @@ void Level::loadEnemiesFromMap()
 	// Count how many enemies that will be spawned.
 	for (int row = 0; row < map.getHeight(); row++) {
 		for (int col = 0; col < map.getWidth(); col++) {
-			if (tempMap[row][col] == ENEMY_HARPY || tempMap[row][col] == ENEMY_GRIZZLY) {
+			if (tempMap[row][col] == ENEMY_FLYING || tempMap[row][col] == ENEMY_WALKING) {
 				countEnemies++;
 			}
 		}
@@ -560,15 +527,15 @@ void Level::loadEnemiesFromMap()
 	enemyList = new Enemy[countEnemies];
 	for (int row = 0; row < map.getHeight(); row++) {
 		for (int col = 0; col < map.getWidth(); col++) {
-			if (tempMap[row][col] == ENEMY_HARPY) {
+			if (tempMap[row][col] == ENEMY_FLYING) {
 				Enemy newEnemy = Enemy();
-				newEnemy.loadEnemy(col * TILE_WIDTH, row * TILE_HEIGHT, ENEMY_HARPY);
+				newEnemy.loadEnemy(col * map.getTileWidth(), row * map.getTileHeight(), ENEMY_FLYING);
 				enemyList[numberOfEnemies] = newEnemy;
 				numberOfEnemies++;
 			}
-			if (tempMap[row][col] == ENEMY_GRIZZLY) {
+			if (tempMap[row][col] == ENEMY_WALKING) {
 				Enemy newEnemy = Enemy();
-				newEnemy.loadEnemy(col * TILE_WIDTH, row * TILE_HEIGHT, ENEMY_GRIZZLY);
+				newEnemy.loadEnemy(col * map.getTileWidth(), row * map.getTileHeight(), ENEMY_WALKING);
 				enemyList[numberOfEnemies] = newEnemy;
 				numberOfEnemies++;
 			}

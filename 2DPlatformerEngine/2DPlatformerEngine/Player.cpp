@@ -11,7 +11,7 @@ Player::Player()
 	posY = 0;
 	velX = 0;
 	velY = 0;
-	moveState = STAND_RIGHT;
+	moveState = PLAYER_STAND_RIGHT;
 
 	canJump = false;
 	reachedGoal = false;
@@ -37,10 +37,10 @@ void Player::loadPlayer()
 	isAlive = true;
 
 	// Load the player textures
-	playerStand = Window::LoadImage("media/SamusStandRight64px.png");
-	playerWalk = Window::LoadImage("media/SamusWalkRight64px.png");
-	playerJump = Window::LoadImage("media/SamusJumpRight64px.png");
-	playerDie = Window::LoadImage("media/SamusDie64px.png");
+	playerStand = Window::LoadImage(PLAYER_TEXTURE_STAND);
+	playerWalk = Window::LoadImage(PLAYER_TEXTURE_WALK);
+	playerJump = Window::LoadImage(PLAYER_TEXTURE_JUMP);
+	playerDie = Window::LoadImage(PLAYER_TEXTURE_DIE);
 
 	// Set default texture
 	currentTexture = playerStand;
@@ -54,7 +54,7 @@ void Player::loadPlayer()
 	animationStandClip.h = playerHeight;
 
 	// Creates the clips for the walking animation
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < PLAYER_WALK_CLIPS; i++)
 	{
 		animationWalkClips[i].x = i * playerWidth;
 		animationWalkClips[i].y = 0;
@@ -63,7 +63,7 @@ void Player::loadPlayer()
 	}
 
 	// Creates the clips for the jumping animation
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < PLAYER_JUMP_CLIPS; i++)
 	{
 		animationJumpClips[i].x = i * playerWidth;
 		animationJumpClips[i].y = 0;
@@ -72,7 +72,7 @@ void Player::loadPlayer()
 	}
 
 	// Creates the clips for the dying animation
-	for (int i = 0; i < 15; i++)
+	for (int i = 0; i < PLAYER_DIE_CLIPS; i++)
 	{
 		animationDieClips[i].x = i * playerWidth;
 		animationDieClips[i].y = 0;
@@ -80,6 +80,8 @@ void Player::loadPlayer()
 		animationDieClips[i].w = playerWidth;
 	}
 
+	// Reduce player size a little to allow for running through holes
+	// that are only 1 tile wide.
 	playerHeight -= 2;
 	playerWidth -= 2;
 }
@@ -133,24 +135,24 @@ void Player::decelerateX()
 		currentWalkClip = 0;
 	}
 
-	if (moveState == MOVE_RIGHT) {
-		moveState = STAND_RIGHT;
+	if (moveState == PLAYER_MOVE_RIGHT) {
+		moveState = PLAYER_STAND_RIGHT;
 	}
 
-	if (moveState == MOVE_LEFT) {
-		moveState = STAND_LEFT;
+	if (moveState == PLAYER_MOVE_LEFT) {
+		moveState = PLAYER_STAND_LEFT;
 	}
 }
 
 void Player::decelerateY()
 {
-	velY = -GRAVITY;
+	velY = -PLAYER_GRAVITY;
 }
 
 void Player::updateTexture()
 {
 	// Resets the internal clip counter.
-	internalClipCounter = internalClipCounter % 18;
+	internalClipCounter = internalClipCounter % ((PLAYER_WALK_CLIPS - 1) * 2);
 
 	// Calculates the right clip for both animations.
 	currentWalkClip = internalClipCounter / 2;
@@ -159,9 +161,9 @@ void Player::updateTexture()
 	internalClipCounter++;
 	if (!isAlive) {
 		internalDeathClipCounter++;
-		internalDeathClipCounter = internalDeathClipCounter % 56;
+		internalDeathClipCounter = internalDeathClipCounter % ((PLAYER_DIE_CLIPS - 1) * 4);
 		currentDeathClip = internalDeathClipCounter / 3;
-		if (internalDeathClipCounter == 55) {
+		if (internalDeathClipCounter == ((PLAYER_DIE_CLIPS - 1) * 4) - 1) {
 			timeToRespawn = true;
 		}
 	}
@@ -175,10 +177,10 @@ void Player::updateTexture()
 		currentTexture = playerJump;
 	}
 	else {
-		if (moveState == MOVE_RIGHT || moveState == MOVE_LEFT) {
+		if (moveState == PLAYER_MOVE_RIGHT || moveState == PLAYER_MOVE_LEFT) {
 			currentTexture = playerWalk;
 		}
-		if (moveState == STAND_RIGHT || moveState == STAND_LEFT) {
+		if (moveState == PLAYER_STAND_RIGHT || moveState == PLAYER_STAND_LEFT) {
 			currentTexture = playerStand;
 		}
 	}
@@ -192,7 +194,7 @@ SDL_Rect Player::getCurrentAnimationClip()
 	else if (isJumping) {
 		return animationJumpClips[currentJumpClip];
 	}
-	else if (moveState == MOVE_LEFT || moveState == MOVE_RIGHT) {
+	else if (moveState == PLAYER_MOVE_LEFT || moveState == PLAYER_MOVE_RIGHT) {
 		return animationWalkClips[currentWalkClip];
 	}
 	else {

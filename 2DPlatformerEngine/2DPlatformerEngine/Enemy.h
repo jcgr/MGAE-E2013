@@ -3,6 +3,8 @@
 
 #include <SDL.h>
 
+#include "GameVariables.h"
+
 /**
 * An enemy.
 */
@@ -11,14 +13,6 @@ class Enemy
 	public:
 		Enemy();
 		~Enemy(){};
-
-		#define ENEMY_HARPY 5
-		#define ENEMY_GRIZZLY 6
-
-		#define MOVE_UP 1
-		#define MOVE_DOWN 2
-		#define MOVE_RIGHT 3
-		#define MOVE_LEFT 4
 
 		/**
 		* The enemy's type.
@@ -42,7 +36,7 @@ class Enemy
 		*/
 		bool isFalling;
 
-		SDL_Point currentCollisionPoints[9], tempCollisionPoints[9];
+		SDL_Point currentCollisionPoints[COLLISION_POINT_AMOUNT], tempCollisionPoints[COLLISION_POINT_AMOUNT];
 
 		/**
 		* Loads an enemy at the given position.

@@ -13,12 +13,12 @@ void Enemy::loadEnemy(int x, int y, int enemyType)
 	this->enemyType = enemyType;
 	switch (enemyType)
 	{
-	case ENEMY_HARPY:
-		enemyTexture = Window::LoadImage("media/EnemyHarpy64px.png");
-		moveDirection = MOVE_UP;
+	case ENEMY_FLYING:
+		enemyTexture = Window::LoadImage(ENEMY_TEXTURE_FLYER);
+		moveDirection = ENEMY_MOVE_UP;
 
-		enemyHeight = 64;
-		enemyWidth = 64;
+		enemyHeight = ENEMY_FLYER_HEIGHT;
+		enemyWidth = ENEMY_FLYER_WIDTH;
 
 		maxVelX = 0;
 		maxVelY = 50;
@@ -26,12 +26,12 @@ void Enemy::loadEnemy(int x, int y, int enemyType)
 		isFalling = false;
 		break;
 
-	case ENEMY_GRIZZLY:
-		enemyTexture = Window::LoadImage("media/EnemyGrizzly64px.png");
-		moveDirection = MOVE_LEFT;
+	case ENEMY_WALKING:
+		enemyTexture = Window::LoadImage(ENEMY_TEXTURE_WALKER);
+		moveDirection = ENEMY_MOVE_LEFT;
 
-		enemyHeight = 64;
-		enemyWidth = 36;
+		enemyHeight = ENEMY_WALKER_HEIGHT;
+		enemyWidth = ENEMY_WALKER_WIDTH;
 
 		maxVelX = 20;
 		maxVelY = 40;
@@ -51,7 +51,7 @@ void Enemy::loadEnemy(int x, int y, int enemyType)
 	currentClip = 0;
 
 	// Creates the clips for the enemy's animation
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < ENEMY_WALK_CLIPS; i++)
 	{
 		enemyAnimationClips[i].x = i * enemyWidth;
 		enemyAnimationClips[i].y = 0;
@@ -59,6 +59,8 @@ void Enemy::loadEnemy(int x, int y, int enemyType)
 		enemyAnimationClips[i].w = enemyWidth;
 	}
 
+	// Reduce player size a little to allow for running through holes
+	// that are only 1 tile wide.
 	enemyHeight -= 2;
 	enemyWidth -= 2;
 }
@@ -67,13 +69,13 @@ void Enemy::updateTexture()
 {
 	switch (enemyType)
 	{
-	case ENEMY_HARPY:
-		internalClipCounter = internalClipCounter % (maxVelY - 10);
+	case ENEMY_FLYING:
+		internalClipCounter = internalClipCounter % (ENEMY_WALK_CLIPS * 10);
 		currentClip = internalClipCounter / 10;
 		break;
 
-	case ENEMY_GRIZZLY:
-		internalClipCounter = internalClipCounter % (maxVelX * 4);
+	case ENEMY_WALKING:
+		internalClipCounter = internalClipCounter % (ENEMY_WALK_CLIPS * 10 * 2);
 		currentClip = internalClipCounter / 20;
 		break;
 

@@ -7,14 +7,8 @@
 // PUBLIC
 Map::Map()
 {
-	Map::tileHeight = 64;
-	Map::tileWidth = 64;
-}
-
-Map::Map(int tileHeight, int tileWidth)
-{
-	Map::tileHeight = tileHeight;
-	Map::tileWidth = tileWidth;
+	Map::tileHeight = TILE_HEIGHT;
+	Map::tileWidth = TILE_WIDTH;
 }
 
 void Map::loadMap(string fileName)
@@ -127,4 +121,14 @@ int Map::getHeight()
 int Map::getWidth()
 {
 	return width;
+}
+
+int Map::getTileHeight()
+{
+	return tileHeight;
+}
+
+int Map::getTileWidth()
+{
+	return tileWidth;
 }
