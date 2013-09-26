@@ -5,7 +5,6 @@
 #include <list>
 
 #include "Window.h"
-#include "Timer.h"
 #include "Map.h"
 #include "Player.h"
 #include "Enemy.h"
