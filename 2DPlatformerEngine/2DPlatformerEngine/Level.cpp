@@ -139,8 +139,8 @@ void Level::updatePlayer()
 		player.decelerateY();
 	}
 
-	movePlayer();
 	player.updateTexture();
+	movePlayer();
 	calculateCollisionPoints(player.getHeight(), player.getWidth(), player.posX, player.posY, player.currentCollisionPoints);
 }
 
@@ -151,7 +151,7 @@ void Level::updateMap()
 
 void Level::updateEnemies()
 {
-	// If the player is dead, don't bother moving
+	// If the player is dead, don't do anything
 	if (!player.isAlive) {
 		return;
 	}

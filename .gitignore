@@ -14,3 +14,7 @@
 
 # VS stuff
 *.opensdf
+
+# Other stuff
+*.docx
+*.doc
