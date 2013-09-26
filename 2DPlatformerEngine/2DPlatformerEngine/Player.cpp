@@ -37,16 +37,13 @@ void Player::loadPlayer()
 	isAlive = true;
 
 	// Load the player textures
-	playerStandRight = Window::LoadImage("media/SamusStandRight64px.png");
-	playerStandLeft = Window::LoadImage("media/SamusStandLeft64px.png");
-	playerWalkRight = Window::LoadImage("media/SamusWalkRight64px.png");
-	playerWalkLeft = Window::LoadImage("media/SamusWalkLeft64px.png");
-	playerJumpRight = Window::LoadImage("media/SamusJumpRight64px.png");
-	playerJumpLeft = Window::LoadImage("media/SamusJumpLeft64px.png");
+	playerStand = Window::LoadImage("media/SamusStandRight64px.png");
+	playerWalk = Window::LoadImage("media/SamusWalkRight64px.png");
+	playerJump = Window::LoadImage("media/SamusJumpRight64px.png");
 	playerDie = Window::LoadImage("media/SamusDie64px.png");
 
 	// Set default texture
-	currentTexture = playerStandRight;
+	currentTexture = playerStand;
 
 	// Get size of the default texture
 	SDL_QueryTexture(currentTexture, NULL, NULL, &playerWidth, &playerHeight);
@@ -175,34 +172,14 @@ void Player::updateTexture()
 		currentTexture = playerDie;
 	} 
 	else if (isJumping){
-		if (moveState == MOVE_RIGHT || moveState == STAND_RIGHT){
-			currentTexture = playerJumpRight;
-		}
-		if (moveState == MOVE_LEFT || moveState == STAND_LEFT){
-			currentTexture = playerJumpLeft;
-		}
+		currentTexture = playerJump;
 	}
 	else {
-		switch (moveState)
-		{
-		case MOVE_RIGHT:
-			currentTexture = playerWalkRight;
-			break;
-
-		case MOVE_LEFT:
-			currentTexture = playerWalkLeft;
-			break;
-
-		case STAND_RIGHT:
-			currentTexture = playerStandRight;
-			break;
-
-		case STAND_LEFT:
-			currentTexture = playerStandLeft;
-			break;
-
-		default:
-			break;
+		if (moveState == MOVE_RIGHT || moveState == MOVE_LEFT) {
+			currentTexture = playerWalk;
+		}
+		if (moveState == STAND_RIGHT || moveState == STAND_LEFT) {
+			currentTexture = playerStand;
 		}
 	}
 }

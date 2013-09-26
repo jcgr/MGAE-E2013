@@ -88,7 +88,9 @@ void Enemy::updateSpeed()
 {
 	// If the enemy is falling, don't move horizontally
 	if (isFalling) {
-		internalVelX = 0;
+		if (internalVelX > 0) {
+			internalVelX--;
+		}
 	}
 	else {
 		if (internalVelX < maxVelX) {

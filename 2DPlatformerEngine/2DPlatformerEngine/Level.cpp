@@ -479,8 +479,15 @@ void Level::drawPlayer()
 	pos.w = player.getWidth();
 	pos.h = player.getHeight();
 
+	// Flip the player texture if necessary
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
+	if (player.moveState == MOVE_LEFT || player.moveState == STAND_LEFT) {
+		flip = SDL_FLIP_HORIZONTAL;
+	}
+
 	// Draw the player
-	Window::Draw(player.getCurrentTexture(), pos, &player.getCurrentAnimationClip());
+	Window::Draw(player.getCurrentTexture(), pos, &player.getCurrentAnimationClip(),
+				NULL, NULL, NULL, flip);
 }
 
 void Level::drawEnemies()

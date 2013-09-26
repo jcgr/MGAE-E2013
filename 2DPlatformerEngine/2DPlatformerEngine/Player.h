@@ -175,15 +175,15 @@ class Player
 		/**
 		* The texture that shows the player standing.
 		*/
-		SDL_Texture *playerStandRight, *playerStandLeft;
+		SDL_Texture *playerStand;
 		/**
 		* The texture that shows the player walking/running.
 		*/
-		SDL_Texture *playerWalkRight, *playerWalkLeft;
+		SDL_Texture *playerWalk;
 		/**
 		* The texture that shows the player jumping.
 		*/
-		SDL_Texture *playerJumpRight, *playerJumpLeft;
+		SDL_Texture *playerJump;
 		/**
 		* The texture for the death animation.
 		*/
