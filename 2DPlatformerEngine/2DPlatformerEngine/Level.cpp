@@ -246,7 +246,10 @@ void Level::movePlayer()
 	else {
 		for (int i = player.velY; i < 0; i++)
 		{
-			// If the player collides with something below, he has
+			// If the player is falling, they cannot jump.
+			player.canJump = false;
+
+			// If the player collides with something below, they have
 			// landed and can jump again.
 			calculateCollisionPoints(player.getHeight(), player.getWidth(),
 									player.posX, player.posY + 1,
