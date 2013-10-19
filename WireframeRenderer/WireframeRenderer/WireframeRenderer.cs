@@ -41,7 +41,18 @@ namespace WireframeRenderer
         /// <param name="e">The args.</param>
         private void WireframeRenderer_Paint(object sender, PaintEventArgs e)
         {
-            DrawScreen();
+            foreach (var triangle in pyramidTriangles)
+            {
+                //triangle.A.ScreenCoordinate = new Point((int)triangle.A.X, (int)triangle.A.Y);
+                //triangle.B.ScreenCoordinate = new Point((int)triangle.B.X, (int)triangle.B.Y);
+                //triangle.C.ScreenCoordinate = new Point((int)triangle.C.X, (int)triangle.C.Y);
+
+                triangle.A = HandleVertex(triangle.A);
+                triangle.B = HandleVertex(triangle.B);
+                triangle.C = HandleVertex(triangle.C);
+
+                DrawTriangle(triangle);
+            }
         }
 
         /// <summary>
@@ -57,52 +68,9 @@ namespace WireframeRenderer
                 Application.Exit();
             }
 
-            if (e.KeyChar.ToString(CultureInfo.InvariantCulture) == "a" ||
-                e.KeyChar.ToString(CultureInfo.InvariantCulture) == "A")
-            {
-                MessageBox.Show("Form.KeyPress: '" +
-                    e.KeyChar.ToString() + "' pressed.");
-            }
-        }
+            camera.Move(e.KeyChar.ToString(CultureInfo.InvariantCulture));
 
-        /// <summary>
-        /// Draws the screen.
-        /// </summary>
-        private void DrawScreen()
-        {
-            foreach (var triangle in pyramidTriangles)
-            {
-                triangle.A = HandleVertex(triangle.A);
-                triangle.B = HandleVertex(triangle.B);
-                triangle.C = HandleVertex(triangle.C);
-
-                DrawTriangle(triangle);
-            }
-        }
-
-        /// <summary>
-        /// Loads a pyramid for drawing.
-        /// </summary>
-        void LoadPyramid()
-        {
-            const int low = 100;
-            const int mid = 200;
-            const int top = 300;
-
-            var v1 = new Vertex(low, top, -low);
-            var v2 = new Vertex(top, top, -low);
-            var v3 = new Vertex(mid, top, -top);
-            var v4 = new Vertex(mid, low, -mid);
-
-            var t1 = new Triangle(v1, v2, v3);
-            var t2 = new Triangle(v1, v2, v4);
-            var t3 = new Triangle(v1, v3, v4);
-            var t4 = new Triangle(v2, v3, v4);
-
-            pyramidTriangles.Add(t1);
-            pyramidTriangles.Add(t2);
-            pyramidTriangles.Add(t3);
-            pyramidTriangles.Add(t4);
+            Invalidate();
         }
 
         /// <summary>
@@ -157,6 +125,31 @@ namespace WireframeRenderer
             vertex.ScreenCoordinate = newScreenPoint;
 
             return vertex;
+        }
+
+        /// <summary>
+        /// Loads a pyramid for drawing.
+        /// </summary>
+        void LoadPyramid()
+        {
+            const int low = 50;
+            const int mid = 100;
+            const int top = 150;
+
+            var v1 = new Vertex(low, top, -low);
+            var v2 = new Vertex(top, top, -low);
+            var v3 = new Vertex(mid, top, -top);
+            var v4 = new Vertex(mid, low, -mid);
+
+            var t1 = new Triangle(v1, v2, v3);
+            var t2 = new Triangle(v1, v2, v4);
+            var t3 = new Triangle(v1, v3, v4);
+            var t4 = new Triangle(v2, v3, v4);
+
+            pyramidTriangles.Add(t1);
+            pyramidTriangles.Add(t2);
+            pyramidTriangles.Add(t3);
+            pyramidTriangles.Add(t4);
         }
     }
 }

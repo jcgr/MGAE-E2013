@@ -11,40 +11,40 @@ namespace WireframeRenderer
         /// <summary>
         /// Gets or sets the position of the camera.
         /// </summary>
-        public Vector Position { get; set; }
+        private Vector Position { get; set; }
         /// <summary>
         /// Gets or sets the place the camera is looking at.
         /// </summary>
-        public Vector LookPoint { get; set; }
+        private Vector LookPoint { get; set; }
         /// <summary>
         /// Gets or sets the up direction of the camera.
         /// </summary>
-        public Vector Up { get; set; }
+        private Vector Up { get; set; }
 
         /// <summary>
         /// Gets or sets the far value of the camera.
         /// </summary>
-        public double Far { get; set; }
+        private double Far { get; set; }
         /// <summary>
         /// Gets or sets the near value of the camera.
         /// </summary>
-        public double Near { get; set; }
+        private double Near { get; set; }
         /// <summary>
         /// Gets or sets the width of the camera.
         /// </summary>
-        public double Width { get; set; }
+        public double Width { get; private set; }
         /// <summary>
         /// Gets or sets the height of the camera.
         /// </summary>
-        public double Height { get; set; }
+        public double Height { get; private set; }
         /// <summary>
         /// Gets or sets the field of view of the camera.
         /// </summary>
-        public double FieldOfView { get; set; }
+        private double FieldOfView { get; set; }
         /// <summary>
         /// Gets or sets the aspect ratio of the camera.
         /// </summary>
-        public double AspectRatio { get; set; }
+        private double AspectRatio { get; set; }
 
         /// <summary>
         /// Creates a new instance of Camera.
@@ -53,11 +53,11 @@ namespace WireframeRenderer
         {
             //Position = new Vector(100, 100, 300);
             Position = new Vector(0, 0, 0);
-            LookPoint = new Vector(500, 500, 500);
+            LookPoint = new Vector(100, 100, 100);
             Up = new Vector(0, 1, 0);
 
             Far = -2000;
-            Near = -50;
+            Near = -10;
 
             //Width = 1280;
             //Height = 720;
@@ -68,6 +68,30 @@ namespace WireframeRenderer
 
             Width = -2d * Math.Abs(Far) * Math.Tan(FieldOfView / 2d);
             Height = Width / AspectRatio;
+        }
+
+        /// <summary>
+        /// Moves the camera depending on what button was clicked.
+        /// </summary>
+        /// <param name="key">The key on the keyboard that was clicked.</param>
+        public void Move(string key)
+        {
+            if (key.Equals("a") || key.Equals("A"))
+            {
+                Position.X -= 10;
+            }
+            if (key.Equals("d") || key.Equals("D"))
+            {
+                Position.X += 10;
+            }
+            if (key.Equals("w") || key.Equals("W"))
+            {
+                Position.Y += 10;
+            }
+            if (key.Equals("s") || key.Equals("S"))
+            {
+                Position.Y -= 10;
+            }
         }
 
         /// <summary>
@@ -86,10 +110,6 @@ namespace WireframeRenderer
             cameraLocationTransform[0, 3] = -Position.X;
             cameraLocationTransform[1, 3] = -Position.Y;
             cameraLocationTransform[2, 3] = -Position.Z;
-
-            //cameraLocationTransform[3, 0] = -Position.X;
-            //cameraLocationTransform[3, 1] = -Position.Y;
-            //cameraLocationTransform[3, 2] = -Position.Z;
 
             return cameraLocationTransform;
         }
@@ -117,18 +137,6 @@ namespace WireframeRenderer
             var vVector = Vector.CrossProduct(normalVector, uVector);
 
             var transformMatrix = new Matrix(4, 4);
-
-            //transformMatrix[0, 0] = xVector.X;
-            //transformMatrix[1, 0] = xVector.Y;
-            //transformMatrix[2, 0] = xVector.Z;
-
-            //transformMatrix[0, 1] = yVector.X;
-            //transformMatrix[1, 1] = yVector.Y;
-            //transformMatrix[2, 1] = yVector.Z;
-
-            //transformMatrix[0, 2] = normalVector.X;
-            //transformMatrix[1, 2] = normalVector.Y;
-            //transformMatrix[2, 2] = normalVector.Z;
 
             transformMatrix[0, 0] = uVector.X;
             transformMatrix[0, 1] = uVector.Y;
