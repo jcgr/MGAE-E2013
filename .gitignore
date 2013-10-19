@@ -3,6 +3,7 @@
 
 # Compiled things
 2DPlatformerEngine/2DPlatformerEngine/Debug/
+WireframeRenderer/WireframeRenderer/obj/
 *.exe
 *.slo
 *.lo
