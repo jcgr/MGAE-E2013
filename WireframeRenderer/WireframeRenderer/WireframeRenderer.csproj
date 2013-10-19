@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Matrix.cs" />
-    <Compile Include="Transformation.cs" />
     <Compile Include="Triangle.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="Vertex.cs" />

@@ -1,4 +1,6 @@
-﻿namespace WireframeRenderer
+﻿using System;
+
+namespace WireframeRenderer
 {
     /// <summary>
     /// A class that represents the camera of the renderer.
@@ -51,18 +53,21 @@
         {
             //Position = new Vector(100, 100, 300);
             Position = new Vector(0, 0, 0);
-            LookPoint = new Vector(200, 200, 200);
+            LookPoint = new Vector(500, 500, 500);
             Up = new Vector(0, 1, 0);
 
-            Far = -500;
-            Near = -100;
+            Far = -2000;
+            Near = -50;
 
-            Width = 1280;
-            Height = 720;
+            //Width = 1280;
+            //Height = 720;
 
-            FieldOfView = 75;
+            FieldOfView = 75d;
 
-            AspectRatio = Width / Height;
+            AspectRatio = 16d / 9d;
+
+            Width = -2d * Math.Abs(Far) * Math.Tan(FieldOfView / 2d);
+            Height = Width / AspectRatio;
         }
 
         /// <summary>
@@ -78,9 +83,13 @@
             cameraLocationTransform[2, 2] = 1;
             cameraLocationTransform[3, 3] = 1;
 
-            cameraLocationTransform[3, 0] = -Position.X;
-            cameraLocationTransform[3, 1] = -Position.Y;
-            cameraLocationTransform[3, 2] = -Position.Z;
+            cameraLocationTransform[0, 3] = -Position.X;
+            cameraLocationTransform[1, 3] = -Position.Y;
+            cameraLocationTransform[2, 3] = -Position.Z;
+
+            //cameraLocationTransform[3, 0] = -Position.X;
+            //cameraLocationTransform[3, 1] = -Position.Y;
+            //cameraLocationTransform[3, 2] = -Position.Z;
 
             return cameraLocationTransform;
         }
@@ -91,24 +100,21 @@
         /// <returns>The resulting matrix.</returns>
         public Matrix LookTransform()
         {
-            var cameraLocation = Position;
-            var cameraLookPoint = LookPoint;
-
             // Direction
-            var directionX = cameraLookPoint.X - cameraLocation.X;
-            var directionY = cameraLookPoint.Y - cameraLocation.Y;
-            var directionZ = cameraLookPoint.Z - cameraLocation.Z;
+            var directionX = LookPoint.X - Position.X;
+            var directionY = LookPoint.Y - Position.Y;
+            var directionZ = LookPoint.Z - Position.Z;
             var direction = new Vector(directionX, directionY, directionZ);
 
             // Normalise for z-axis
-            var normalVector = Transformation.NormalizeVector(direction, Transformation.VectorLength(direction));
+            var normalVector = Vector.NormalizeVector(direction, Vector.VectorLength(direction));
 
             // x-axis
-            var crossProduct = Transformation.CrossProduct(Up, normalVector);
-            var xVector = Transformation.NormalizeVector(crossProduct, Transformation.VectorLength(crossProduct));
+            var crossProduct = Vector.CrossProduct(Up, normalVector);
+            var uVector = Vector.NormalizeVector(crossProduct, Vector.VectorLength(crossProduct));
 
             // y-axis
-            var yVector = Transformation.CrossProduct(normalVector, xVector);
+            var vVector = Vector.CrossProduct(normalVector, uVector);
 
             var transformMatrix = new Matrix(4, 4);
 
@@ -124,13 +130,13 @@
             //transformMatrix[1, 2] = normalVector.Y;
             //transformMatrix[2, 2] = normalVector.Z;
 
-            transformMatrix[0, 0] = xVector.X;
-            transformMatrix[0, 1] = xVector.Y;
-            transformMatrix[0, 2] = xVector.Z;
+            transformMatrix[0, 0] = uVector.X;
+            transformMatrix[0, 1] = uVector.Y;
+            transformMatrix[0, 2] = uVector.Z;
 
-            transformMatrix[1, 0] = yVector.X;
-            transformMatrix[1, 1] = yVector.Y;
-            transformMatrix[1, 2] = yVector.Z;
+            transformMatrix[1, 0] = vVector.X;
+            transformMatrix[1, 1] = vVector.Y;
+            transformMatrix[1, 2] = vVector.Z;
 
             transformMatrix[2, 0] = normalVector.X;
             transformMatrix[2, 1] = normalVector.Y;
@@ -145,15 +151,15 @@
         /// Calculates the projection matrix (3.2).
         /// </summary>
         /// <returns>The resulting matrix.</returns>
-        public Matrix ProjectionMatrix()
+        public Matrix PerspectiveTransform()
         {
             var projectionMatrix = new Matrix(4, 4);
 
-            projectionMatrix[0, 0] = (2 * Near) / Width;
-            projectionMatrix[1, 1] = (2 * Near) / Height;
+            projectionMatrix[0, 0] = (2d * Near) / Width;
+            projectionMatrix[1, 1] = (2d * Near) / Height;
             projectionMatrix[2, 2] = (-(Far + Near)) / (Far - Near);
-            projectionMatrix[2, 3] = (-2 * Far * Near) / (Far - Near);
-            projectionMatrix[3, 2] = -1;
+            projectionMatrix[2, 3] = (-2d * Far * Near) / (Far - Near);
+            projectionMatrix[3, 2] = -1d;
 
             return projectionMatrix;
         }

@@ -38,5 +38,32 @@
             get { return _matrix[x, y]; }
             set { _matrix[x, y] = value; }
         }
+
+        /// <summary>
+        /// Multiplies two matrices.
+        /// Source: http://dev.bratched.com/en/fun-with-matrix-multiplication-and-unsafe-code/
+        /// </summary>
+        /// <param name="m1">The first matrix</param>
+        /// <param name="m2">The second matrix</param>
+        /// <returns>The resulting matrix of the multiplication</returns>
+        public static Matrix NaiveMultiplication(Matrix m1, Matrix m2)
+        {
+            var resultMatrix = new Matrix(m1.Height, m2.Width);
+
+            // Handles the multiplication.
+            for (var i = 0; i < resultMatrix.Height; i++)
+            {
+                for (var j = 0; j < resultMatrix.Width; j++)
+                {
+                    resultMatrix[i, j] = 0;
+                    for (var k = 0; k < m1.Width; k++)
+                    {
+                        resultMatrix[i, j] += m1[i, k] * m2[k, j];
+                    }
+                }
+            }
+
+            return resultMatrix;
+        }
     }
 }

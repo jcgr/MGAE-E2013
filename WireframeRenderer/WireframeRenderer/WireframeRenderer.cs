@@ -41,14 +41,7 @@ namespace WireframeRenderer
         /// <param name="e">The args.</param>
         private void WireframeRenderer_Paint(object sender, PaintEventArgs e)
         {
-            foreach (var triangle in pyramidTriangles)
-            {
-                triangle.A = HandleVertex(triangle.A);
-                triangle.B = HandleVertex(triangle.B);
-                triangle.C = HandleVertex(triangle.C);
-
-                DrawTriangle(triangle);
-            }
+            DrawScreen();
         }
 
         /// <summary>
@@ -73,6 +66,21 @@ namespace WireframeRenderer
         }
 
         /// <summary>
+        /// Draws the screen.
+        /// </summary>
+        private void DrawScreen()
+        {
+            foreach (var triangle in pyramidTriangles)
+            {
+                triangle.A = HandleVertex(triangle.A);
+                triangle.B = HandleVertex(triangle.B);
+                triangle.C = HandleVertex(triangle.C);
+
+                DrawTriangle(triangle);
+            }
+        }
+
+        /// <summary>
         /// Loads a pyramid for drawing.
         /// </summary>
         void LoadPyramid()
@@ -81,10 +89,10 @@ namespace WireframeRenderer
             const int mid = 200;
             const int top = 300;
 
-            var v1 = new Vertex(low, top, low);
-            var v2 = new Vertex(top, top, low);
-            var v3 = new Vertex(mid, top, top);
-            var v4 = new Vertex(mid, low, mid);
+            var v1 = new Vertex(low, top, -low);
+            var v2 = new Vertex(top, top, -low);
+            var v3 = new Vertex(mid, top, -top);
+            var v4 = new Vertex(mid, low, -mid);
 
             var t1 = new Triangle(v1, v2, v3);
             var t2 = new Triangle(v1, v2, v4);
@@ -114,16 +122,19 @@ namespace WireframeRenderer
         /// <param name="vertex">The vertex to transform.</param>
         private Vertex HandleVertex(Vertex vertex)
         {
+            // Creating a matrix from the vertex for calculations
             var vertexMatrix = new Matrix(4, 1);
             vertexMatrix[0, 0] = vertex.X;
             vertexMatrix[1, 0] = vertex.Y;
             vertexMatrix[2, 0] = vertex.Z;
             vertexMatrix[3, 0] = vertex.W;
 
-            var viewSpaceMatrix = Transformation.NaiveMultiplication(camera.ProjectionMatrix(), camera.LookTransform());
-            viewSpaceMatrix = Transformation.NaiveMultiplication(viewSpaceMatrix, camera.LocationTransform());
-            viewSpaceMatrix = Transformation.NaiveMultiplication(viewSpaceMatrix, vertexMatrix);
+            // Multipling the camera stuff with the vertex
+            var viewSpaceMatrix = Matrix.NaiveMultiplication(camera.PerspectiveTransform(), camera.LookTransform());
+            viewSpaceMatrix = Matrix.NaiveMultiplication(viewSpaceMatrix, camera.LocationTransform());
+            viewSpaceMatrix = Matrix.NaiveMultiplication(viewSpaceMatrix, vertexMatrix);
 
+            // Back to vertex 
             var vertexViewSpace = new Vertex(viewSpaceMatrix[0, 0], viewSpaceMatrix[1, 0], viewSpaceMatrix[2, 0], viewSpaceMatrix[3, 0]);
 
             vertexViewSpace.X = vertexViewSpace.X / vertexViewSpace.W;
@@ -137,13 +148,14 @@ namespace WireframeRenderer
                 return vertex;
             }
 
+            // Create the screen point for the vertex
             var newScreenPoint = new Point
             {
                 X = (int) (vertexViewSpace.X * (camera.Width / 2) + (camera.Width / 2)),
                 Y = (int) (-vertexViewSpace.Y * (camera.Height / 2) + (camera.Height / 2))
             };
-
             vertex.ScreenCoordinate = newScreenPoint;
+
             return vertex;
         }
     }
