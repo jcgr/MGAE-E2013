@@ -47,6 +47,11 @@ namespace WireframeRenderer
         private double AspectRatio { get; set; }
 
         /// <summary>
+        /// Gets all the camera transformations multiplied with each other.
+        /// </summary>
+        public Matrix AllTransforms { get; private set; }
+
+        /// <summary>
         /// Creates a new instance of Camera.
         /// </summary>
         public Camera()
@@ -57,19 +62,21 @@ namespace WireframeRenderer
             Up = new Vector(0, 1, 0);
 
             Far = -2000;
-            Near = -10;
+            Near = -300;
 
             //Width = 1280;
             //Height = 720;
 
             FieldOfView = 75d;
-
             AspectRatio = 16d / 9d;
 
-            Width = -2d * Math.Abs(Far) * Math.Tan(FieldOfView / 2d);
+            var fovradians = Math.PI / 180 * (FieldOfView);
+
+            Width = (-2d) * Near * Math.Tan(fovradians / 2.0);
             Height = Width / AspectRatio;
         }
 
+        #region Transforms
         /// <summary>
         /// Moves the camera depending on what button was clicked.
         /// </summary>
@@ -171,5 +178,21 @@ namespace WireframeRenderer
 
             return projectionMatrix;
         }
+
+
+        /// <summary>
+        /// Multiplies perspective transform, look transform and location transforms.
+        /// </summary>
+        /// <returns>The resulting matrix.</returns>
+        public Matrix CalculateTransforms()
+        {
+            var m = Matrix.NaiveMultiplication(PerspectiveTransform(), LookTransform());
+            m = Matrix.NaiveMultiplication(m, LocationTransform());
+
+            AllTransforms = m;
+
+            return m;
+        }
+        #endregion
     }
 }

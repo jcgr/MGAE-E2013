@@ -39,5 +39,16 @@
         /// Gets or sets the C vertex.
         /// </summary>
         public Vertex C { get; set; }
+
+        /// <summary>
+        /// Updates the screen points of the triangle's vertices.
+        /// </summary>
+        /// <param name="camera">The camera.</param>
+        public void UpdateVerticesScreenPoint(Camera camera)
+        {
+            A.UpdateScreenPoint(camera);
+            B.UpdateScreenPoint(camera);
+            C.UpdateScreenPoint(camera);
+        }
     }
 }

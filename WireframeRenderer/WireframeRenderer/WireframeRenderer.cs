@@ -19,9 +19,12 @@ namespace WireframeRenderer
         {
             InitializeComponent();
             camera = new Camera();
+            camera.CalculateTransforms();
 
-            Width = (int)camera.Width;
-            Height = (int)camera.Height;
+            Width = 1280;
+            Height = 720;
+            //Width = (int)camera.Width;
+            //Height = (int)camera.Height;
 
             graphicsObj = CreateGraphics();
 
@@ -41,16 +44,11 @@ namespace WireframeRenderer
         /// <param name="e">The args.</param>
         private void WireframeRenderer_Paint(object sender, PaintEventArgs e)
         {
+            camera.CalculateTransforms();
+
             foreach (var triangle in pyramidTriangles)
             {
-                //triangle.A.ScreenCoordinate = new Point((int)triangle.A.X, (int)triangle.A.Y);
-                //triangle.B.ScreenCoordinate = new Point((int)triangle.B.X, (int)triangle.B.Y);
-                //triangle.C.ScreenCoordinate = new Point((int)triangle.C.X, (int)triangle.C.Y);
-
-                triangle.A = HandleVertex(triangle.A);
-                triangle.B = HandleVertex(triangle.B);
-                triangle.C = HandleVertex(triangle.C);
-
+                triangle.UpdateVerticesScreenPoint(camera);
                 DrawTriangle(triangle);
             }
         }
@@ -85,61 +83,19 @@ namespace WireframeRenderer
         }
 
         /// <summary>
-        /// Changes a vertex' screencoordinates in relation to the camera (4)
-        /// </summary>
-        /// <param name="vertex">The vertex to transform.</param>
-        private Vertex HandleVertex(Vertex vertex)
-        {
-            // Creating a matrix from the vertex for calculations
-            var vertexMatrix = new Matrix(4, 1);
-            vertexMatrix[0, 0] = vertex.X;
-            vertexMatrix[1, 0] = vertex.Y;
-            vertexMatrix[2, 0] = vertex.Z;
-            vertexMatrix[3, 0] = vertex.W;
-
-            // Multipling the camera stuff with the vertex
-            var viewSpaceMatrix = Matrix.NaiveMultiplication(camera.PerspectiveTransform(), camera.LookTransform());
-            viewSpaceMatrix = Matrix.NaiveMultiplication(viewSpaceMatrix, camera.LocationTransform());
-            viewSpaceMatrix = Matrix.NaiveMultiplication(viewSpaceMatrix, vertexMatrix);
-
-            // Back to vertex 
-            var vertexViewSpace = new Vertex(viewSpaceMatrix[0, 0], viewSpaceMatrix[1, 0], viewSpaceMatrix[2, 0], viewSpaceMatrix[3, 0]);
-
-            vertexViewSpace.X = vertexViewSpace.X / vertexViewSpace.W;
-            vertexViewSpace.Y = vertexViewSpace.Y / vertexViewSpace.W;
-            vertexViewSpace.Z = vertexViewSpace.Z / vertexViewSpace.W;
-
-            if (vertexViewSpace.X < -1 || vertexViewSpace.X > 1 ||
-                vertexViewSpace.Y < -1 || vertexViewSpace.Y > 1 ||
-                vertexViewSpace.Z < -1 || vertexViewSpace.Z > 1)
-            {
-                return vertex;
-            }
-
-            // Create the screen point for the vertex
-            var newScreenPoint = new Point
-            {
-                X = (int) (vertexViewSpace.X * (camera.Width / 2) + (camera.Width / 2)),
-                Y = (int) (-vertexViewSpace.Y * (camera.Height / 2) + (camera.Height / 2))
-            };
-            vertex.ScreenCoordinate = newScreenPoint;
-
-            return vertex;
-        }
-
-        /// <summary>
         /// Loads a pyramid for drawing.
         /// </summary>
-        void LoadPyramid()
+        private void LoadPyramid()
         {
+            //pyramidTriangles = Pyramid();
             const int low = 50;
             const int mid = 100;
             const int top = 150;
 
-            var v1 = new Vertex(low, top, -low);
-            var v2 = new Vertex(top, top, -low);
-            var v3 = new Vertex(mid, top, -top);
-            var v4 = new Vertex(mid, low, -mid);
+            var v1 = new Vertex(low, 0, low);
+            var v2 = new Vertex(top, 0, low);
+            var v3 = new Vertex(mid, 0, top);
+            var v4 = new Vertex(mid, mid, mid);
 
             var t1 = new Triangle(v1, v2, v3);
             var t2 = new Triangle(v1, v2, v4);
@@ -150,6 +106,38 @@ namespace WireframeRenderer
             pyramidTriangles.Add(t2);
             pyramidTriangles.Add(t3);
             pyramidTriangles.Add(t4);
+        }
+
+        /// <summary>
+        /// Loads a standard pyramid shape.
+        /// </summary>
+        /// <returns>A list of triangles making up a pyramid.</returns>
+        private List<Triangle> Pyramid()
+        {
+            var tempTriangles = new List<Triangle>();
+
+            const int near = 50;
+            const int mid = 100;
+            const int far = 150;
+            const int height = 75;
+
+            var v1 = new Vertex(near, 0, near);
+            var v2 = new Vertex(far, 0, near);
+            var v3 = new Vertex(near, 0, far);
+            var v4 = new Vertex(far, 0, far);
+            var v5 = new Vertex(mid, height, mid);
+
+            var t1 = new Triangle(v1, v2, v5);
+            var t2 = new Triangle(v1, v3, v5);
+            var t3 = new Triangle(v2, v4, v5);
+            var t4 = new Triangle(v3, v4, v5);
+
+            tempTriangles.Add(t1);
+            tempTriangles.Add(t2);
+            tempTriangles.Add(t3);
+            tempTriangles.Add(t4);
+
+            return tempTriangles;
         }
     }
 }
