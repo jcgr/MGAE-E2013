@@ -6,18 +6,11 @@
     /// </summary>
     class Matrix
     {
+        #region Fields
         private readonly double[,] _matrix;
+        #endregion
 
-        /// <summary>
-        /// Creates a new matrix with the given height and width.
-        /// </summary>
-        /// <param name="height">The height of the matrix.</param>
-        /// <param name="width">The width of the matrix.</param>
-        public Matrix(int height, int width)
-        {
-            _matrix = new double[height, width];
-        }
-
+        #region Properties
         /// <summary>
         /// Gets the height of the matrix.
         /// </summary>
@@ -38,7 +31,21 @@
             get { return _matrix[x, y]; }
             set { _matrix[x, y] = value; }
         }
+        #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Creates a new matrix with the given height and width.
+        /// </summary>
+        /// <param name="height">The height of the matrix.</param>
+        /// <param name="width">The width of the matrix.</param>
+        public Matrix(int height, int width)
+        {
+            _matrix = new double[height, width];
+        }
+        #endregion
+
+        #region Static Methods
         /// <summary>
         /// Multiplies two matrices.
         /// Source: http://dev.bratched.com/en/fun-with-matrix-multiplication-and-unsafe-code/
@@ -65,5 +72,6 @@
 
             return resultMatrix;
         }
+        #endregion
     }
 }

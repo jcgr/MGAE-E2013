@@ -1,13 +1,11 @@
-﻿using System;
-
-namespace WireframeRenderer
+﻿namespace WireframeRenderer
 {
     /// <summary>
     /// A class that represents the camera of the renderer.
     /// </summary>
     class Camera
     {
-
+        #region Properties
         /// <summary>
         /// Gets or sets the position of the camera.
         /// </summary>
@@ -50,57 +48,131 @@ namespace WireframeRenderer
         /// Gets all the camera transformations multiplied with each other.
         /// </summary>
         public Matrix AllTransforms { get; private set; }
+        #endregion
 
+        #region Constructors
         /// <summary>
         /// Creates a new instance of Camera.
         /// </summary>
         public Camera()
         {
-            //Position = new Vector(100, 100, 300);
-            Position = new Vector(0, 0, 0);
-            LookPoint = new Vector(100, 100, 100);
+            Position = new Vector(200, 100, 0);
+            LookPoint = new Vector(200, 100, 200);
             Up = new Vector(0, 1, 0);
 
-            Far = -2000;
+            Far = -3000;
             Near = -300;
 
-            //Width = 1280;
-            //Height = 720;
-
-            FieldOfView = 75d;
+            FieldOfView = 90d;
             AspectRatio = 16d / 9d;
 
-            var fovradians = Math.PI / 180 * (FieldOfView);
+            Width = 1280;
+            Height = 720;
 
-            Width = (-2d) * Near * Math.Tan(fovradians / 2.0);
-            Height = Width / AspectRatio;
+            //var radians = Math.PI / 180 * (FieldOfView);
+
+            //Width = (-2d) * Near * Math.Tan(radians / 2.0);
+            //Height = Width / AspectRatio;
+
+            CalculateTransforms();
         }
+        #endregion
 
-        #region Transforms
+        #region Movement
         /// <summary>
         /// Moves the camera depending on what button was clicked.
         /// </summary>
         /// <param name="key">The key on the keyboard that was clicked.</param>
         public void Move(string key)
         {
-            if (key.Equals("a") || key.Equals("A"))
+            switch (key)
             {
-                Position.X -= 10;
+                // Movement
+                case "a":
+                    ChangePosition(-10, 0, 0);
+                    break;
+
+                case "d":
+                    ChangePosition(10, 0, 0);
+                    break;
+
+                case "s":
+                    ChangePosition(0, -10, 0);
+                    break;
+
+                case "w":
+                    ChangePosition(0, 10, 0);
+                    break;
+
+                case "q":
+                    ChangePosition(0, 0, -10);
+                    break;
+
+                case "e":
+                    ChangePosition(0, 0, 10);
+                    break;
+
+                // Rotation
+                case "j":
+                    ChangeRotation(-10, 0, 0);
+                    break;
+
+                case "l":
+                    ChangeRotation(10, 0, 0);
+                    break;
+
+                case "k":
+                    ChangeRotation(0, -10, 0);
+                    break;
+
+                case "i":
+                    ChangeRotation(0, 10, 0);
+                    break;
+
+                case "u":
+                    ChangeRotation(0, 0, -10);
+                    break;
+
+                case "o":
+                    ChangeRotation(0, 0, 10);
+                    break;
             }
-            if (key.Equals("d") || key.Equals("D"))
-            {
-                Position.X += 10;
-            }
-            if (key.Equals("w") || key.Equals("W"))
-            {
-                Position.Y += 10;
-            }
-            if (key.Equals("s") || key.Equals("S"))
-            {
-                Position.Y -= 10;
-            }
+
+            CalculateTransforms();
         }
 
+        /// <summary>
+        /// Changes the position of the camera.
+        /// </summary>
+        /// <param name="x">The change to the x-coordinate of the camera.</param>
+        /// <param name="y">The change to the y-coordinate of the camera.</param>
+        /// <param name="z">The change to the z-coordinate of the camera.</param>
+        private void ChangePosition(int x, int y, int z)
+        {
+            Position.X += x;
+            Position.Y += y;
+            Position.Z += z;
+
+            LookPoint.X += x;
+            LookPoint.Y += y;
+            LookPoint.Z += z;
+        }
+
+        /// <summary>
+        /// Changes the rotation of the camera.
+        /// </summary>
+        /// <param name="x">The change to the x-coordinate of the look point.</param>
+        /// <param name="y">The change to the y-coordinate of the look point.</param>
+        /// <param name="z">The change to the z-coordinate of the look point.</param>
+        private void ChangeRotation(int x, int y, int z)
+        {
+            LookPoint.X += x;
+            LookPoint.Y += y;
+            LookPoint.Z += z;
+        }
+        #endregion
+
+        #region Transforms
         /// <summary>
         /// Calculates the camera location transformation (3.1.1)
         /// </summary>
@@ -133,15 +205,12 @@ namespace WireframeRenderer
             var directionZ = LookPoint.Z - Position.Z;
             var direction = new Vector(directionX, directionY, directionZ);
 
-            // Normalise for z-axis
-            var normalVector = Vector.NormalizeVector(direction, Vector.VectorLength(direction));
+            // Normalize for z-axis
+            var normalVector = direction.Normalize();
 
-            // x-axis
-            var crossProduct = Vector.CrossProduct(Up, normalVector);
-            var uVector = Vector.NormalizeVector(crossProduct, Vector.VectorLength(crossProduct));
-
-            // y-axis
-            var vVector = Vector.CrossProduct(normalVector, uVector);
+            // The two vectors
+            var uVector = Vector.CrossProduct(Up, normalVector).Normalize();
+            var vVector = Vector.CrossProduct(normalVector, uVector).Normalize();
 
             var transformMatrix = new Matrix(4, 4);
 
@@ -184,14 +253,12 @@ namespace WireframeRenderer
         /// Multiplies perspective transform, look transform and location transforms.
         /// </summary>
         /// <returns>The resulting matrix.</returns>
-        public Matrix CalculateTransforms()
+        private void CalculateTransforms()
         {
-            var m = Matrix.NaiveMultiplication(PerspectiveTransform(), LookTransform());
-            m = Matrix.NaiveMultiplication(m, LocationTransform());
+            var allTransformMatrix = Matrix.NaiveMultiplication(PerspectiveTransform(), LookTransform());
+            allTransformMatrix = Matrix.NaiveMultiplication(allTransformMatrix, LocationTransform());
 
-            AllTransforms = m;
-
-            return m;
+            AllTransforms = allTransformMatrix;
         }
         #endregion
     }

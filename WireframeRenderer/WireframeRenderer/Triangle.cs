@@ -5,6 +5,24 @@
     /// </summary>
     class Triangle
     {
+        #region Properties
+        /// <summary>
+        /// Gets or sets the A vertex.
+        /// </summary>
+        public Vertex A { get; set; }
+
+        /// <summary>
+        /// Gets or sets the B vertex.
+        /// </summary>
+        public Vertex B { get; set; }
+
+        /// <summary>
+        /// Gets or sets the C vertex.
+        /// </summary>
+        public Vertex C { get; set; }
+        #endregion
+
+        #region Constructors
         /// <summary>
         /// Creates a new instance of Triangle.
         /// </summary>
@@ -24,22 +42,9 @@
             B = v2;
             C = v3;
         }
+        #endregion
 
-        /// <summary>
-        /// Gets or sets the A vertex.
-        /// </summary>
-        public Vertex A { get; set; }
-
-        /// <summary>
-        /// Gets or sets the B vertex.
-        /// </summary>
-        public Vertex B { get; set; }
-
-        /// <summary>
-        /// Gets or sets the C vertex.
-        /// </summary>
-        public Vertex C { get; set; }
-
+        #region Public Methods
         /// <summary>
         /// Updates the screen points of the triangle's vertices.
         /// </summary>
@@ -50,5 +55,6 @@
             B.UpdateScreenPoint(camera);
             C.UpdateScreenPoint(camera);
         }
+        #endregion
     }
 }

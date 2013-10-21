@@ -7,19 +7,7 @@ namespace WireframeRenderer
     /// </summary>
     class Vector
     {
-        /// <summary>
-        /// Creates a new instance of Vector.
-        /// </summary>
-        /// <param name="x">The x-coordinate of the vector.</param>
-        /// <param name="y">The y-coordinate of the vector.</param>
-        /// <param name="z">The z-coordinate of the vector.</param>
-        public Vector(double x, double y, double z)
-        {
-            X = x;
-            Y = y;
-            Z = z;
-        }
-
+        #region Properties
         /// <summary>
         /// Gets or sets the X value.
         /// </summary>
@@ -34,34 +22,44 @@ namespace WireframeRenderer
         /// Gets or sets the Z value.
         /// </summary>
         public double Z { get; set; }
+        #endregion
 
+        #region Constructors
         /// <summary>
-        /// Calculates the length of a 3D vector.
+        /// Creates a new instance of Vector.
         /// </summary>
-        /// <param name="vector">The vector to calculate the length of.</param>
+        /// <param name="x">The x-coordinate of the vector.</param>
+        /// <param name="y">The y-coordinate of the vector.</param>
+        /// <param name="z">The z-coordinate of the vector.</param>
+        public Vector(double x, double y, double z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
+        #endregion
+
+        #region Public Methods
+        /// <summary>
+        /// Calculates the length of the vector.
+        /// </summary>
         /// <returns>The length of the vector.</returns>
-        public static double VectorLength(Vector vector)
+        public double Length()
         {
-            return Math.Sqrt(Math.Pow(vector.X, 2)
-                            + Math.Pow(vector.Y, 2)
-                            + Math.Pow(vector.Z, 2));
+            return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2) + Math.Pow(Z, 2));
         }
 
         /// <summary>
-        /// Normalizes a 3D vector.
+        /// Normalizes the vector using its own length.
         /// </summary>
-        /// <param name="vector">The vector to normalize.</param>
-        /// <param name="length">The length to normalize by.</param>
         /// <returns>The normalized vector.</returns>
-        public static Vector NormalizeVector(Vector vector, double length)
+        public Vector Normalize()
         {
-            var normalizedX = vector.X / length;
-            var normalizedY = vector.Y / length;
-            var normalizedZ = vector.Z / length;
-
-            return new Vector(normalizedX, normalizedY, normalizedZ);
+            return new Vector(X / Length(), Y / Length(), Z / Length());
         }
+        #endregion
 
+        #region Static Methods
         /// <summary>
         /// Calculates the crossproduct of two vectors.
         /// </summary>
@@ -76,5 +74,6 @@ namespace WireframeRenderer
 
             return new Vector(newX, newY, newZ);
         }
+        #endregion
     }
 }
