@@ -4,7 +4,6 @@ namespace WireframeRenderer
 {
     /// <summary>
     /// Represents a vertex in 3D space.
-    /// Can also substitute as a vector (just leave the W coordinate as 0).
     /// </summary>
     class Vertex
     {

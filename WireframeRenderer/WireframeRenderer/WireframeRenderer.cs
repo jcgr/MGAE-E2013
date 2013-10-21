@@ -21,8 +21,6 @@ namespace WireframeRenderer
 
             Width = (int)_camera.Width;
             Height = (int)_camera.Height;
-            //Width = 1280;
-            //Height = 720;
 
             _graphicsObj = CreateGraphics();
 
