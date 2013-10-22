@@ -38,6 +38,8 @@ namespace WireframeRenderer
         /// <param name="e">The args.</param>
         private void WireframeRenderer_Paint(object sender, PaintEventArgs e)
         {
+            _camera.CalculateTransforms();
+
             foreach (var triangle in _pyramidTriangles)
             {
                 triangle.UpdateVerticesScreenPoint(_camera);

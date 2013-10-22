@@ -57,17 +57,17 @@
         public Camera()
         {
             Position = new Vector(200, 100, 0);
-            LookPoint = new Vector(200, 100, 200);
+            LookPoint = new Vector(200, 50, 200);
             Up = new Vector(0, 1, 0);
 
             Far = -3000;
             Near = -300;
 
-            FieldOfView = 90d;
-            AspectRatio = 16d / 9d;
-
             Width = 1280;
             Height = 720;
+
+            FieldOfView = 90d;
+            AspectRatio = Width / Height;
 
             //var radians = Math.PI / 180 * (FieldOfView);
 
@@ -137,8 +137,6 @@
                     ChangeRotation(0, 0, 10);
                     break;
             }
-
-            CalculateTransforms();
         }
 
         /// <summary>
@@ -153,9 +151,7 @@
             Position.Y += y;
             Position.Z += z;
 
-            LookPoint.X += x;
-            LookPoint.Y += y;
-            LookPoint.Z += z;
+            ChangeRotation(x, y, z);
         }
 
         /// <summary>
@@ -253,7 +249,7 @@
         /// Multiplies perspective transform, look transform and location transforms.
         /// </summary>
         /// <returns>The resulting matrix.</returns>
-        private void CalculateTransforms()
+        public void CalculateTransforms()
         {
             var allTransformMatrix = Matrix.NaiveMultiplication(PerspectiveTransform(), LookTransform());
             allTransformMatrix = Matrix.NaiveMultiplication(allTransformMatrix, LocationTransform());

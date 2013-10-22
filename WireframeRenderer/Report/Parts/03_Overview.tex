@@ -1,0 +1,44 @@
+\section{Overview}
+\label{03}
+
+In this section I will be giving an overview of the program. I will cover the classes of the program, how the rendering and math works and in which parts of the program the math is.
+
+\subsection{Classes}
+\label{03_01}
+The program contains seven classes. They are \texttt{Matrix}, \texttt{Vertex}, \texttt{Triangle}, \texttt{Vector}, \texttt{Camera}, \texttt{WireframeRenderer} and \texttt{Program}.
+
+\subsubsection*{Matrix, Vertex, Triangle and Vector}
+These four classes are computer representations of their mathematical versions. 
+\begin{my_itemize}
+	\item \texttt{Matrix} represents a matrix of varying sizes and holds floating-point values. 
+
+	\item \texttt{Vertex} represents vertices, but has four coordinate points (x, y, z and w). The fourth, w, is a dummy value so it matches the four-dimensional matrices that are used. It also has a point (an x- and y-value) that represents its position on the screen.
+
+	\item \texttt{Triangle} represents a triangle in 3D space and contains the three vertices that determines the triangle's corners.
+
+	\item \texttt{Vector} represents a 3D vector has three coordinate points (x, y and z).
+\end{my_itemize}
+
+\subsubsection*{Camera}
+The \texttt{Camera} class represents the camera in the model view space. It is what allows the user to see the wireframe models. It contains variables that determines its position, where it is looking, its height, width, field of view and aspect ratio.
+
+\subsubsection*{WireframeRenderer and Program}
+The \texttt{Program} class starts the application. It creates a new instance of the \texttt{WireframeRenderer}, which is a subtype of WindowsForms. \texttt{WireframeRenderer} creates a window for drawing, initializes the camera and is responsible for accepting user input (and handling it correctly), updating the triangles and drawing to the screen.
+
+\subsection{Rendering}
+\label{03_02}
+When the program is started, \texttt{WireframeRenderer} loads four \texttt{Triangle}s. These triangles represent a model of a pyramid, which is what the program renders.
+
+When the model is to be drawn to the screen, it tells the camera to calculate its transforms. After the calculations, each triangle tells its vertices to update their screenpoint, which they do through the use of the camera transformations. Lastly, the triangles are drawn to the screen.
+
+\subsection{Math}
+\label{03_03}
+I decided to move the calculations to the classes they were related to.
+
+The \texttt{Matrix} class contains a simple method for multiplying matrices with each other.
+
+The \texttt{Camera} class contains the methods needed to calculate the three camera transforms described in the tutorial PDF (location-, look- and perspective-transforms). It also contains a method for calculating the combination of these three transformations. It was implemented to make it less code-heavy to get the combined transform, for example for use in updating the screenpoints of the vertices.
+
+The calculation of the screenpoints of the vertices happens across multiple classes. \texttt{WireframeRenderer} iterates over all triangles in the model, and tell each to update its vertices. The triangle then tells each of its own vertices to update their screenpoint. The vertices themselves handles the actual calculation of screenpoints.
+
+It should be noted that I have omitted a part of the pseudocode that describes how to calculate the screenpoints. I decided not to ignore a point if it was outside the screen. The reason is, that while the point might not be on the screen, the line between points may. Skipping a point will therefore result in missing lines of the model.
