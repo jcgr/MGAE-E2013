@@ -30,8 +30,6 @@ namespace PathFinding
         /// </summary>
         public Node CameFrom { get; set; }
 
-        private static readonly IEqualityComparer<Node> XYComparerInstance = new XYEqualityComparer();
-
         public Node(int x, int y)
         {
             X = x;
@@ -50,32 +48,25 @@ namespace PathFinding
             return (float)Math.Sqrt(Math.Pow(target.X - X, 2) + Math.Pow(target.Y - Y, 2));
         }
 
-        /// <summary>
-        /// Equality generated with Resharper.
-        /// </summary>
-        private sealed class XYEqualityComparer : IEqualityComparer<Node>
+        protected bool Equals(Node other)
         {
-            public bool Equals(Node x, Node y)
-            {
-                if (ReferenceEquals(x, y)) return true;
-                if (ReferenceEquals(x, null)) return false;
-                if (ReferenceEquals(y, null)) return false;
-                if (x.GetType() != y.GetType()) return false;
-                return x.X == y.X && x.Y == y.Y;
-            }
-
-            public int GetHashCode(Node obj)
-            {
-                unchecked
-                {
-                    return (obj.X * 397) ^ obj.Y;
-                }
-            }
+            return X == other.X && Y == other.Y;
         }
 
-        public static IEqualityComparer<Node> XYComparer
+        public override bool Equals(object obj)
         {
-            get { return XYComparerInstance; }
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Node) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (X * 397) ^ Y;
+            }
         }
     }
 }

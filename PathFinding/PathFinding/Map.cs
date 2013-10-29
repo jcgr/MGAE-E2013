@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PathFinding
 {
@@ -86,9 +87,44 @@ namespace PathFinding
             return neighbors;
         }
 
-        public void Draw()
+        public void Draw(Node agentA, Node agentB, List<Node> agentAPath, List<Node> agentBPath)
         {
-            
+            Node tempNode = new Node(0, 0);
+
+            Console.Clear();
+
+            for (int x = 0; x < Height; x++)
+            {
+                Console.Write("+");
+                for (int y = 0; y < Width; y++)
+                {
+                    Console.Write("-+");
+                }
+                Console.WriteLine();
+
+                Console.Write("|");
+                for (int y = 0; y < Width; y++)
+                {
+                    tempNode.X = x;
+                    tempNode.Y = y;
+
+                    if (tempNode.Equals(agentA)) Console.Write("A");
+                    else if (tempNode.Equals(agentB)) Console.Write("B");
+                    else if (agentAPath.Contains(tempNode)) Console.Write("a");
+                    else if (agentBPath.Contains(tempNode)) Console.Write("b");
+                    else Console.Write(" ");
+                    Console.Write("|");
+                }
+                Console.WriteLine();
+            }
+
+            Console.Write("+");
+            for (int y = 0; y < Width; y++)
+            {
+                Console.Write("-+");
+            }
+            Console.WriteLine();
+            Console.Write("Press <enter> to continue to next step.");
         }
     }
 }
