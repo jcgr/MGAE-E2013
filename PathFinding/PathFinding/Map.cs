@@ -84,6 +84,11 @@ namespace PathFinding
             if (WithinMap(node.X + 1, node.Y + 1)) neighbors.Add(_map[node.X + 1, node.Y + 1]);
 
             return neighbors;
-        } 
+        }
+
+        public void Draw()
+        {
+            
+        }
     }
 }
