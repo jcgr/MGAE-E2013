@@ -30,11 +30,32 @@ namespace PathFinding
         /// </summary>
         public Node CameFrom { get; set; }
 
+        /// <summary>
+        /// Initializes the node.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public Node(int x, int y)
         {
             X = x;
             Y = y;
             Cost = 1;
+            Closed = false;
+        }
+
+        /// <summary>
+        /// Closes the node.
+        /// </summary>
+        public void Close()
+        {
+            Closed = true;
+        }
+
+        /// <summary>
+        /// Opens the node.
+        /// </summary>
+        public void Open()
+        {
             Closed = false;
         }
 

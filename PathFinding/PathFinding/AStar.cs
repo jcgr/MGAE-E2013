@@ -1,27 +1,28 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace PathFinding
 {
     class AStar
     {
-        private List<Node> _open;
-        private List<Node> _closed;
+        private static List<Node> _open;
+        private static List<Node> _closed;
 
         /// <summary>
-        /// Finds a path from [start] to [end] using the AStar algorithm.
+        /// Finds the shortest path from [fleeing] to [chasing] using the AStar algorithm.
         /// </summary>
-        /// <param name="start">The node to start at.</param>
-        /// <param name="end">The node to end at.</param>
+        /// <param name="start">The node to fleeing at.</param>
+        /// <param name="end">The node to chasing at.</param>
         /// <param name="map">The map.</param>
         /// <returns>The path as a list of nodes.</returns>
-        public List<Node> FindPath(Node start, Node end, Map map)
+        public static List<Node> FindPathTo(Node start, Node end, Map map)
         {
             // Create lists
             var path = new List<Node>();
             _open = new List<Node>();
             _closed = new List<Node>();
 
-            // Create start node
+            // Create fleeing node
             var tempStart = start;
             tempStart.CameFrom = null;
             tempStart.GScore = 0;
@@ -95,9 +96,9 @@ namespace PathFinding
         /// <summary>
         /// Reconstructs the path that ends at node [node].
         /// </summary>
-        /// <param name="node">The end node.</param>
+        /// <param name="node">The chasing node.</param>
         /// <returns>A list that holds the nodes for the entire path.</returns>
-        private List<Node> ReconstructPath(Node node)
+        private static List<Node> ReconstructPath(Node node)
         {
             var path = new List<Node>();
 
@@ -113,7 +114,7 @@ namespace PathFinding
         /// <param name="nodes">The list of nodes for the path.</param>
         /// <param name="node">The node to add.</param>
         /// <returns>The list of nodes for the path.</returns>
-        private List<Node> ReconstructPath(List<Node> nodes, Node node)
+        private static List<Node> ReconstructPath(List<Node> nodes, Node node)
         {
             if (node == null) return nodes;
 
@@ -126,7 +127,7 @@ namespace PathFinding
         /// Adds a node to the open list, ensuring that the list is in ascending order.
         /// </summary>
         /// <param name="node">The node to add.</param>
-        private void AddToOpenList(Node node)
+        private static void AddToOpenList(Node node)
         {
             for (var i = 0; i < _open.Count; i++)
             {
@@ -144,7 +145,7 @@ namespace PathFinding
         /// Adds a node to the closed list, ensuring that the list is in ascending order.
         /// </summary>
         /// <param name="node">The node to add.</param>
-        private void AddToClosedList(Node node)
+        private static void AddToClosedList(Node node)
         {
             for (var i = 0; i < _closed.Count; i++)
             {

@@ -5,6 +5,9 @@ namespace PathFinding
 {
     class Map
     {
+        /// <summary>
+        /// The map.
+        /// </summary>
         private Node[,] _map;
 
         /// <summary>
@@ -29,6 +32,11 @@ namespace PathFinding
             set { _map[x, y] = value; }
         }
 
+        /// <summary>
+        /// Initializes the map with the given height and width.
+        /// </summary>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
         public Map(int height, int width)
         {
             _map = new Node[height, width];
@@ -40,6 +48,79 @@ namespace PathFinding
                     _map[i, k] = new Node(i, k);
                 }
             }
+        }
+
+        /// <summary>
+        /// Closes a position on the map.
+        /// </summary>
+        /// <param name="x">The x-coordinate of the position.</param>
+        /// <param name="y">The y-coordinate of the position.</param>
+        public void Close(int x, int y)
+        {
+            if (!WithinMap(x, y)) return;
+
+            _map[x, y].Close();
+        }
+
+        /// <summary>
+        /// Opens a position on the map.
+        /// </summary>
+        /// <param name="x">The x-coordinate of the position.</param>
+        /// <param name="y">The y-coordinate of the position.</param>
+        public void Open(int x, int y)
+        {
+            if (!WithinMap(x, y)) return;
+
+            _map[x, y].Open();
+        }
+
+        /// <summary>
+        /// Draws the map to the console.
+        /// </summary>
+        /// <param name="agentA">The location of agent A.</param>
+        /// <param name="agentB">The location of agent B.</param>
+        /// <param name="agentAPath">The path agent A is taking.</param>
+        /// <param name="agentBPath">The path agent B is taking.</param>
+        public void Draw(Agent agentA, Agent agentB, List<Node> agentAPath, List<Node> agentBPath)
+        {
+            Node tempNode = new Node(0, 0);
+
+            Console.Clear();
+
+            for (int x = 0; x < Height; x++)
+            {
+                Console.Write("+");
+                for (int y = 0; y < Width; y++)
+                {
+                    Console.Write("-+");
+                }
+                Console.WriteLine();
+
+                Console.Write("|");
+                for (int y = 0; y < Width; y++)
+                {
+                    tempNode.X = x;
+                    tempNode.Y = y;
+
+                    if (_map[x, y].Closed) Console.Write("X");
+                    else if (tempNode.X == agentA.X && tempNode.Y == agentA.Y) Console.Write("A");
+                    else if (tempNode.X == agentB.X && tempNode.Y == agentB.Y) Console.Write("B");
+                    else if (agentAPath.Contains(tempNode)) Console.Write("a");
+                    else if (agentBPath.Contains(tempNode)) Console.Write("b");
+                    else Console.Write(" ");
+                    Console.Write("|");
+                }
+                Console.WriteLine();
+            }
+
+            Console.Write("+");
+            for (int y = 0; y < Width; y++)
+            {
+                Console.Write("-+");
+            }
+
+            Console.WriteLine();
+            Console.Write("Press <enter> to continue to next step.");
         }
 
         /// <summary>
@@ -85,46 +166,6 @@ namespace PathFinding
             if (WithinMap(node.X + 1, node.Y + 1)) neighbors.Add(_map[node.X + 1, node.Y + 1]);
 
             return neighbors;
-        }
-
-        public void Draw(Node agentA, Node agentB, List<Node> agentAPath, List<Node> agentBPath)
-        {
-            Node tempNode = new Node(0, 0);
-
-            Console.Clear();
-
-            for (int x = 0; x < Height; x++)
-            {
-                Console.Write("+");
-                for (int y = 0; y < Width; y++)
-                {
-                    Console.Write("-+");
-                }
-                Console.WriteLine();
-
-                Console.Write("|");
-                for (int y = 0; y < Width; y++)
-                {
-                    tempNode.X = x;
-                    tempNode.Y = y;
-
-                    if (tempNode.Equals(agentA)) Console.Write("A");
-                    else if (tempNode.Equals(agentB)) Console.Write("B");
-                    else if (agentAPath.Contains(tempNode)) Console.Write("a");
-                    else if (agentBPath.Contains(tempNode)) Console.Write("b");
-                    else Console.Write(" ");
-                    Console.Write("|");
-                }
-                Console.WriteLine();
-            }
-
-            Console.Write("+");
-            for (int y = 0; y < Width; y++)
-            {
-                Console.Write("-+");
-            }
-            Console.WriteLine();
-            Console.Write("Press <enter> to continue to next step.");
         }
     }
 }

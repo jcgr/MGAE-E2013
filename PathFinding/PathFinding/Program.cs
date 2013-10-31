@@ -1,77 +1,99 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace PathFinding
 {
     class Program
     {
-        private static readonly Map Map = new Map(10, 15);
-        private static readonly AStar PathFinder = new AStar();
+        private static Map _map;
         private static Agent _agentA;
         private static Agent _agentB;
 
         static void Main(string[] args)
         {
-            _agentA = new Agent(2, 2, 2);
-            _agentB = new Agent(8, 13, 1);
+            LoadMap();
+            LoadAgents();
 
-            // Make A chase B.
-            while (_agentA.X != _agentB.X
-                   || _agentA.Y != _agentB.Y)
+            // Draw
+            _map.Draw(_agentA, _agentB, new List<Node>(), new List<Node>());
+            Console.ReadLine();
+
+            // Run until A catches B.
+            while (true)
             {
-                //Console.WriteLine("Agent A is at: " + _agentA.X + " - " + _agentA.Y + " and moves towards B");
-                //Console.WriteLine("Agent B is at: " + _agentB.X + " - " + _agentB.Y + " and runs away from A");
+                // Make B avoid A
+                _agentB.Avoid(_agentA, _map);
+                var agentBPath = _agentB.Path;
 
-
-
-                var agentANode = new Node(_agentA.X, _agentA.Y);
-                var agentBNode = new Node(_agentB.X, _agentB.Y);
-
-                var agentAPath = MoveTowards(agentANode, agentBNode);
-                var agentBPath = MoveAwayFrom(agentBNode, agentANode);
-
-                Map.Draw(agentANode, agentBNode, agentAPath, agentBPath);
-
-                var speed = (_agentA.Speed) <= agentAPath.Count - 1 ? _agentA.Speed : agentAPath.Count - 1;
-                var newPos = agentAPath[speed];
-
-                _agentA.X = newPos.X;
-                _agentA.Y = newPos.Y;
-
-                speed = (_agentB.Speed) <= agentBPath.Count - 1 ? _agentB.Speed : agentBPath.Count - 1;
-                newPos = agentBPath[speed];
-
+                var speed = (_agentB.Speed) <= agentBPath.Count - 1 ? _agentB.Speed : agentBPath.Count - 1;
+                var newPos = agentBPath[speed];
                 _agentB.X = newPos.X;
                 _agentB.Y = newPos.Y;
+                agentBPath.RemoveRange(0, speed);
+
+                // Make A chase B
+                _agentA.Chase(_agentB, _map);
+                var agentAPath = _agentA.Path;
+
+                speed = (_agentA.Speed) <= agentAPath.Count - 1 ? _agentA.Speed : agentAPath.Count - 1;
+                newPos = agentAPath[speed];
+                _agentA.X = newPos.X;
+                _agentA.Y = newPos.Y;
+                agentAPath.RemoveRange(0, speed);
+
+                // Draw the map
+                _map.Draw(_agentA, _agentB, agentAPath, agentBPath);
+
+                // Stop the loop if A has caught B.
+                if (_agentA.X == _agentB.X && _agentA.Y == _agentB.Y) break;
 
                 Console.ReadLine();
             }
 
-            Console.WriteLine("Agent A has cought agent B!");
-            Console.WriteLine("Agent A: " + _agentA.X + " - " + _agentA.Y);
-            Console.WriteLine("Agent B: " + _agentB.X + " - " + _agentB.Y);
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Agent A has caught agent B at X:" + _agentA.X + " Y:" + _agentA.Y + "!");
             Console.ReadLine();
         }
 
-        private static List<Node> MoveTowards(Node a, Node b)
+        /// <summary>
+        /// Loads the agents.
+        /// </summary>
+        private static void LoadAgents()
         {
-            return PathFinder.FindPath(Map[a.X, a.Y], Map[b.X, b.Y], Map);
+            var defaultASpeed = 1;
+            var defaultBSpeed = 1;
+            int newASpeed, newBSpeed;
+
+            Console.WriteLine("Enter the speed for agent A (default is 1):");
+            var result = Console.ReadLine();
+            bool isNumeric = int.TryParse(result, out newASpeed);
+            if (isNumeric) defaultASpeed = newASpeed;
+
+            Console.WriteLine("Enter the speed for agent B (default is 1):");
+            result = Console.ReadLine();
+            isNumeric = int.TryParse(result, out newBSpeed);
+            if (isNumeric) defaultBSpeed = newBSpeed;
+
+            _agentA = new Agent(2, 2, defaultASpeed);
+            _agentB = new Agent(5, 4, defaultBSpeed);
         }
 
-        private static List<Node> MoveAwayFrom(Node b, Node a)
+        /// <summary>
+        /// Loads the map.
+        /// </summary>
+        private static void LoadMap()
         {
-            var list = new List<Node>();
+            _map = new Map(10, 15);
 
-            var newX = b.X;
-            var newY = b.Y;
-
-            if (a.X < b.X && Map.WithinMap(b.X + 1, b.Y)) newX++;
-            else if (a.X <= b.X && Map.WithinMap(b.X - 1, b.Y)) newX--;
-            if (a.Y < b.Y && Map.WithinMap(b.X, b.Y + 1)) newY++;
-            else if (a.Y <= b.Y && Map.WithinMap(b.X, b.Y - 1)) newY--;
-
-            list.Add(Map[newX, newY]);
-            return list;
+            _map.Close(1, 3);
+            _map.Close(2, 3);
+            _map.Close(3, 3);
+            _map.Close(4, 3);
+            _map.Close(5, 3);
+            _map.Close(6, 3);
+            _map.Close(7, 3);
         }
     }
 }
