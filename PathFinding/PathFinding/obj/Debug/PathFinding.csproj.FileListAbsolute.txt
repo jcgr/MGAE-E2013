@@ -1,6 +1,0 @@
-D:\My Documents\GitHub\MGAE-E2013\PathFinding\PathFinding\bin\Debug\PathFinding.exe.config
-D:\My Documents\GitHub\MGAE-E2013\PathFinding\PathFinding\bin\Debug\PathFinding.exe
-D:\My Documents\GitHub\MGAE-E2013\PathFinding\PathFinding\bin\Debug\PathFinding.pdb
-D:\My Documents\GitHub\MGAE-E2013\PathFinding\PathFinding\obj\Debug\PathFinding.csprojResolveAssemblyReference.cache
-D:\My Documents\GitHub\MGAE-E2013\PathFinding\PathFinding\obj\Debug\PathFinding.exe
-D:\My Documents\GitHub\MGAE-E2013\PathFinding\PathFinding\obj\Debug\PathFinding.pdb

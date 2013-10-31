@@ -1,14 +1,42 @@
 \section{Overview}
 \label{03}
 
-In this section I will be giving an overview of the program. I will cover the classes of the programand how the pathfinding is done.
+In this section I will be giving an overview of the program. I will cover the classes of the program and how the pathfinding is done.
 
 \subsection{Classes}
 \label{03_01}
 
+The program contains five classes. They are \texttt{Agent}, \texttt{Node}, \texttt{Map}, \texttt{AStar} and \texttt{Program}.
+
+\subsubsection{Agent}
+\label{03_01_01}
+The \texttt{Agent} class represents the agents running around. It contains variables that specify the agent's position, speed and the path the agent currently is moving. The class has two methods, one for chasing another agent and one for fleeing from a given agent. The difference between the two is describes in section \ref{03_02}.
+
+\subsubsection{Node}
+\label{03_01_02}
+The \texttt{Node} class represents the nodes the agents are walking on. Each node contains its x- and y-coordinates, a value that indicates if the node can be paased or not and values that are used by the \texttt{AStar} class for determining the best path to another node. It has methods for comparison with other nodes and a method for determining the distance to another node.
+
+\subsubsection{Map}
+\label{03_01_03}
+The \texttt{Map} class represents the map through a 2D array of nodes. The class furthermore has methods for determining if a node (or x/y position) is within the bounds of the map, a method for drawing the map in ASCII art and a method for finding neighbours to a given node.
+
+\subsubsection{AStar}
+\label{03_01_04}
+The \texttt{AStar} class contains the pathfinding algorithm, along with the method used to reconstruct the path when a route has been found. It is based on the pseudocode from the \href{http://en.wikipedia.org/wiki/A*_search_algorithm#Pseudocode}{Wikipedia article about A*}, but has been modified to accept a map as input as well, as it uses the map to find the neighbour nodes.
+
+\subsubsection{Program}
+\label{03_01_05}
+The \texttt{Program} class starts the application and loads both the map and the agents. After loading it enters a loop, in which the agents are told to chase or flee from the other agent. When the loop ends, the program writes at which position the fleeing agent is caught, after which it terminates.
+
 \subsection{Pathfinding}
 \label{03_02}
 
-Chase
+Pathfinding is done in two ways:
 
-Avoid
+\begin{my_itemize}
+
+	\item \textbf{Chasing} - When an agent is chasing another agent, it uses the basic A* algoritm to find the shortest route to the target agent.
+
+	\item \textbf{Fleeing} - When an agent is fleeing, it goes through its neighbour nodes, looking for one that puts it further away from the chasing agent. It chooses the one that gives the most distance and then it checks the new position's neighbours the same. This iteration happens ten times. After the ten iterations, the agent uses the A* algorithm to find the shortest route from its current position to the position it found to be furthest away from the chasing agent.
+
+\end{my_itemize}

@@ -1,10 +1,21 @@
 \section{Features}
 \label{02}
 
-In this section I will describe the two main features of the program: User input and pathfinding.
-
-\subsection{User input}
-\label{02_01}
+In this section I will describe the features of the program: Pathfinding, visualization and user input.
 
 \subsection{Pathfinding}
+\label{02_01}
+
+The program uses the A*\footnote{http://en.wikipedia.org/wiki/A*\_search\_algorithm} algorithm to simulate two agents, one chasing the other. The A* algorithm allows the chasing agent to find the shortest path to his target while avoiding obstacles and, depending on his speed, catch the fleeing agent.
+
+\subsection{Visualization}
 \label{02_02}
+
+The map the agents are traversing is visualized through simple ASCII art, as seen in figure \ref{fig:Visualization_01}. Agent A is represented by the capital \texttt{A}, agent B by the capital \texttt{B} and the walls by capital \texttt{X}. The paths the two agents take are represented by non-capital \texttt{a} and \texttt{b}.
+
+\insertPicture{0.6}{Visualization_01}{The initial visualization.}
+
+\subsection{User input}
+\label{02_03}
+
+The program accepts very simple user input. When the program is started, it lets the user specify the start position and speed of each of the agents. After that, it waits at every step for the user to press the \texttt{enter} button.

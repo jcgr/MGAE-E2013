@@ -59,7 +59,7 @@ namespace PathFinding
         {
             if (!WithinMap(x, y)) return;
 
-            _map[x, y].Close();
+            _map[x, y].Closed = true;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace PathFinding
         {
             if (!WithinMap(x, y)) return;
 
-            _map[x, y].Open();
+            _map[x, y].Closed = false;
         }
 
         /// <summary>
@@ -79,12 +79,8 @@ namespace PathFinding
         /// </summary>
         /// <param name="agentA">The location of agent A.</param>
         /// <param name="agentB">The location of agent B.</param>
-        /// <param name="agentAPath">The path agent A is taking.</param>
-        /// <param name="agentBPath">The path agent B is taking.</param>
-        public void Draw(Agent agentA, Agent agentB, List<Node> agentAPath, List<Node> agentBPath)
+        public void Draw(Agent agentA, Agent agentB)
         {
-            Node tempNode = new Node(0, 0);
-
             Console.Clear();
 
             for (int x = 0; x < Height; x++)
@@ -99,14 +95,13 @@ namespace PathFinding
                 Console.Write("|");
                 for (int y = 0; y < Width; y++)
                 {
-                    tempNode.X = x;
-                    tempNode.Y = y;
+                    var tempNode = new Node(x, y);
 
                     if (_map[x, y].Closed) Console.Write("X");
-                    else if (tempNode.X == agentA.X && tempNode.Y == agentA.Y) Console.Write("A");
-                    else if (tempNode.X == agentB.X && tempNode.Y == agentB.Y) Console.Write("B");
-                    else if (agentAPath.Contains(tempNode)) Console.Write("a");
-                    else if (agentBPath.Contains(tempNode)) Console.Write("b");
+                    else if (x == agentA.X && y == agentA.Y) Console.Write("A");
+                    else if (x == agentB.X && y == agentB.Y) Console.Write("B");
+                    else if (agentA.Path.Contains(tempNode)) Console.Write("a");
+                    else if (agentB.Path.Contains(tempNode)) Console.Write("b");
                     else Console.Write(" ");
                     Console.Write("|");
                 }

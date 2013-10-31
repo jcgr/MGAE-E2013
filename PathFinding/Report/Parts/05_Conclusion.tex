@@ -1,14 +1,22 @@
 \section{Conclusion}
 \label{05}
 
-Conclusion
+The program I have written shows simulates one agent chasing another through the use of the A* pathfinding algorithm. It allows the user to specify the start position and speed of the two agents and will visualize each step of the chase.
 
 \subsection{Future works}
 \label{05_01}
-Better gui
 
-Let player open/close nodes
+While the program can do simple pathfinding/visualization, there are a lot of things that could be changed:
 
-Let player chose start position
+\begin{itemize}
 
-Fix up/down issue
+	\item \textbf{GUI} - The GUI could be improved tenfold (or more). Currently it just consists of printing to the console. While it gives a basic view of what is going on, it is by no means pretty or user-friendly. Changing it to include graphics would be a huge improvement and would also make user interaction (see next point) a lot easier.
+
+	\item \textbf{User Interaction} - As it is, the user is only allowed to interact with the program in a very limited way: At first by selecting the start position and speed of the agents, then by controlling the visualization by pressing \texttt{enter}. Letting the user open/close nodes or changing the position/speed of the agents while the program is running would make it more interesting.
+
+	\item \textbf{AI} - When it comes to movement, the chasing agent is doing fine, but the fleeing agent has some issues (as described in chapter \ref{04}). The method for finding a suitable path away from the chasing agent would be an improvement worth spending time on developing.
+	\\ On the same note, implementing states for the agents ("idle", "chasing", "fleeing", etc.) would also be worth looking into, as it would better simulate how beings act.
+
+	\item \textbf{Terrain types} - All nodes (excluding the closed ones) are treated equally during pathfinding. Introducing different types of "terrain" (water, forest, plains, mountains, etc.) would make the simulation more interesting, as the agents would have to take the terrain types into account. This would require the use of a graphics-based UI instead of the current text-based one, but would be well worth the time.
+
+\end{itemize}

@@ -53,6 +53,7 @@ namespace PathFinding
         public void Chase(Agent target, Map map)
         {
             Path = AStar.FindPathTo(map[X, Y], map[target.X, target.Y], map);
+            Move();
         }
 
         /// <summary>
@@ -95,6 +96,19 @@ namespace PathFinding
 
             // Find the path to the target location.
             Path = AStar.FindPathTo(map[X, Y], map[newX, newY], map);
+            Move();
+        }
+
+        /// <summary>
+        /// Moves the agent along its path.
+        /// </summary>
+        private void Move()
+        {
+            var speed = (Speed) <= Path.Count - 1 ? Speed : Path.Count - 1;
+            var newPos = Path[speed];
+            X = newPos.X;
+            Y = newPos.Y;
+            Path.RemoveRange(0, speed);
         }
     }
 }

@@ -1,4 +1,8 @@
 \section{Problems}
 \label{04}
 
-Top row
+I have found one major problem in the program, which I will describe here.
+
+The main problem is when an agent is fleeing. Most of the time it will act in a smart way, until the chasing agent is on the same row or column as the fleeing agent. At this point, the fleeing agent will prefer moving either up or left (depending on if they are on the same row or column) until it reaches the edge of the map. Here it will move away from the edge, only to go back to where it came from. 
+
+This issue only occours when the fleeing agent has a speed of 1. It could be prevented by a better prediction of where a certain node will lead it, instead of blindly going for the one that puts it the furthest from the chasing agent.

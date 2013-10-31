@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace PathFinding
 {
@@ -13,10 +12,12 @@ namespace PathFinding
         static void Main(string[] args)
         {
             LoadMap();
-            LoadAgents();
+            Console.WriteLine("If you want to use default values for the agents, press <enter> to skip each value:");
+            _agentA = LoadAgent("A", 2, 2, 1);
+            _agentB = LoadAgent("B", 5, 7, 1);
 
             // Draw
-            _map.Draw(_agentA, _agentB, new List<Node>(), new List<Node>());
+            _map.Draw(_agentA, _agentB);
             Console.ReadLine();
 
             // Run until A catches B.
@@ -24,26 +25,12 @@ namespace PathFinding
             {
                 // Make B avoid A
                 _agentB.Avoid(_agentA, _map);
-                var agentBPath = _agentB.Path;
-
-                var speed = (_agentB.Speed) <= agentBPath.Count - 1 ? _agentB.Speed : agentBPath.Count - 1;
-                var newPos = agentBPath[speed];
-                _agentB.X = newPos.X;
-                _agentB.Y = newPos.Y;
-                agentBPath.RemoveRange(0, speed);
 
                 // Make A chase B
                 _agentA.Chase(_agentB, _map);
-                var agentAPath = _agentA.Path;
-
-                speed = (_agentA.Speed) <= agentAPath.Count - 1 ? _agentA.Speed : agentAPath.Count - 1;
-                newPos = agentAPath[speed];
-                _agentA.X = newPos.X;
-                _agentA.Y = newPos.Y;
-                agentAPath.RemoveRange(0, speed);
 
                 // Draw the map
-                _map.Draw(_agentA, _agentB, agentAPath, agentBPath);
+                _map.Draw(_agentA, _agentB);
 
                 // Stop the loop if A has caught B.
                 if (_agentA.X == _agentB.X && _agentA.Y == _agentB.Y) break;
@@ -60,24 +47,32 @@ namespace PathFinding
         /// <summary>
         /// Loads the agents.
         /// </summary>
-        private static void LoadAgents()
+        private static Agent LoadAgent(String agent, int defaultX, int defaultY, int defaultSpeed)
         {
-            var defaultASpeed = 1;
-            var defaultBSpeed = 1;
-            int newASpeed, newBSpeed;
+            int newPosX, newPosY, newSpeed;
 
-            Console.WriteLine("Enter the speed for agent A (default is 1):");
-            var result = Console.ReadLine();
-            bool isNumeric = int.TryParse(result, out newASpeed);
-            if (isNumeric) defaultASpeed = newASpeed;
+            Console.WriteLine("Enter the X position for agent " + agent + " (between 0 and " + (_map.Height - 1) + "):");
+            bool isNumeric = int.TryParse(Console.ReadLine(), out newPosX);
+            if (!isNumeric) newPosX = defaultX;
 
-            Console.WriteLine("Enter the speed for agent B (default is 1):");
-            result = Console.ReadLine();
-            isNumeric = int.TryParse(result, out newBSpeed);
-            if (isNumeric) defaultBSpeed = newBSpeed;
+            Console.WriteLine("Enter the Y position for agent " + agent + " (between 0 and " + (_map.Width - 1) + "):");
+            isNumeric = int.TryParse(Console.ReadLine(), out newPosY);
+            if (!isNumeric) newPosY = defaultY;
 
-            _agentA = new Agent(2, 2, defaultASpeed);
-            _agentB = new Agent(5, 4, defaultBSpeed);
+            Console.WriteLine("Enter the speed for agent " + agent + " (default is 1):");
+            isNumeric = int.TryParse(Console.ReadLine(), out newSpeed);
+            if (!isNumeric) newSpeed = defaultSpeed;
+
+            if (_map[newPosX, newPosY].Closed
+                || !_map.WithinMap(newPosX, newPosY))
+            {
+                Console.WriteLine("Agent was placed on a closed/invalid position. Using default position instead.");
+                newPosX = defaultX;
+                newPosY = defaultY;
+            }
+
+            Console.WriteLine();
+            return new Agent(newPosX, newPosY, newSpeed);
         }
 
         /// <summary>
@@ -85,15 +80,15 @@ namespace PathFinding
         /// </summary>
         private static void LoadMap()
         {
-            _map = new Map(10, 15);
+            _map = new Map(10, 20);
 
-            _map.Close(1, 3);
-            _map.Close(2, 3);
-            _map.Close(3, 3);
-            _map.Close(4, 3);
-            _map.Close(5, 3);
-            _map.Close(6, 3);
-            _map.Close(7, 3);
+            _map.Close(1, 5);
+            _map.Close(2, 5);
+            _map.Close(3, 5);
+            _map.Close(4, 5);
+            _map.Close(5, 5);
+            _map.Close(6, 5);
+            _map.Close(7, 5);
         }
     }
 }

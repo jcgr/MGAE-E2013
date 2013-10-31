@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.5.5)  31 OCT 2013 13:24
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.5.5)  31 OCT 2013 19:51
 entering extended mode
 **D:/My*Documents/GitHub/MGAE-E2013/PathFinding/Report/PathfindingReport.tex
 ("D:/My Documents/GitHub/MGAE-E2013/PathFinding/Report/PathfindingReport.tex"
@@ -908,46 +908,58 @@ Package lastpage Info: Please have a look at the pageslts package at
 {C:/Users/Jacob/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
 ("D:\My Documents\GitHub\MGAE-E2013\PathFinding\Report\Parts/01_Introduction.te
 x") ("D:\My Documents\GitHub\MGAE-E2013\PathFinding\Report\Parts/02_Features.te
-x") ("D:\My Documents\GitHub\MGAE-E2013\PathFinding\Report\Parts/03_Overview.te
 x"
-LaTeX Font Info:    Try loading font information for OT1+fi4 on input line 8.
+LaTeX Font Info:    Try loading font information for OT1+fi4 on input line 14.
  ("C:\Program Files\MiKTeX\tex\latex\inconsolata\ot1fi4.fd"
 File: ot1fi4.fd 2009/05/28 OT1/Inconsolata
-)pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
- been already used, duplicate ignored
+)
+<Parts/Images/Visualization_01.png, id=81, 247.52475pt x 265.59225pt>
+File: Parts/Images/Visualization_01.png Graphic file (type png)
+
+<use Parts/Images/Visualization_01.png>
+Package pdftex.def Info: Parts/Images/Visualization_01.png used on input line 1
+6.
+(pdftex.def)             Requested size: 148.51599pt x 159.35657pt.
+)
+("D:\My Documents\GitHub\MGAE-E2013\PathFinding\Report\Parts/03_Overview.tex"pd
+fTeX warning (ext4): destination with the same identifier (name{page.1}) has be
+en already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.24 
-      [1])
+l.6 \subsection{Classes}
+                         [1 <D:/My Documents/GitHub/MGAE-E2013/PathFinding/Repo
+rt/Parts/Images/Visualization_01.png>])
 ("D:\My Documents\GitHub\MGAE-E2013\PathFinding\Report\Parts/04_Problems.tex"
 [2])
 ("D:\My Documents\GitHub\MGAE-E2013\PathFinding\Report\Parts/05_Conclusion.tex"
-) ("D:\My Documents\GitHub\MGAE-E2013\PathFinding\Report\Parts/06_Appendix.tex"
-[3] <Parts/Images/01.png, id=80, 769.6755pt x 432.4155pt>
-File: Parts/Images/01.png Graphic file (type png)
+) [3]
+("D:\My Documents\GitHub\MGAE-E2013\PathFinding\Report\Parts/06_Appendix.tex"
+<Parts/Images/Appendix_01.png, id=113, 483.0045pt x 184.2885pt>
+File: Parts/Images/Appendix_01.png Graphic file (type png)
 
-<use Parts/Images/01.png>
-Package pdftex.def Info: Parts/Images/01.png used on input line 4.
-(pdftex.def)             Requested size: 281.85587pt x 158.3483pt.
+<use Parts/Images/Appendix_01.png>
+Package pdftex.def Info: Parts/Images/Appendix_01.png used on input line 4.
+(pdftex.def)             Requested size: 289.80493pt x 110.57394pt.
 
-<Parts/Images/02.png, id=82, 769.6755pt x 432.4155pt>
-File: Parts/Images/02.png Graphic file (type png)
+<Parts/Images/Appendix_02.png, id=114, 254.1495pt x 270.41025pt>
+File: Parts/Images/Appendix_02.png Graphic file (type png)
 
-<use Parts/Images/02.png>
-Package pdftex.def Info: Parts/Images/02.png used on input line 5.
-(pdftex.def)             Requested size: 281.85587pt x 158.3483pt.
+<use Parts/Images/Appendix_02.png>
+Package pdftex.def Info: Parts/Images/Appendix_02.png used on input line 5.
+(pdftex.def)             Requested size: 152.49088pt x 162.24739pt.
 
-<Parts/Images/03.png, id=83, 770.27776pt x 432.4155pt>
-File: Parts/Images/03.png Graphic file (type png)
+<Parts/Images/Appendix_03.png, id=115, 254.1495pt x 290.88675pt>
+File: Parts/Images/Appendix_03.png Graphic file (type png)
 
-<use Parts/Images/03.png>
-Package pdftex.def Info: Parts/Images/03.png used on input line 6.
-(pdftex.def)             Requested size: 281.85587pt x 158.22952pt.
+<use Parts/Images/Appendix_03.png>
+Package pdftex.def Info: Parts/Images/Appendix_03.png used on input line 6.
+(pdftex.def)             Requested size: 152.49088pt x 174.53339pt.
 ) 
 AED: lastpage setting LastPage
-[4 <D:/My Documents/GitHub/MGAE-E2013/PathFinding/Report/Parts/Images/01.png> <
-D:/My Documents/GitHub/MGAE-E2013/PathFinding/Report/Parts/Images/02.png> <D:/M
-y Documents/GitHub/MGAE-E2013/PathFinding/Report/Parts/Images/03.png>]
+[4 <D:/My Documents/GitHub/MGAE-E2013/PathFinding/Report/Parts/Images/Appendix_
+01.png> <D:/My Documents/GitHub/MGAE-E2013/PathFinding/Report/Parts/Images/Appe
+ndix_02.png> <D:/My Documents/GitHub/MGAE-E2013/PathFinding/Report/Parts/Images
+/Appendix_03.png>]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 103.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 103.
 
@@ -955,29 +967,35 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 103.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 103.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 103.
 Package rerunfilecheck Info: File `PathfindingReport.out' has not changed.
-(rerunfilecheck)             Checksum: 72001C35E5BD18B184C476D350CA3CE0;628.
+(rerunfilecheck)             Checksum: F6366C1150B5691B6CF96AA2B78DA86D;965.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 103.
  ) 
 Here is how much of TeX's memory you used:
- 11582 strings out of 493921
- 170032 string characters out of 3148887
- 268482 words of memory out of 3000000
- 14662 multiletter control sequences out of 15000+200000
- 10454 words of font info for 37 fonts, out of 3000000 for 9000
+ 11611 strings out of 493921
+ 170772 string characters out of 3148887
+ 268478 words of memory out of 3000000
+ 14683 multiletter control sequences out of 15000+200000
+ 10908 words of font info for 39 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 37i,12n,43p,582b,367s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX/fonts/enc/dvips/inconsolata/fi4-ot1tt.enc} <C:\Users
-\Jacob\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1000.pk>
-<C:/Program Files/MiKTeX/fonts/type1/public/inconsolata/Inconsolata.pfb><C:/Pro
-gram Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/
-amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/c
-mr17.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsl10.pfb><C:
-/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on PathfindingReport.pdf (5 pages, 158216 bytes).
+ 37i,12n,43p,594b,367s stack positions out of 5000i,500n,10000p,200000b,50000s
+pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exi
+st, replaced by a fixed one
+
+ <C:\Users\Jacob\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\tc
+rm1000.pk>{C:/Program Files/MiKTeX/fonts/enc/dvips/inconsolata/fi4-ot1tt.enc}<C
+:/Program Files/MiKTeX/fonts/type1/public/inconsolata/Inconsolata.pfb><C:/Progr
+am Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX/fonts/ty
+pe1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/am
+sfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr
+17.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Pro
+gram Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX/fonts/type
+1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmti12.pfb>
+Output written on PathfindingReport.pdf (5 pages, 177943 bytes).
 PDF statistics:
- 131 PDF objects out of 1000 (max. 8388607)
- 20 named destinations out of 1000 (max. 500000)
- 112 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 173 PDF objects out of 1000 (max. 8388607)
+ 27 named destinations out of 1000 (max. 500000)
+ 157 words of extra memory for PDF output out of 10000 (max. 10000000)
 
