@@ -15,6 +15,7 @@ void Game::initialize()
 
 void Game::play()
 {
+	Player player = Player();
 	Level level = Level();
 
 	// The file name for the levels.
@@ -34,7 +35,7 @@ void Game::play()
 		if (mapData.is_open())
 		{
 			// ... load the level and run it
-			level.load(levelFileName);
+			level.load(levelFileName, player);
 			level.run();
 
 			levelNumber++;

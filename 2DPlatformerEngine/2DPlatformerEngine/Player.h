@@ -2,8 +2,10 @@
 #define PLAYER_H
 
 #include <SDL.h>
+
 #include "Map.h"
-#include "GameVariables.h"
+#include "Enemy2.h"
+#include "HelperClass.h"
 
 /**
 * The player
@@ -54,7 +56,12 @@ class Player
 		/**
 		* The points to check for collision with regards to the player.
 		*/
-		SDL_Point currentCollisionPoints[COLLISION_POINT_AMOUNT], tempCollisionPoints[COLLISION_POINT_AMOUNT];
+		SDL_Point collisionPoints[COLLISION_POINT_AMOUNT];
+
+		/**
+		* The helper class
+		*/
+		HelperClass hc;
 
 		/**
 		* Uses the given texture to determine the height
@@ -101,6 +108,14 @@ class Player
 		* player is doing.
 		*/
 		void updateTexture();
+
+		/**
+		* Moves the player.
+		* @param map The map of tiles.
+		* @param **enemyList The list of enemies.
+		* @param numberOfEnemies The actual number of enemies in the list.
+		*/
+		void move(Map map, Enemy2 **enemylist, int numberOfEnemies);
 
 		/**
 		* Gets the height of the player
@@ -183,6 +198,20 @@ class Player
 		* The texture for the death animation.
 		*/
 		SDL_Texture *playerDie;
+
+		/**
+		* Handles collision for the player.
+		* @param collisionType the type of collision.
+		*/
+		void handleCollision(int collisionType);
+
+		/**
+		* Checks for collision between the player and the map/enemies.
+		* @param map The map of tiles.
+		* @param **enemyList The list of enemies.
+		* @param numberOfEnemies The actual number of enemies in the list.
+		*/
+		int checkCollision(Map map, Enemy2 **enemylist, int numberOfEnemies);
 };
 
 #endif // !PLAYER_H

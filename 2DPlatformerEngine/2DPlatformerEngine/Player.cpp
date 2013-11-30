@@ -19,8 +19,7 @@ Player::Player()
 	// Initialize the collision points.
 	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
 	{
-		currentCollisionPoints[i] = SDL_Point{ 0, 0 };
-		tempCollisionPoints[i] = SDL_Point{ 0, 0 };
+		collisionPoints[i] = SDL_Point{ 0, 0 };
 	}
 
 	currentWalkClip = 0;
@@ -183,6 +182,149 @@ void Player::updateTexture()
 		if (moveState == PLAYER_STAND_RIGHT || moveState == PLAYER_STAND_LEFT) {
 			currentTexture = playerStand;
 		}
+	}
+}
+
+void Player::move(Map map, Enemy2 **enemylist, int numberOfEnemies)
+{
+	// If the player is dead, don't move.
+	if (!isAlive) {
+		return;
+	}
+
+	// If the player if moving left ...
+	if (moveState == PLAYER_MOVE_LEFT) {
+		for (int i = 0; i < velX; i++)
+		{
+			hc.calculateCollisionPoints(getHeight(), getWidth(),
+				posX - 1, posY,
+				collisionPoints);
+			int collisionType = checkCollision(map, enemylist, numberOfEnemies);
+			if (collisionType) {
+				handleCollision(collisionType);
+				break;
+			}
+
+			posX--;
+		}
+	}
+
+	// If the player is moving right ...
+	if (moveState == PLAYER_MOVE_RIGHT) {
+		for (int i = 0; i < velX; i++)
+		{
+			hc.calculateCollisionPoints(getHeight(), getWidth(),
+				posX + 1, posY,
+				collisionPoints);
+			int collisionType = checkCollision(map, enemylist, numberOfEnemies);
+			if (collisionType) {
+				handleCollision(collisionType);
+				break;
+			}
+
+			posX++;
+		}
+	}
+
+	// If the player is moving up ...
+	if (velY > 0) {
+		// ... check each position step-by-step instead of just moving
+		// the player 7 pixels immediately.
+		for (int i = 0; i < PLAYER_GRAVITY; i++)
+		{
+			hc.calculateCollisionPoints(getHeight(), getWidth(),
+				posX, posY - 1,
+				collisionPoints);
+			int collisionType = checkCollision(map, enemylist, numberOfEnemies);
+			if (collisionType) {
+				handleCollision(collisionType);
+				decelerateY();
+				break;
+			}
+
+			posY--;
+			velY--;
+		}
+	}
+	// If the player is moving down ...
+	else {
+		for (int i = velY; i < 0; i++)
+		{
+			// If the player is falling, they cannot jump.
+			canJump = false;
+
+			// If the player collides with something below, they have
+			// landed and can jump again.
+			hc.calculateCollisionPoints(getHeight(), getWidth(),
+				posX, posY + 1,
+				collisionPoints);
+			int collisionType = checkCollision(map, enemylist, numberOfEnemies);
+			if (collisionType) {
+				handleCollision(collisionType);
+				canJump = true;
+				isJumping = false;
+				break;
+			}
+
+			posY++;
+		}
+	}
+}
+
+int Player::checkCollision(Map map, Enemy2 **enemylist, int numberOfEnemies)
+{
+	int tileType = 0;
+
+	// Check if the player hits an enemy
+	for (int point = 0; point < COLLISION_POINT_AMOUNT; point++)
+	{
+		SDL_Point tempPoint = collisionPoints[point];
+
+		for (int enemy = 0; enemy < numberOfEnemies; enemy++)
+		{
+			Enemy2 *tempEnemy = enemylist[enemy];
+
+			if (tempPoint.x > tempEnemy->posX && tempPoint.x < tempEnemy->posX + tempEnemy->getWidth()
+				&& tempPoint.y > tempEnemy->posY && tempPoint.y < tempEnemy->posY + tempEnemy->getHeight()) {
+				return COLLISION_ENEMY;
+			}
+		}
+	}
+
+	// Iterate over all collision points to check for collision with the map
+	for (int i = 0; i < COLLISION_POINT_AMOUNT; i++)
+	{
+		SDL_Point tempPoint = collisionPoints[i];
+		int tempCollisionType = map.getTile(tempPoint.x, tempPoint.y);
+
+		// If checking for the player, just return the highest collision type
+		if (tempCollisionType > tileType) {
+			tileType = tempCollisionType;
+		}
+	}
+
+	return tileType;
+}
+
+void Player::handleCollision(int collisionType)
+{
+	switch (collisionType)
+	{
+	case COLLISION_SOLID_BLOCK:
+		// Do nothing. Is handled depending on where it happens
+		break;
+
+	case COLLISION_GOAL:
+		reachedGoal = true;
+		break;
+
+	case COLLISION_SPIKE:
+		die();
+		break;
+
+	case COLLISION_ENEMY:
+		die();
+		break;
 	}
 }
 

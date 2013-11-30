@@ -62,6 +62,7 @@ void Map::loadMap(string fileName)
 
 int** Map::getMap()
 {
+	int lol = 0;
 	return tileMap;
 }
 

@@ -4,153 +4,126 @@
 #include <SDL.h>
 #include <list>
 
-#include "GameVariables.h"
+#include "HelperClass.h"
 #include "Window.h"
 #include "Map.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "Enemy2.h"
+#include "Enemy2Bear.h"
+#include "Enemy2Harpy.h"
 
 class Level
 {
-	public:
-		Level();
-		~Level(){};
+public:
+	Level();
+	~Level(){};
 
-		/**
-		* Tells the game to shut down.
-		*/
-		bool gameShutDown;
+	/**
+	* Tells the game to shut down.
+	*/
+	bool gameShutDown;
 
-		/**
-		* Loads the level.
-		* @param level The level to load.
-		*/
-		void load(string level);
-		/**
-		* Runs the game.
-		*/
-		void run();
+	/**
+	* Loads the level.
+	* @param level The level to load.
+	* @param playerCharacter The player character.
+	*/
+	void load(string level, Player playerCharacter);
+	/**
+	* Runs the game.
+	*/
+	void run();
 
-	private:
+private:
 
-		/**
-		* Determines which key is currently pressed.
-		*/
-		int currentHorizontalKey, currentVerticalKey;
+	/**
+	* Determines which key is currently pressed.
+	*/
+	int currentHorizontalKey, currentVerticalKey;
 
-		/**
-		* The x-coordinate of the camera (used for drawing enemies and level)
-		*/
-		int camPosX;
+	/**
+	* The x-coordinate of the camera (used for drawing enemies and level)
+	*/
+	int camPosX;
 
-		int numberOfEnemies;
+	/**
+	* The actual number of enemies in the level.
+	*/
+	int numberOfEnemies;
 
-		/**
-		* A list of enemies in the level.
-		*/
-		Enemy* enemyList;
+	/**
+	* A list of enemies in the level.
+	*/
+	Enemy2 *enemy2List[MAX_AMOUNT_OF_EMENIES];
 
-		/**
-		* The player object.
-		*/
-		Player player;
-		/**
-		* The map object.
-		*/
-		Map map;
+	/**
+	* The player object.
+	*/
+	Player player;
+	/**
+	* The map object.
+	*/
+	Map map;
 
-		/**
-		* The texture of the background.
-		*/
-		SDL_Texture *backgroundTexture;
-		/**
-		* The texture of game objects.
-		*/
-		SDL_Texture *brickTexture, *goalTexture, *spikeTexture;
+	/**
+	* The texture of the background.
+	*/
+	SDL_Texture *backgroundTexture;
+	/**
+	* The texture of game objects.
+	*/
+	SDL_Texture *brickTexture, *goalTexture, *spikeTexture;
 
-		/**
-		* The state of the keyboard.
-		*/
-		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
+	/**
+	* The state of the keyboard.
+	*/
+	const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
 
-		/**
-		* The position and dimension of the background.
-		*/
-		SDL_Rect backgroundPosition;
+	/**
+	* The position and dimension of the background.
+	*/
+	SDL_Rect backgroundPosition;
 
-		/**
-		* Updates the player.
-		*/
-		void updatePlayer();
-		/**
-		* Updates the map.
-		*/
-		void updateMap();
-		/**
-		* Updates the enemies.
-		*/
-		void updateEnemies();
+	/**
+	* The helper class
+	*/
+	HelperClass hc;
 
-		/**
-		* Moves the player.
-		*/
-		void movePlayer();
-		/**
-		* Logic for moving flying enemies.
-		* @param flyer The initial information about the flyer.
-		* @return The moved flyer.
-		*/
-		Enemy moveFlying(Enemy flyer);
-		/**
-		* Logic for moving walking enemies.
-		* @param walker The initial information about the walker.
-		* @return The moved walker.
-		*/
-		Enemy moveWalking(Enemy walker);
+	/**
+	* Updates the player.
+	*/
+	void updatePlayer();
+	/**
+	* Updates the enemies.
+	*/
+	void updateEnemies();
 
-		/**
-		* Draws the level.
-		*/
-		void drawLevel();
-		/**
-		* Draws the player.
-		*/
-		void drawPlayer();
-		/**
-		* Draws the enemies.
-		*/
-		void drawEnemies();
-		/**
-		* Draws the win screen.
-		*/
-		void drawWinScreen();
+	/**
+	* Moves the player.
+	*/
+	void movePlayer();
 
-		/**
-		* Loads the enemies present on the map.
-		*/
-		void loadEnemiesFromMap();
+	/**
+	* Draws the level.
+	*/
+	void drawLevel();
+	/**
+	* Draws the player.
+	*/
+	void drawPlayer();
+	/**
+	* Draws the enemies.
+	*/
+	void drawEnemies();
+	/**
+	* Draws the win screen.
+	*/
+	void drawWinScreen();
 
-		/**
-		* Calculates the collision points for the given position.
-		* @param newPosX The x coordiate of the new position.
-		* @param newPosY The y coordiate of the new position.
-		* @param collisionPoints The array to put the results into.
-		*/
-		void calculateCollisionPoints(int height, int width, int newPosX, int newPosY, SDL_Point* collisionPoints);
-
-		/**
-		* Makes stuff happen to the player, depending on what he collides with
-		* @param collisionType The type of collision that happens.
-		*/
-		void handlePlayerCollision(int collisionType);
-
-		/**
-		* Checks if the points collide with something in the map.
-		* @param *collisoinPoints The points to do the collision checking for.
-		* @param player A value that determines if we're checking for the player or not.
-		* @return A value that indicates the kind of collision.
-		*/
-		int checkCollision(SDL_Point *collisionPoints, bool player);
+	/**
+	* Loads the enemies present on the map.
+	*/
+	void loadEnemiesFromMap();
 };
 
 #endif // !LEVEL_H

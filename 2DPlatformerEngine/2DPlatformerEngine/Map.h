@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <vector>
 
-#include "GameVariables.h"
+#include "HelperClass.h"
 
 using namespace std;
 
