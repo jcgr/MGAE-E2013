@@ -14,7 +14,7 @@ The \texttt{Agent} class represents the agents running around. It contains varia
 
 \subsubsection{Node}
 \label{03_01_02}
-The \texttt{Node} class represents the nodes the agents are walking on. Each node contains its x- and y-coordinates, a value that indicates if the node can be paased or not and values that are used by the \texttt{AStar} class for determining the best path to another node. It has methods for comparison with other nodes and a method for determining the distance to another node.
+The \texttt{Node} class represents the nodes the agents are walking on. Each node contains its x- and y-coordinates (used when the position of a node needs to be found without asking the map), a value that indicates if the node can be paased or not and values that are used by the \texttt{AStar} class for determining the best path to another node. It has methods for comparison with other nodes and a method for determining the distance to another node.
 
 \subsubsection{Map}
 \label{03_01_03}
@@ -31,7 +31,7 @@ The \texttt{Program} class starts the application and loads both the map and the
 \subsection{Pathfinding}
 \label{03_02}
 
-Pathfinding is done in two ways:
+Pathfinding is done in the following two ways:
 
 \begin{my_itemize}
 

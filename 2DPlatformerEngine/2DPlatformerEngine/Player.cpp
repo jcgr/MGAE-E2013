@@ -185,7 +185,7 @@ void Player::updateTexture()
 	}
 }
 
-void Player::move(Map map, Enemy2 **enemylist, int numberOfEnemies)
+void Player::move(Map map, Enemy **enemylist, int numberOfEnemies)
 {
 	// If the player is dead, don't move.
 	if (!isAlive) {
@@ -271,7 +271,38 @@ void Player::move(Map map, Enemy2 **enemylist, int numberOfEnemies)
 	}
 }
 
-int Player::checkCollision(Map map, Enemy2 **enemylist, int numberOfEnemies)
+SDL_Rect Player::getCurrentAnimationClip()
+{
+	if (!isAlive) {
+		return animationDieClips[currentDeathClip];
+	}
+	else if (isJumping) {
+		return animationJumpClips[currentJumpClip];
+	}
+	else if (moveState == PLAYER_MOVE_LEFT || moveState == PLAYER_MOVE_RIGHT) {
+		return animationWalkClips[currentWalkClip];
+	}
+	else {
+		return animationStandClip;
+	}
+}
+
+SDL_Texture* Player::getCurrentTexture()
+{
+	return currentTexture;
+}
+
+int Player::getHeight()
+{
+	return playerHeight;
+}
+
+int Player::getWidth()
+{
+	return playerWidth;
+}
+
+int Player::checkCollision(Map map, Enemy **enemylist, int numberOfEnemies)
 {
 	int tileType = 0;
 
@@ -282,7 +313,7 @@ int Player::checkCollision(Map map, Enemy2 **enemylist, int numberOfEnemies)
 
 		for (int enemy = 0; enemy < numberOfEnemies; enemy++)
 		{
-			Enemy2 *tempEnemy = enemylist[enemy];
+			Enemy *tempEnemy = enemylist[enemy];
 
 			if (tempPoint.x > tempEnemy->posX && tempPoint.x < tempEnemy->posX + tempEnemy->getWidth()
 				&& tempPoint.y > tempEnemy->posY && tempPoint.y < tempEnemy->posY + tempEnemy->getHeight()) {
@@ -326,37 +357,6 @@ void Player::handleCollision(int collisionType)
 		die();
 		break;
 	}
-}
-
-SDL_Rect Player::getCurrentAnimationClip()
-{
-	if (!isAlive) {
-		return animationDieClips[currentDeathClip];
-	}
-	else if (isJumping) {
-		return animationJumpClips[currentJumpClip];
-	}
-	else if (moveState == PLAYER_MOVE_LEFT || moveState == PLAYER_MOVE_RIGHT) {
-		return animationWalkClips[currentWalkClip];
-	}
-	else {
-		return animationStandClip;
-	}
-}
-
-SDL_Texture* Player::getCurrentTexture()
-{
-	return currentTexture;
-}
-
-int Player::getHeight()
-{
-	return playerHeight;
-}
-
-int Player::getWidth()
-{
-	return playerWidth;
 }
 
 // PRIVATE

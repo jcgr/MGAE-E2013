@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.5.5)  22 OCT 2013 13:47
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.5.5)  1 DEC 2013 17:27
 entering extended mode
 **D:/My*Documents/GitHub/MGAE-E2013/WireframeRenderer/Report/WireframeRendererR
 eport.tex
@@ -916,7 +916,7 @@ ion.tex")
 tex")
 ("D:\My Documents\GitHub\MGAE-E2013\WireframeRenderer\Report\Parts/03_Overview.
 tex"
-LaTeX Font Info:    Try loading font information for OT1+fi4 on input line 8.
+LaTeX Font Info:    Try loading font information for OT1+fi4 on input line 13.
  ("C:\Program Files\MiKTeX\tex\latex\inconsolata\ot1fi4.fd"
 File: ot1fi4.fd 2009/05/28 OT1/Inconsolata
 )pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
@@ -991,7 +991,7 @@ gram Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiK
 TeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX/fonts/type
 1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmti12.pfb>
-Output written on WireframeRendererReport.pdf (5 pages, 187712 bytes).
+Output written on WireframeRendererReport.pdf (5 pages, 187060 bytes).
 PDF statistics:
  145 PDF objects out of 1000 (max. 8388607)
  21 named destinations out of 1000 (max. 500000)

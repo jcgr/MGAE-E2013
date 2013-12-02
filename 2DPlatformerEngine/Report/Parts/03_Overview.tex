@@ -1,0 +1,22 @@
+\section{Overview}
+\label{03}
+
+This section will be used for explaining the overall structure of the engine.
+
+The engine consists of seven header (.h) files and seven c++ (.cpp) files as seen in the pictures to the right. Most of these files are related, with the exceptions of GameVariables.h and main.cpp.
+
+The GameVariables.h file acts as a config file as it contains a lot of static values that are used by the engine. Therefore it does not need a .cpp file. The main.cpp file is simply used for testing the engine and has no need for a header file.
+
+As stated above, the main.cpp is used for testing the engine. It creates a new Game object which is then initialized. Initializing the Game object creates a Window object of a set height and width, which is used to draw the game upon.
+
+The game is then told to start playing, which creates a new Level object and tells it to load a level with a name format of “Level0.txt”, where the 0 can be replaced with the level the player has gotten to. Every time a level is completed, the level number will be increased and a new level will be loaded. When there are no more levels, the game is over and will show the end screen.
+
+The Level class is the one that actually contains game logic. It creates a new player, it loads the map from the given file and creates the enemies for the level. When the initial load has finished, the main loop will start running until either the level is completed or the player closes the game. 
+
+The first thing the main loop does, is check for events. For example input from the person playing the game. Based on the input, the window will be closed, the player will be moved or nothing will happen. 
+
+After checking for input, the loop updates the map (if anything needs updating), the player and the enemies. This updating involves switching to the right textures based on the state of objects, moving the entities that needs moving and checking for collision. 
+
+After updating the objects, the entire game is drawn (background, the map, the player and the enemies). This entire loop keeps running until the player quits the game or finished the level.
+
+When the player reaches the end of the level, another screen will be drawn. It tells the player that he has completed the level. After proceeding, the Game class will attempt to find the next level, or tell the player that he has won the game.

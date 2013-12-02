@@ -1,0 +1,12 @@
+\section{Problems}
+\label{04}
+
+While the program can do simple pathfinding/visualization, there are a lot of things that could be changed:Currently, the engine is pretty closed off, which is something I will address in this section. The only things that can be easily changed are the levels and the textures of everything. The levels are defined in separate .txt files and the paths to the different textures are stored in the GameVariables.h file. There are plenty of things that could be done to make it more user-friendly, and I will go over a few of them here.
+
+The first thing to improve would be to make the classes easier to work with. As it is, the Level class takes care of a lot of important things, such as moving entities and drawing everything. Instead of doing that, it would make more sense to give each entity its own function for moving, and just have the Level class call that function when necessary. The same goes for drawing.
+
+Another thing to improve would be how enemies work. Currently, the Enemy class contains two hard-coded enemies. Because of this, the Enemy class would have to be edited to allow for more enemies. Instead, having an abstract Enemy class that could be inherited from to create new enemies would be a better idea.
+
+The level/loading could also do with an update. As it is, it is very simple and does not support more than ten different things as it uses the numbers from 0 to 9 to determine what each part of the map file represents.
+
+These are just a few of the possible improvements. Each of them would take some work to get done, but each would make the engine a lot better.

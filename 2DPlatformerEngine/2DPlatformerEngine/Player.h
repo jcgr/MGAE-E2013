@@ -4,7 +4,7 @@
 #include <SDL.h>
 
 #include "Map.h"
-#include "Enemy2.h"
+#include "Enemy.h"
 #include "HelperClass.h"
 
 /**
@@ -115,7 +115,7 @@ class Player
 		* @param **enemyList The list of enemies.
 		* @param numberOfEnemies The actual number of enemies in the list.
 		*/
-		void move(Map map, Enemy2 **enemylist, int numberOfEnemies);
+		void move(Map map, Enemy **enemylist, int numberOfEnemies);
 
 		/**
 		* Gets the height of the player
@@ -211,7 +211,7 @@ class Player
 		* @param **enemyList The list of enemies.
 		* @param numberOfEnemies The actual number of enemies in the list.
 		*/
-		int checkCollision(Map map, Enemy2 **enemylist, int numberOfEnemies);
+		int checkCollision(Map map, Enemy **enemylist, int numberOfEnemies);
 };
 
 #endif // !PLAYER_H

@@ -8,9 +8,9 @@
 #include "Window.h"
 #include "Map.h"
 #include "Player.h"
-#include "Enemy2.h"
-#include "Enemy2Bear.h"
-#include "Enemy2Harpy.h"
+#include "Enemy.h"
+#include "EnemyBear.h"
+#include "EnemyHarpy.h"
 
 class Level
 {
@@ -54,7 +54,7 @@ private:
 	/**
 	* A list of enemies in the level.
 	*/
-	Enemy2 *enemy2List[MAX_AMOUNT_OF_EMENIES];
+	Enemy *enemy2List[MAX_AMOUNT_OF_EMENIES];
 
 	/**
 	* The player object.

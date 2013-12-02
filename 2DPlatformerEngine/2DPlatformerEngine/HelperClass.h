@@ -2,6 +2,7 @@
 #define HELPERCLASS_H
 
 #include <SDL.h>
+
 #include "Map.h"
 
 class HelperClass

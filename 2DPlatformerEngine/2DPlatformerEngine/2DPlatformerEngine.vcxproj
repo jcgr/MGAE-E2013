@@ -75,9 +75,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Enemy2.cpp" />
-    <ClCompile Include="Enemy2Bear.cpp" />
-    <ClCompile Include="Enemy2Harpy.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBear.cpp" />
+    <ClCompile Include="EnemyHarpy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="HelperClass.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -87,9 +87,9 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Enemy2.h" />
-    <ClInclude Include="Enemy2Bear.h" />
-    <ClInclude Include="Enemy2Harpy.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBear.h" />
+    <ClInclude Include="EnemyHarpy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="HelperClass.h" />
     <ClInclude Include="Level.h" />

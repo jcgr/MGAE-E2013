@@ -1,9 +1,7 @@
 \section{Problems}
 \label{04}
 
-In this section I will describe some of the problems of the program.
-
-One problem arises then the camera is moved through the model and no longer looks at it. The results for the screenpoints will overflow and cause the program to crash. This could be avoided by updating only the triangles the camera is looking at.
+While the program can do simple rendering, there are a few problems. One of them arises when the camera is moved through the model and no longer looks at it. The results for the screenpoints will overflow and cause the program to crash. This could be avoided by updating only the triangles the camera is looking at.
 
 Another problem happens when the camera is turned. At some point, the transforms will end up putting one of the closer to the oppesite side of the screen from where the rest of the model is, which means the triangle will stretch across the screen. A check to see where the rest of the triangle is would help in getting rid of this problem.
 
