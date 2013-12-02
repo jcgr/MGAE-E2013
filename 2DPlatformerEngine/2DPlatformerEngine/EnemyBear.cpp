@@ -4,45 +4,16 @@ EnemyBear::EnemyBear()
 {
 }
 
-void EnemyBear::loadEnemy(int x, int y, int height, int width, int maxAnimationClips, string texture)
+void EnemyBear::loadEnemy(int x, int y)
 {
-	posX = x;
-	posY = y;
+	this->load(x, y, ENEMY_WALKER_HEIGHT, ENEMY_WALKER_WIDTH, ENEMY_WALK_CLIPS, ENEMY_TEXTURE_WALKER);
 
-	this->enemyType = ENEMY_WALKING;
-
-	enemyTexture = Window::LoadImage(texture);
 	moveDirection = ENEMY_MOVE_LEFT;
-
-	enemyHeight = height;
-	enemyWidth = width;
 
 	maxVelX = 20;
 	maxVelY = 40;
 
 	isFalling = true;
-
-	internalVelX = 0;
-	internalVelY = 0;
-
-	updateSpeed();
-
-	currentClip = 0;
-	maxClips = maxAnimationClips;
-
-	// Creates the clips for the enemy's animation
-	for (int i = 0; i < maxClips; i++)
-	{
-		enemyAnimationClips[i].x = i * enemyWidth;
-		enemyAnimationClips[i].y = 0;
-		enemyAnimationClips[i].h = enemyHeight;
-		enemyAnimationClips[i].w = enemyWidth;
-	}
-
-	// Reduce player size a little to allow for running through holes
-	// that are only 1 tile wide.
-	enemyHeight -= 2;
-	enemyWidth -= 2;
 }
 
 void EnemyBear::move(Map map)
@@ -100,8 +71,17 @@ void EnemyBear::move(Map map)
 
 void EnemyBear::updateTexture()
 {
-	internalClipCounter = internalClipCounter % (ENEMY_WALK_CLIPS * 10 * 2);
+	internalClipCounter = internalClipCounter % (maxClips * 10 * 2);
 	currentClip = internalClipCounter / 20;
 
 	internalClipCounter++;
+}
+
+SDL_RendererFlip EnemyBear::getFlip()
+{
+	if (this->moveDirection == ENEMY_MOVE_LEFT) {
+		return SDL_FLIP_HORIZONTAL;
+	}
+
+	return SDL_FLIP_NONE;
 }

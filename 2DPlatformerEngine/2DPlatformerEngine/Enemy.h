@@ -17,10 +17,6 @@ public:
 	~Enemy(){};
 
 	/**
-	* The enemy's type.
-	*/
-	int enemyType;
-	/**
 	* The direction the enemy is moving.
 	*/
 	int moveDirection;
@@ -70,34 +66,38 @@ public:
 	*/
 	bool isFalling;
 
+	/**
+	* The collision points of the enemy.
+	*/
 	SDL_Point collisionPoints[COLLISION_POINT_AMOUNT];
 
 	/**
-	* Moves the enemy (override for actual movement)
+	* Moves the enemy.
 	* @param map The map (used for collision).
 	*/
 	virtual void move(Map map);
 
 	/**
-	* Loads an enemy at the given position (override for actual loading)
+	* Loads an enemy.
 	* @param x The x-coordinate of the enemy.
 	* @param y The y-coordinate of the enemy.
-	* @param height The height of the enemy.
-	* @param width The width of the enemy.
-	* @param maxAnimationClips The amount of clips in the enemy's animation.
-	* @param texture The path to the texture.
 	*/
-	virtual void loadEnemy(int x, int y, int height, int width, int maxAnimationClips, string texture);
+	virtual void loadEnemy(int x, int y);
 
 	/**
-	* Updates the enemy's texture to reflect what the enemy is doing (override for actual loading)
+	* Updates of the enemy's texture to reflect what the enemy is doing.
 	*/
 	virtual void updateTexture();
 
 	/**
-	* Updates the enemy's speed.
+	* Updates of the enemy's speed.
 	*/
-	void updateSpeed();
+	virtual void updateSpeed();
+
+	/**
+	* Gets a value that indicates how the enemy's texture is supposed to be flipped.
+	*/
+	virtual SDL_RendererFlip getFlip();
 
 	/**
 	* Gets the rectangle that take corresponds to the right
@@ -120,6 +120,19 @@ public:
 	* @param map The map of tiles.
 	*/
 	int checkCollision(Map map);
+
+protected:
+
+	/**
+	* Loads the things an enemy needs.
+	* @param x The x-coordinate of the enemy.
+	* @param y The y-coordinate of the enemy.
+	* @param height The height of the enemy.
+	* @param width The width of the enemy.
+	* @param maxAnimationClips The amount of clips in the enemy's animation.
+	* @param texture The path to the texture.
+	*/
+	void load(int x, int y, int height, int width, int maxAnimationClips, string texture);
 };
 
 #endif

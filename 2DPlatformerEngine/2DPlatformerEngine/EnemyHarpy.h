@@ -11,26 +11,22 @@ public:
 	~EnemyHarpy(){};
 
 	/**
-	* Moves the enemy.
+	* Harpy specific movement.
 	* @param map The map (used for collision).
 	*/
 	virtual void move(Map map);
 
 	/**
-	* Loads an enemy at the given position.
-	* @param x The x-coordinate of the enemy.
-	* @param y The y-coordinate of the enemy.
-	* @param height The height of the enemy.
-	* @param width The width of the enemy.
-	* @param maxAnimationClips The amount of clips in the enemy's animation.
-	* @param texture The path to the texture.
+	* Loads a harpy at the given position.
+	* @param x The x-coordinate of the harpy.
+	* @param y The y-coordinate of the harpy.
 	*/
-	virtual void loadEnemy(int x, int y, int height, int width, int maxAnimationClips, string texture);
+	virtual void loadEnemy(int x, int y);
 
 	/**
-	* Updates the enemy's texture to reflect what the enemy is doing.
+	* Gets a value that indicates how the harpy's texture is supposed to be flipped.
 	*/
-	virtual void updateTexture();
+	virtual SDL_RendererFlip getFlip();
 };
 
 #endif

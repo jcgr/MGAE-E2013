@@ -1,2 +1,43 @@
 \section{Appendix}
 \label{06}
+
+\subsection{Map data file and layout}
+\label{06_01}
+
+The map uses the following data format: The first line determines the amount of rows in the map, the second determines the amount of columns. The lines after represents the layout of the map, with the numbers meaning the following things:
+
+\begin{my_itemize}
+
+	\item \textbf{0}: An empty space.
+
+	\item \textbf{1}: A solid block.
+
+	\item \textbf{2 \& 3}: 2 and 3 both represent the goal, but there is a difference: 2 determines the place where the goal texture is drawn and is used for checking for collision with the goal, where 3 is only used for checking for collision with the goal. 
+		\\This two-part design is used because drawing the goal texture multiple places looks strange, but collision might be needed for multiple tiles. 3 was introduced to handle that.
+
+	\item \textbf{4}: Spikes.
+
+	\item \textbf{5}: The spawn point of one kind of enemy.
+
+	\item \textbf{6}: The spawn point of another kind of enemy.
+
+	\item \textbf{9}: The spawn point the player.
+
+\end{my_itemize}
+
+\begin{lstlisting}
+12
+40
+1111111111111111111111111111111111111111
+1000000000000000000000000000000000000001
+1000006000000000000000000000000000000001
+1000000000000000000000000000000000000001
+1111111110000000000000000000000000000001
+1000000000000000000000000000000000000001
+1000000000005000000000000000000000000001
+1000000000000000000000000000000000000001
+1000000000000000000000000000000000000001
+1000000000000000000000111100000000300001
+1090000000000000000000000000000000200001
+1111111111111144441111111111111111111111
+\end{lstlisting}

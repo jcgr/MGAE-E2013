@@ -4,45 +4,16 @@ EnemyHarpy::EnemyHarpy()
 {
 }
 
-void EnemyHarpy::loadEnemy(int x, int y, int height, int width, int maxAnimationClips, string texture)
+void EnemyHarpy::loadEnemy(int x, int y)
 {
-	posX = x;
-	posY = y;
+	load(x, y, ENEMY_FLYER_HEIGHT, ENEMY_FLYER_WIDTH, ENEMY_FLY_CLIPS, ENEMY_TEXTURE_FLYER);
 
-	this->enemyType = ENEMY_FLYING;
-
-	enemyTexture = Window::LoadImage(texture);
 	moveDirection = ENEMY_MOVE_UP;
-
-	enemyHeight = height;
-	enemyWidth = width;
 
 	maxVelX = 0;
 	maxVelY = 50;
 
 	isFalling = false;
-
-	internalVelX = 0;
-	internalVelY = 0;
-
-	updateSpeed();
-
-	currentClip = 0;
-	maxClips = maxAnimationClips;
-
-	// Creates the clips for the enemy's animation
-	for (int i = 0; i < maxClips; i++)
-	{
-		enemyAnimationClips[i].x = i * enemyWidth;
-		enemyAnimationClips[i].y = 0;
-		enemyAnimationClips[i].h = enemyHeight;
-		enemyAnimationClips[i].w = enemyWidth;
-	}
-
-	// Reduce player size a little to allow for running through holes
-	// that are only 1 tile wide.
-	enemyHeight -= 2;
-	enemyWidth -= 2;
 }
 
 void EnemyHarpy::move(Map map)
@@ -78,10 +49,7 @@ void EnemyHarpy::move(Map map)
 	}
 }
 
-void EnemyHarpy::updateTexture()
+SDL_RendererFlip EnemyHarpy::getFlip()
 {
-	internalClipCounter = internalClipCounter % (maxClips * 10 * 2);
-	currentClip = internalClipCounter / 20;
-
-	internalClipCounter++;
+	return SDL_FLIP_HORIZONTAL;
 }

@@ -267,20 +267,7 @@ void Level::drawEnemies()
 {
 	for (int i = 0; i < numberOfEnemies; i++)
 	{
-		SDL_RendererFlip flip = SDL_FLIP_NONE;
-
 		Enemy *tempEnemy = enemy2List[i];
-
-		if (tempEnemy->enemyType == ENEMY_FLYING) {
-			if (player.posX < tempEnemy->posX) {
-				flip = SDL_FLIP_HORIZONTAL;
-			}
-		}
-		if (tempEnemy->enemyType == ENEMY_WALKING) {
-			if (tempEnemy->moveDirection == ENEMY_MOVE_LEFT) {
-				flip = SDL_FLIP_HORIZONTAL;
-			}
-		}
 
 		SDL_Rect pos;
 		pos.x = tempEnemy->posX - (tempEnemy->getWidth() / 2) - camPosX;
@@ -289,6 +276,7 @@ void Level::drawEnemies()
 		pos.h = tempEnemy->getHeight();
 		SDL_Texture *tempTex = tempEnemy->getCurrentTexture();
 		SDL_Rect tempRect = tempEnemy->getCurrentAnimationClip();
+		SDL_RendererFlip flip = tempEnemy->getFlip();
 
 		Window::Draw(tempTex, pos, &tempRect, NULL, NULL, NULL, flip);
 	}
@@ -337,8 +325,7 @@ void Level::loadEnemiesFromMap()
 		for (int col = 0; col < map.getWidth(); col++) {
 			if (tempMap[row][col] == ENEMY_FLYING) {
 				EnemyHarpy *newEnemy = new EnemyHarpy();
-				newEnemy->loadEnemy(col * map.getTileWidth(), row * map.getTileHeight(), ENEMY_FLYER_HEIGHT,
-					ENEMY_FLYER_HEIGHT, ENEMY_FLY_CLIPS, ENEMY_TEXTURE_FLYER);
+				newEnemy->loadEnemy(col * map.getTileWidth(), row * map.getTileHeight());
 				enemy2List[numberOfEnemies] = newEnemy;
 
 				this->numberOfEnemies++;
@@ -346,8 +333,7 @@ void Level::loadEnemiesFromMap()
 
 			if (tempMap[row][col] == ENEMY_WALKING) {
 				EnemyBear *newEnemy = new EnemyBear();
-				newEnemy->loadEnemy(col * map.getTileWidth(), row * map.getTileHeight(), ENEMY_WALKER_HEIGHT, 
-					ENEMY_WALKER_WIDTH, ENEMY_WALK_CLIPS, ENEMY_TEXTURE_WALKER);
+				newEnemy->loadEnemy(col * map.getTileWidth(), row * map.getTileHeight());
 				enemy2List[numberOfEnemies] = newEnemy;
 
 				this->numberOfEnemies++;

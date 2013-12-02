@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.5.5)  1 DEC 2013 16:01
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.5.5)  2 DEC 2013 21:36
 entering extended mode
 **D:/My*Documents/GitHub/MGAE-E2013/2DPlatformerEngine/Report/2DPlatformerEngin
 eReport.tex
@@ -836,26 +836,27 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 53.
 
 ("D:\My Documents\GitHub\MGAE-E2013\2DPlatformerEngine\Report\2DPlatformerEngin
 eReport.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 93.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 93.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 102.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 102.
+
  ("C:\Program Files\MiKTeX\tex\latex\base\ts1cmr.fd"
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    ... okay on input line 102.
 
 ("C:\Program Files\MiKTeX\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -881,7 +882,7 @@ Package: ltcaption 2013/02/03 v1.3-62 longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count145
-Package hyperref Info: Link coloring ON on input line 93.
+Package hyperref Info: Link coloring ON on input line 102.
 
 ("C:\Program Files\MiKTeX\tex\latex\hyperref\nameref.sty"
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -891,9 +892,9 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count146
 )
-LaTeX Info: Redefining \ref on input line 93.
-LaTeX Info: Redefining \pageref on input line 93.
-LaTeX Info: Redefining \nameref on input line 93.
+LaTeX Info: Redefining \ref on input line 102.
+LaTeX Info: Redefining \pageref on input line 102.
+LaTeX Info: Redefining \nameref on input line 102.
 
 ("D:\My Documents\GitHub\MGAE-E2013\2DPlatformerEngine\Report\2DPlatformerEngin
 eReport.out")
@@ -906,65 +907,72 @@ Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             or
 (lastpage)             http://www.ctan.org/tex-archive/ 
 (lastpage)             install/macros/latex/contrib/pageslts.tds.zip
-(lastpage)             ! on input line 93.
+(lastpage)             ! on input line 102.
  [1
 
 {C:/Users/Jacob/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
 ("D:\My Documents\GitHub\MGAE-E2013\2DPlatformerEngine\Report\Parts/01_Introduc
 tion.tex")
 ("D:\My Documents\GitHub\MGAE-E2013\2DPlatformerEngine\Report\Parts/02_Features
-.tex")
+.tex" <Parts/Images/Gamescreen_01.png, id=68, 963.6pt x 578.16pt>
+File: Parts/Images/Gamescreen_01.png Graphic file (type png)
+
+<use Parts/Images/Gamescreen_01.png>
+Package pdftex.def Info: Parts/Images/Gamescreen_01.png used on input line 20.
+(pdftex.def)             Requested size: 328.82707pt x 197.2952pt.
+)
 ("D:\My Documents\GitHub\MGAE-E2013\2DPlatformerEngine\Report\Parts/03_Overview
-.tex")
-("D:\My Documents\GitHub\MGAE-E2013\2DPlatformerEngine\Report\Parts/04_Problems
 .tex"pdfTeX warning (ext4): destination with the same identifier (name{page.1})
  has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1 \section{Problems}
-                       [1]
-Overfull \hbox (29.69041pt too wide) in paragraph at lines 4--5
-\OT1/cmr/m/n/10 While the pro-gram can do sim-ple pathfind-ing/vi-su-al-iza-tio
-n, there are a lot of things that could be changed:Currently,
- []
-
-)
+l.15 
+      [1 <D:/My Documents/GitHub/MGAE-E2013/2DPlatformerEngine/Report/Parts/Ima
+ges/Gamescreen_01.png>])
+("D:\My Documents\GitHub\MGAE-E2013\2DPlatformerEngine\Report\Parts/04_Problems
+.tex")
 ("D:\My Documents\GitHub\MGAE-E2013\2DPlatformerEngine\Report\Parts/05_Conclusi
-on.tex")
+on.tex") [2]
 ("D:\My Documents\GitHub\MGAE-E2013\2DPlatformerEngine\Report\Parts/06_Appendix
-.tex" [2]) 
+.tex") 
 AED: lastpage setting LastPage
 [3]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 103.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 103.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 112.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 112.
 
 ("D:\My Documents\GitHub\MGAE-E2013\2DPlatformerEngine\Report\2DPlatformerEngin
 eReport.aux")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 103.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 103.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 112.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 112.
 Package rerunfilecheck Info: File `2DPlatformerEngineReport.out' has not change
 d.
-(rerunfilecheck)             Checksum: FE35DCDCBBE5102C92D5816F9D39645A;269.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 103.
+(rerunfilecheck)             Checksum: 4F4432E4C1B4F889FF65517FE6B28F3F;801.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 112.
  ) 
 Here is how much of TeX's memory you used:
- 11516 strings out of 493921
- 169238 string characters out of 3148887
- 268485 words of memory out of 3000000
- 14616 multiletter control sequences out of 15000+200000
- 9635 words of font info for 34 fonts, out of 3000000 for 9000
+ 11845 strings out of 493921
+ 172340 string characters out of 3148887
+ 272558 words of memory out of 3000000
+ 14916 multiletter control sequences out of 15000+200000
+ 10704 words of font info for 38 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 37i,11n,43p,651b,367s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\Jacob\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\
-tcrm1000.pk><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
-<C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program F
-iles/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX/f
-onts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX/fonts/type1/pu
-blic/amsfonts/cm/cmsl10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfont
-s/cm/cmti12.pfb>
-Output written on 2DPlatformerEngineReport.pdf (4 pages, 93217 bytes).
+ 37i,11n,43p,525b,993s stack positions out of 5000i,500n,10000p,200000b,50000s
+pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exi
+st, replaced by a fixed one
+
+ <C:\Users\Jacob\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\tc
+rm1000.pk><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C
+:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Fi
+les/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX/fonts/type1/pub
+lic/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/
+cm/cmr6.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C
+:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program File
+s/MiKTeX/fonts/type1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on 2DPlatformerEngineReport.pdf (4 pages, 787388 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
- 10 named destinations out of 1000 (max. 500000)
- 49 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 153 PDF objects out of 1000 (max. 8388607)
+ 35 named destinations out of 1000 (max. 500000)
+ 118 words of extra memory for PDF output out of 10000 (max. 10000000)
 

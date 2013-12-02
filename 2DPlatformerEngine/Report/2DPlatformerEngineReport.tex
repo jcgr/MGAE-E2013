@@ -76,6 +76,15 @@ numbers = left}
 \end{figure}
 }
 
+\newcommand{\insertPictureTW}[3]{
+\begin{figure}[h!]
+  \centering
+\includegraphics[width=#1\textwidth]{Parts/Images/#2}
+\caption{#3}
+\label{fig:#2}
+\end{figure}
+}
+
 \newenvironment{my_itemize}{\begin{itemize}[itemsep=0pt, topsep=0pt, partopsep=0pt]}{\end{itemize}}
 
 % Title

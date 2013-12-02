@@ -49,6 +49,7 @@ class HelperClass
 	#define ENEMY_FLYING 5
 	#define ENEMY_WALKING 6
 
+	#define ENEMY_MOVE_NOWHERE 0
 	#define ENEMY_MOVE_UP 1
 	#define ENEMY_MOVE_DOWN 2
 	#define ENEMY_MOVE_RIGHT 3
