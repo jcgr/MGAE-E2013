@@ -17,6 +17,7 @@ void Game::play()
 {
 	Player player = Player();
 	Level level = Level();
+	HelperClass hc = HelperClass();
 
 	// The file name for the levels.
 	int levelNumber = 0;
@@ -74,7 +75,7 @@ void Game::play()
 		}
 
 		Window::Clear();
-		showEndScreen();
+		hc.drawGameWonScreen();
 		Window::Present();
 	}
 }
@@ -83,27 +84,4 @@ void Game::end()
 {
 	Window::Clear();
 	Window::Quit();
-}
-
-// Private
-void Game::showEndScreen()
-{
-	SDL_Color white = { 255, 255, 255 };
-	SDL_Texture *msgGrats, *msgContinue;
-	SDL_Rect msgGratsBox, msgContinueBox;
-
-	msgGrats = Window::RenderText("No more levels to load! You have won!", "FreeSans.ttf", white, 50);
-	msgContinue = Window::RenderText("Press [escape] to stop the game.", "FreeSans.ttf", white, 30);
-
-	SDL_QueryTexture(msgGrats, NULL, NULL, &msgGratsBox.w, &msgGratsBox.h);
-	SDL_QueryTexture(msgContinue, NULL, NULL, &msgContinueBox.w, &msgContinueBox.h);
-
-	msgGratsBox.x = (Window::Box().w / 2) - (msgGratsBox.w / 2);
-	msgGratsBox.y = (Window::Box().h / 2) - (msgGratsBox.h / 2) - 25;
-
-	msgContinueBox.x = (Window::Box().w / 2) - (msgContinueBox.w / 2);
-	msgContinueBox.y = (Window::Box().h / 2) - (msgContinueBox.h / 2) + 25;
-
-	Window::Draw(msgGrats, msgGratsBox);
-	Window::Draw(msgContinue, msgContinueBox);
 }

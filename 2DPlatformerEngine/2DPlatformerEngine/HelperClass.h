@@ -4,6 +4,7 @@
 #include <SDL.h>
 
 #include "Map.h"
+#include "Window.h"
 
 class HelperClass
 {
@@ -68,7 +69,25 @@ class HelperClass
 	#define ENEMY_WALKER_WIDTH 36
 
 public:
+	/**
+	* Calculates the collision points for a unity with the given dimensions and position.
+	* @param unitHeight The height of the unit.
+	* @param unitWidth The width of the unit.
+	* @param newPosX The x-coordinate of the unit's position.
+	* @param newPosY The y-coordinate of the unit's position.
+	* @param *collisionPoints The array of collision points to be calculated.
+	*/
 	void calculateCollisionPoints(int unitHeight, int unitWidth, int newPosX, int newPosY, SDL_Point* collisionPoints);
+
+	/**
+	* Draws the win screen.
+	*/
+	void drawLevelVictoryScreen();
+
+	/**
+	* Show the ending screen.
+	*/
+	void drawGameWonScreen();
 };
 
 #endif

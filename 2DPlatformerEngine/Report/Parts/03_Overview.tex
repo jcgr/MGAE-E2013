@@ -6,7 +6,7 @@ In this section, I will go over the general structure of the engine and explain 
 \subsection{Overall Structure}
 \label{03_01}
 
-The engine consists of the following classes: A map, a player, enemies, a level, and a window to display everything to.
+The engine consists of the following classes: A map, a player, enemies, a level, a window to display everything to and a class for shared functions.
 
 \subsubsection{Map}
 \label{03_01_01}
@@ -33,6 +33,8 @@ The \textbf{level} class represents an entire level in the engine. It contains a
 \label{03_01_05}
 
 The \textbf{window} class is the one that handles any form for drawing to the screen. It initializes SDL, creates a window for it to draw on and helps with loading and drawing of images in an easy way. It is used behind the scenes.
+
+
 
 \subsection{Decisions}
 \label{03_02}

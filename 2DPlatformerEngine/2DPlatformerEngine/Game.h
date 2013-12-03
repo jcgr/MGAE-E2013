@@ -24,11 +24,6 @@ class Game
 		void end();
 
 	private:
-
-		/**
-		* Show the ending screen.
-		*/
-		void showEndScreen();
 };
 
 #endif

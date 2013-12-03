@@ -115,10 +115,6 @@ private:
 	* Draws the enemies.
 	*/
 	void drawEnemies();
-	/**
-	* Draws the win screen.
-	*/
-	void drawWinScreen();
 
 	/**
 	* Loads the enemies present on the map.

@@ -122,7 +122,7 @@ void Level::run()
 		}
 
 		Window::Clear();
-		drawWinScreen();
+		hc.drawLevelVictoryScreen();
 		Window::Present();
 	}
 }
@@ -280,28 +280,6 @@ void Level::drawEnemies()
 
 		Window::Draw(tempTex, pos, &tempRect, NULL, NULL, NULL, flip);
 	}
-}
-
-void Level::drawWinScreen()
-{
-	SDL_Color white = { 255, 255, 255 };
-	SDL_Texture *msgGrats, *msgContinue;
-	SDL_Rect msgGratsBox, msgContinueBox;
-
-	msgGrats = Window::RenderText("You have completed the level!", "FreeSans.ttf", white, 50);
-	msgContinue = Window::RenderText("Press [space] to continue.", "FreeSans.ttf", white, 30);
-
-	SDL_QueryTexture(msgGrats, NULL, NULL, &msgGratsBox.w, &msgGratsBox.h);
-	SDL_QueryTexture(msgContinue, NULL, NULL, &msgContinueBox.w, &msgContinueBox.h);
-
-	msgGratsBox.x = (Window::Box().w / 2) - (msgGratsBox.w / 2);
-	msgGratsBox.y = (Window::Box().h / 2) - (msgGratsBox.h / 2) - 25;
-
-	msgContinueBox.x = (Window::Box().w / 2) - (msgContinueBox.w / 2);
-	msgContinueBox.y = (Window::Box().h / 2) - (msgContinueBox.h / 2) + 25;
-
-	Window::Draw(msgGrats, msgGratsBox);
-	Window::Draw(msgContinue, msgContinueBox);
 }
 
 void Level::loadEnemiesFromMap()
