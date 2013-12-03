@@ -7,7 +7,7 @@ Enemy::Enemy()
 
 void Enemy::loadEnemy(int x, int y)
 {
-	load(x, y, 64, 64, 1, ENEMY_TEXTURE_FLYER);
+	load(x, y, 64, 64, 1, ENEMY_TEXTURE_DEFAULT);
 
 	moveDirection = ENEMY_MOVE_NOWHERE;
 

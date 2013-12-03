@@ -56,6 +56,7 @@ class HelperClass
 	#define ENEMY_MOVE_RIGHT 3
 	#define ENEMY_MOVE_LEFT 4
 
+	#define ENEMY_TEXTURE_DEFAULT "media/EnemyDefault64px.png"
 	#define ENEMY_TEXTURE_FLYER "media/EnemyHarpy64px.png"
 	#define ENEMY_TEXTURE_WALKER "media/EnemyGrizzly64px.png"
 

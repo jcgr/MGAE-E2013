@@ -4,6 +4,9 @@
 #include "Level.h"
 #include "Player.h"
 
+/**
+* The Game class is used to demonstrate one way of using the engine.
+*/
 class Game
 {
 	public:

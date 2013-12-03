@@ -1,49 +1,37 @@
-\section{Overview}
+\section{Overall Structure}
 \label{03}
 
-In this section, I will go over the general structure of the engine and explain some decisions that I have taken with regards to how the engine works.
+In this section, I will go over the structure of the engine, which consists of the following classes: A map, a player, enemies, a level, a window to display everything to and a class for shared functions.
 
-\subsection{Overall Structure}
-\label{03_01}
-
-The engine consists of the following classes: A map, a player, enemies, a level, a window to display everything to and a class for shared functions.
-
-\subsubsection{Map}
+\subsection*{Map}
 \label{03_01_01}
 
 The \textbf{map} class is a representation of the world the player is traversing. It contains information about the layout of the world, such as where solid blocks and spikes are found, where the goal is, where the player spawns and where enemies spawn. The information about the world is loaded from a .txt file (see section \ref{06_01} for an example and explanation of the data format).
 
-\subsubsection{Player}
+\subsection*{Player}
 \label{03_01_02}
 
 The person playing the game needs to be able to interact with it, which is the purpose of the \textbf{player} class. It represents the player character, which can move around the map and collide with other objects. Collision results in different events depending on what is hit (stopping if a wall is hit, dying if something hostile is collided with, etc.).
 
-\subsubsection{Enemies}
+\subsection*{Enemies}
 \label{03_01_03}
 
 Obstacles in a 2D platformer is important and some kind of enemies are usually used for this purpose. In the engine, enemies are represented by the \textbf{enemy} class, which is a very basic enemy. It contains very basic behaviour, but it can be extended by other classes to create specific enemies with their own behaviour. This makes it very easy to implement new enemies.
 
-\subsubsection{Level}
+\subsection*{Level}
 \label{03_01_04}
 
 The \textbf{level} class represents an entire level in the engine. It contains a map, a list of the enemies in the map and the player character. 
 \\The level handles input from the keyboard tells the player to move depending on the input. The level also updates and moves the enemies according to their behaviour. It also takes care of telling the window class where to draw everything.
 
-\subsubsection{Window}
+\subsection*{Window}
 \label{03_01_05}
 
 The \textbf{window} class is the one that handles any form for drawing to the screen. It initializes SDL, creates a window for it to draw on and helps with loading and drawing of images in an easy way. It is used behind the scenes.
 
+\subsection*{HelperClass}
+\label{03_01_06}
 
+As there are some things that are used by multiple classes (for example the amount of collision points for entities), having such information gathered in one place makes it easier to keep track of. That is the purpose of the \textbf{helperclass} class. It contains values and functions used by multiple other classes, so they do not have to be defined a lot of different places.
 
-\subsection{Decisions}
-\label{03_02}
-
-Enemies.
-
-Timestep variable (problems)
-
-Level handles input
-
-Map loads files
-
+These classes are the main ones that make up the engine. Used together they can produce a simple 2D platformer game, in which the player's objective is to get from one point to another.

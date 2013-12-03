@@ -2,6 +2,10 @@
 
 #include "Game.h"
 
+/**
+* The Game class is used to demonstrate one way of using the engine.
+*/
+
 // Public
 Game::Game()
 {

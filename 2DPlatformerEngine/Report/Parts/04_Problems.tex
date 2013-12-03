@@ -1,3 +1,12 @@
-\section{Problems}
+\section{Improvements}
 \label{04}
 
+Currently, the engine works to a certain degree. It supports simple 2D platformer games, where the player has to dodge enemies and deadly obstacles in order to reach a goal. But that is pretty much all it supports. There is no fighting, interacting with objects, acquiring new abilities or anything along those lines. Implementing such things would be one of the main focuses if improvements were to be made.
+
+When it comes to implementing new things, enemies work fairly well. One can extend the \textbf{Enemy} class to create new kinds of enemies with different behaviours, but loading them into a level from a map file is not easy. The reason is that the map uses a very basic data format, which is not easy to extend. Therefore, changing the data format of the map files would be something to look into.
+
+Introducing an actual camera class would be a welcome change as well. In the current implementation, there is no actual camera. Things are just drawn to the screen in relation to where the player character currently is. A separate camera would be easier for the user of the engine to work with, as the user would have more control over how it works.
+
+Another thing that could be improved upon is the performance on fast vs. slow computers. As it is, there is nothing that takes framerate into account, and the engine will therefore run slower on older/slower computers, which worsens the experience for people with slow computers.
+
+These are just a few of the possible improvements. Each of them would take some work to get done, but each would make the engine a lot better.
